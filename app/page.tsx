@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface Position {
   coords: {
@@ -9,7 +9,7 @@ interface Position {
   };
 }
 
-export default function Home() {
+const Home: React.FC = () => {
   const [location, setLocation] = useState<Position | null>(null);
 
   const successCallback = (position: Position) => {
@@ -21,25 +21,33 @@ export default function Home() {
     console.log(error);
   };
 
-  const handleGetLocation = () => {
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-  };
+  useEffect(() => {
+    const locationWatcher = navigator.geolocation.watchPosition(
+      successCallback,
+      errorCallback
+    );
+
+    return () => {
+      navigator.geolocation.clearWatch(locationWatcher);
+    };
+  }, []); 
 
   return (
-    <div className="h-screen w-full flex justify-center items-center">
+    <div className="h-screen w-full flex flex-col gap-4 justify-center items-center">
       <button
         className="text-sm font-semibold px-4 py-2 rounded-md bg-zinc-950 text-white"
-        onClick={handleGetLocation}
+        onClick={() => navigator.geolocation.getCurrentPosition(successCallback, errorCallback)}
       >
         Get Your Location
       </button>
 
       {location && (
         <div>
-          <p>Latitude: {location.coords.latitude}</p>
-          <p>Longitude: {location.coords.longitude}</p>
+          <p>Latitude: {location.coords.latitude}, {location.coords.longitude}</p>
         </div>
       )}
     </div>
   );
-}
+};
+
+export default Home;
