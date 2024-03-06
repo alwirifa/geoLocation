@@ -1,12 +1,11 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const GeofenceApp: React.FC = () => {
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
 
   useEffect(() => {
-    // Membuat fungsi untuk meminta lokasi pengguna
     const requestLocation = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -23,37 +22,27 @@ const GeofenceApp: React.FC = () => {
       }
     };
 
-    // Meminta lokasi pengguna setiap 5 detik
     const locationInterval = setInterval(requestLocation, 5000);
 
-    return () => clearInterval(locationInterval); // Membersihkan interval saat komponen tidak lagi digunakan
+    return () => clearInterval(locationInterval);
   }, []); // useEffect hanya dijalankan pada mounting komponen
 
   useEffect(() => {
-    // Cek apakah user berada dalam geofence
-    if (
-      userLocation &&
-      isInsideGeofence(userLocation.latitude, userLocation.longitude)
-    ) {
-      // Jika dalam geofence, tampilkan notifikasi
+    if (userLocation && isInsideGeofence(userLocation.latitude, userLocation.longitude)) {
       showNotification('You are inside the geofence!');
     }
-  }, [userLocation]); // useEffect akan dijalankan setiap kali userLocation berubah
+  }, [userLocation]);
 
-  // Fungsi untuk menentukan apakah lokasi berada dalam geofence
   const isInsideGeofence = (latitude: number, longitude: number) => {
     const geofenceLatitude = -6.925526250146626;
     const geofenceLongitude = 107.66500627780277;
     const radius = 10; // 10 meter radius
 
-    // Menghitung jarak antara dua titik koordinat menggunakan rumus Haversine
     const distance = haversine(latitude, longitude, geofenceLatitude, geofenceLongitude);
 
-    // Mengecek apakah jarak kurang dari radius geofence
     return distance <= radius;
   };
 
-  // Fungsi untuk menampilkan notifikasi
   const showNotification = (message: string) => {
     if (Notification.permission === 'granted') {
       new Notification(message);
@@ -66,7 +55,6 @@ const GeofenceApp: React.FC = () => {
     }
   };
 
-  // Fungsi Haversine untuk menghitung jarak antara dua titik koordinat
   const haversine = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     const toRadians = (angle: number) => (angle * Math.PI) / 180;
 
