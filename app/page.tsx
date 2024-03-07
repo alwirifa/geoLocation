@@ -1,58 +1,67 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-type Props = {};
-
-interface UserLocation {
-  latitude: number | null;
-  longitude: number | null;
+interface Location {
+  latitude?: number;
+  longitude?: number;
+  city?: string;
 }
 
-const Page = (props: Props) => {
-  const [userLocation, setUserLocation] = useState<UserLocation>({
-    latitude: null,
-    longitude: null,
-  });
+const Page: React.FC = () => {
+  const [currLocation, setCurrLocation] = useState<Location>({});
+  const [currLocationJs, setCurrLocationJs] = useState<Location>({});
 
   useEffect(() => {
-    const getLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setUserLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-          },
-          (error) => {
-            console.error('Error getting user location:', error);
-          }
-        );
-      } else {
-        console.error('Geolocation is not supported by this browser.');
-      }
-    };
-
     getLocation();
+    getLocationJs();
 
-    // Set up a timer to continuously update the location every 5 minutes
-    const intervalId = setInterval(getLocation, 5 * 60 * 1000);
+    const intervalId = setInterval(() => {
+      getLocation();
+      getLocationJs();
+    }, 4000); // Ambil lokasi setiap 5 detik
 
-    // Clean up the interval when the component is unmounted
-    return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId); // Membersihkan interval pada unmount
   }, []);
 
+  const getLocation = async () => {
+    try {
+      const location = await axios.get("https://ipapi.co/json");
+      setCurrLocation(location.data);
+    } catch (error) {
+      console.error("Error fetching location:", error);
+    }
+  };
+
+  const getLocationJs = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        const { latitude, longitude } = position.coords;
+        setCurrLocationJs({ latitude, longitude });
+      },
+      (error) => {
+        console.error("Error fetching geolocation:", error);
+      }
+    );
+  };
+
   return (
-    <div>
-      <h1>User Location</h1>
-      {userLocation.latitude !== null && userLocation.longitude !== null ? (
-        <p>
-          Latitude: {userLocation.latitude}, Longitude: {userLocation.longitude}
-        </p>
-      ) : (
-        <p>Loading location...</p>
-      )}
+    <div className="flex flex-col gap-4 h-screen w-full justify-center items-center">
+      <div>
+
+        <h1>Current Location API</h1>
+        <p>Latitude: {currLocation.latitude}</p>
+        <p>Longitude: {currLocation.longitude}</p>
+        <p>City: {currLocation.city}</p>
+      </div>
+      <div>
+
+        <h1>Current Location JS</h1>
+        <p>Latitude: {currLocationJs.latitude}</p>
+        <p>Longitude: {currLocationJs.longitude}</p>
+      </div>
     </div>
   );
 };
