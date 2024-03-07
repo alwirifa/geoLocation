@@ -1,60 +1,68 @@
 "use client"
 
-// Import necessary React modules
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-// Define the functional component
-const Page: React.FC = () => {
-  // Define state variables to store user location data
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number }>({
-    latitude: 0,
-    longitude: 0,
-  });
+const Home: React.FC = () => {
+  const [totalDistance, setTotalDistance] = useState<number>(0);
 
-  // Define a function to get the user's location
-  const getUserLocation = () => {
+  useEffect(() => {
+    // Meminta izin lokasi dari pengguna
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.watchPosition(
         (position) => {
-          setUserLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
+          // Memanggil fungsi untuk menghitung jarak
+          calculateDistance(position.coords.latitude, position.coords.longitude);
         },
         (error) => {
-          console.error('Error getting user location:', error);
+          console.error('Error getting location:', error);
         }
       );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
+    }
+  }, []);
+
+  // Fungsi untuk menghitung jarak menggunakan formula Haversine
+  const calculateDistance = (lat2: number, lon2: number) => {
+    const R = 6371000; // Radius bumi dalam meter
+
+    const lat1 = 0; // Latitudine default (misalnya, lokasi awal)
+    const lon1 = 0; // Longitudine default
+
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = R * c; // Jarak dalam meter
+
+    // Contoh sederhana: menambahkan jarak setiap kali fungsi dipanggil
+    setTotalDistance((prevDistance) => prevDistance + distance);
+
+    // Memeriksa apakah notifikasi perlu ditampilkan
+    if (totalDistance >= 6) {
+      showNotification(totalDistance);
+      setTotalDistance(0); // Reset jarak setelah notifikasi ditampilkan
     }
   };
 
-  // useEffect to run the getUserLocation initially and set up the interval
-  useEffect(() => {
-    getUserLocation(); // Get user location initially
+  // Menampilkan notifikasi
+  const showNotification = (distance: number) => {
+    if (Notification.permission === 'granted') {
+      new Notification('Info Pergerakan', {
+        body: `Anda telah berjalan sejauh ${distance.toFixed(2)} meter.`,
+      });
+    }
+  };
 
-    const intervalId = setInterval(() => {
-      getUserLocation(); // Get user location every 3 seconds
-    }, 3000);
-
-    // Clean up the interval when the component is unmounted
-    return () => clearInterval(intervalId);
-  }, []); // Empty dependency array ensures the effect runs only once on mount
-
-  // Return the JSX structure
   return (
-    <div className='h-screen w-full flex justify-center items-center'>
-      <div className='flex flex-col gap-4'>
-        <p>Your Location:</p>
-        <p>Latitude: <span className='font-semibold'>{userLocation.latitude}</span></p>
-        <p>Longitude: <span className='font-semibold'>{userLocation.longitude}</span></p>
-      </div>
-
-      {/* Button is not needed anymore, as we are updating location automatically */}
+    <div>
+      <h1>My Location App</h1>
+      <p>Jarak yang telah ditempuh: {totalDistance.toFixed(2)} meter</p>
     </div>
   );
 };
 
-// Export the component as the default export
-export default Page;
+export default Home;
