@@ -1,66 +1,89 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+// pages/index.tsx
+import React, { useEffect, useState } from 'react';
+
+const calculateDistance = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number => {
+  const R = 6371e3; // radius of Earth in meters
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const d = R * c; // distance in meters
+  return d;
+};
 
 const Home: React.FC = () => {
-  const [totalDistance, setTotalDistance] = useState<number>(0);
+  const [distance, setDistance] = useState<number>(0);
+
+  const resetDistance = () => {
+    setDistance(0);
+  };
 
   useEffect(() => {
-    // Meminta izin lokasi dari pengguna
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(
-        (position) => {
-          // Memanggil fungsi untuk menghitung jarak
-          calculateDistance(position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          console.error('Error getting location:', error);
+    let watchId: number;
+
+    const MAX_ALLOWED_TIME_DIFF = 30000; // 30 seconds
+    const MAX_ALLOWED_DISTANCE = 10; // 10 meters
+
+    const successCallback = (position: GeolocationPosition) => {
+      const currentTime = new Date().getTime();
+      const timeDifference = currentTime - position.timestamp;
+
+      if (timeDifference < MAX_ALLOWED_TIME_DIFF) {
+        const newYorkCoords = {
+          latitude: 40.7128,
+          longitude: -74.006,
+        };
+
+        const newDistance = calculateDistance(
+          newYorkCoords.latitude,
+          newYorkCoords.longitude,
+          position.coords.latitude,
+          position.coords.longitude
+        );
+
+        // Check if the new distance is reasonable
+        if (newDistance < MAX_ALLOWED_DISTANCE) {
+          setDistance((prevDistance) => prevDistance + newDistance);
         }
-      );
-    }
+      }
+    };
+
+    const errorCallback = (error: GeolocationPositionError) => {
+      console.error(error);
+    };
+
+    const options: PositionOptions = {
+      enableHighAccuracy: false, // Adjust this based on your needs
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    watchId = navigator.geolocation.watchPosition(successCallback, errorCallback, options);
+
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
   }, []);
-
-  // Fungsi untuk menghitung jarak menggunakan formula Haversine
-  const calculateDistance = (lat2: number, lon2: number) => {
-    const R = 6371000; // Radius bumi dalam meter
-
-    const lat1 = 0; // Latitudine default (misalnya, lokasi awal)
-    const lon1 = 0; // Longitudine default
-
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    const distance = R * c; // Jarak dalam meter
-
-    // Contoh sederhana: menambahkan jarak setiap kali fungsi dipanggil
-    setTotalDistance((prevDistance) => prevDistance + distance);
-
-    // Memeriksa apakah notifikasi perlu ditampilkan
-    if (totalDistance >= 6) {
-      showNotification(totalDistance);
-      setTotalDistance(0); // Reset jarak setelah notifikasi ditampilkan
-    }
-  };
-
-  // Menampilkan notifikasi
-  const showNotification = (distance: number) => {
-    if (Notification.permission === 'granted') {
-      new Notification('Info Pergerakan', {
-        body: `Anda telah berjalan sejauh ${distance.toFixed(2)} meter.`,
-      });
-    }
-  };
 
   return (
     <div>
-      <h1>My Location App</h1>
-      <p>Jarak yang telah ditempuh: {totalDistance.toFixed(2)} meter</p>
+      <h1>GPS Distance Tracker</h1>
+      <p>Distance Traveled: {distance.toFixed(2)} meters</p>
+      <button onClick={resetDistance}>Reset</button>
     </div>
   );
 };
