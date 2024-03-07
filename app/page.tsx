@@ -1,86 +1,58 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+// Import necessary React modules
+import React, { useEffect, useState } from 'react';
 
-const GeofenceApp: React.FC = () => {
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+// Define the functional component
+const Page: React.FC = () => {
+  // Define state variables to store user location data
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number }>({
+    latitude: 0,
+    longitude: 0,
+  });
 
-  useEffect(() => {
-    const requestLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setUserLocation({ latitude, longitude });
-          },
-          (error) => {
-            console.error('Error getting location:', error.message);
-          }
-        );
-      } else {
-        console.error('Geolocation is not supported by this browser.');
-      }
-    };
-
-    const locationInterval = setInterval(requestLocation, 5000);
-
-    return () => clearInterval(locationInterval);
-  }, []); // useEffect hanya dijalankan pada mounting komponen
-
-  useEffect(() => {
-    if (userLocation && isInsideGeofence(userLocation.latitude, userLocation.longitude)) {
-      showNotification('You are inside the geofence!');
-    }
-  }, [userLocation]);
-
-  const isInsideGeofence = (latitude: number, longitude: number) => {
-    const geofenceLatitude = -6.925526250146626;
-    const geofenceLongitude = 107.66500627780277;
-    const radius = 10; // 10 meter radius
-
-    const distance = haversine(latitude, longitude, geofenceLatitude, geofenceLongitude);
-
-    return distance <= radius;
-  };
-
-  const showNotification = (message: string) => {
-    if (Notification.permission === 'granted') {
-      new Notification(message);
-    } else if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          new Notification(message);
+  // Define a function to get the user's location
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error('Error getting user location:', error);
         }
-      });
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
     }
   };
 
-  const haversine = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const toRadians = (angle: number) => (angle * Math.PI) / 180;
+  // useEffect to run the getUserLocation initially and set up the interval
+  useEffect(() => {
+    getUserLocation(); // Get user location initially
 
-    const R = 6371; // Radius bumi dalam kilometer
-    const dLat = toRadians(lat2 - lat1);
-    const dLon = toRadians(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const intervalId = setInterval(() => {
+      getUserLocation(); // Get user location every 3 seconds
+    }, 3000);
 
-    const distance = R * c * 1000; // Mengonversi ke meter
-    return distance;
-  };
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(intervalId);
+  }, []); // Empty dependency array ensures the effect runs only once on mount
 
+  // Return the JSX structure
   return (
     <div>
       <p>Your Location:</p>
-      {userLocation && (
-        <div>
-          <p>Latitude: {userLocation.latitude}</p>
-          <p>Longitude: {userLocation.longitude}</p>
-        </div>
-      )}
+      <p>Latitude: {userLocation.latitude}</p>
+      <p>Longitude: {userLocation.longitude}</p>
+
+      {/* Button is not needed anymore, as we are updating location automatically */}
     </div>
   );
 };
 
-export default GeofenceApp;
+// Export the component as the default export
+export default Page;
