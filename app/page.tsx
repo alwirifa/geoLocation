@@ -36,13 +36,12 @@ const Page = (props: Props) => {
 
     getLocation();
 
-    // You can set up a timer to continuously update the location if needed
-    // For example, update every 5 minutes:
-    // const intervalId = setInterval(getLocation, 5 * 60 * 1000);
+    // Set up a timer to continuously update the location every 5 minutes
+    const intervalId = setInterval(getLocation, 5 * 60 * 1000);
 
     // Clean up the interval when the component is unmounted
-    // return () => clearInterval(intervalId);
-  }, []); // The empty dependency array ensures the effect runs once after the initial render
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div>
