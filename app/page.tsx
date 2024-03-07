@@ -44,10 +44,12 @@ const Page: React.FC = () => {
 
   // Return the JSX structure
   return (
-    <div>
-      <p>Your Location:</p>
-      <p>Latitude: {userLocation.latitude}</p>
-      <p>Longitude: {userLocation.longitude}</p>
+    <div className='h-screen w-full flex justify-center items-center'>
+      <div className='flex flex-col gap-4'>
+        <p>Your Location:</p>
+        <p>Latitude: <span className='font-semibold'>{userLocation.latitude}</span></p>
+        <p>Longitude: <span className='font-semibold'>{userLocation.longitude}</span></p>
+      </div>
 
       {/* Button is not needed anymore, as we are updating location automatically */}
     </div>
