@@ -89,7 +89,8 @@ const GeoLocationExample: React.FC = () => {
     return () => {
       stopWatchingPosition();
     };
-  }, []); // Cleanup watcher on component unmount
+  }, [stopWatchingPosition]); // Include stopWatchingPosition in the dependency array
+  
 
   return (
     <div>
@@ -101,16 +102,19 @@ const GeoLocationExample: React.FC = () => {
         <br />
         Your altitude is {positionInfo.altitude !== null ? `${positionInfo.altitude} meters (with an accuracy of ${positionInfo.accuracy} meters)` : 'unavailable'}
         <br />
-        You're {positionInfo.heading !== null ? `${positionInfo.heading}° from the True north` : 'unavailable'}
+        You {positionInfo.heading !== null ? `${positionInfo.heading}° from the True north` : 'unavailable'}
         <br />
-        You're moving at a speed of {positionInfo.speed !== null ? `${positionInfo.speed} meters/second` : 'unavailable'}
+        You moving at a speed of {positionInfo.speed !== null ? `${positionInfo.speed} meters/second` : 'unavailable'}
         <br />
         Data updated at {positionInfo.timestamp !== null ? new Date(positionInfo.timestamp).toLocaleTimeString() : 'unavailable'}
       </p>
 
-      <button onClick={getCurrentPosition}>Get current position</button>
-      <button onClick={watchPosition}>Watch position</button>
-      <button onClick={stopWatchingPosition}>Stop watching position</button>
+<div className='flex gap-4'>
+
+      <button className='border px-4 py-2 bg-sky-500 text-white font-semibold text-sm' onClick={getCurrentPosition}>Get current position</button>
+      <button className='border px-4 py-2 bg-sky-500 text-white font-semibold text-sm' onClick={watchPosition}>Watch position</button>
+      <button className='border px-4 py-2 bg-sky-500 text-white font-semibold text-sm' onClick={stopWatchingPosition}>Stop watching position</button>
+</div>
     </div>
   );
 };
