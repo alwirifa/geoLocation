@@ -26,6 +26,7 @@ const GeoLocationExample: React.FC = () => {
     timestamp: null,
   });
   const [watchId, setWatchId] = useState<number | null>(null);
+  const [isPositionChanging, setIsPositionChanging] = useState<boolean>(false);
 
   const getCurrentPosition = () => {
     if (navigator.geolocation) {
@@ -56,6 +57,7 @@ const GeoLocationExample: React.FC = () => {
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
+          setIsPositionChanging(true);
           setPositionInfo({
             position: {
               latitude: position.coords.latitude,
@@ -67,6 +69,11 @@ const GeoLocationExample: React.FC = () => {
             heading: position.coords.heading,
             timestamp: position.timestamp,
           });
+
+          console.log(
+            `Position updated: Latitude ${position.coords.latitude}, Longitude ${position.coords.longitude}`
+          );
+          
         },
         (error) => {
           console.error('Error watching position:', error.message);
@@ -82,6 +89,7 @@ const GeoLocationExample: React.FC = () => {
     if (navigator.geolocation && watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
+      setIsPositionChanging(false);
     }
   };
 
@@ -89,8 +97,7 @@ const GeoLocationExample: React.FC = () => {
     return () => {
       stopWatchingPosition();
     };
-  }, [stopWatchingPosition]); // Include stopWatchingPosition in the dependency array
-  
+  }, [stopWatchingPosition]);
 
   return (
     <div>
@@ -102,19 +109,39 @@ const GeoLocationExample: React.FC = () => {
         <br />
         Your altitude is {positionInfo.altitude !== null ? `${positionInfo.altitude} meters (with an accuracy of ${positionInfo.accuracy} meters)` : 'unavailable'}
         <br />
-        You {positionInfo.heading !== null ? `${positionInfo.heading}° from the True north` : 'unavailable'}
+        You're {positionInfo.heading !== null ? `${positionInfo.heading}° from the True north` : 'unavailable'}
         <br />
-        You moving at a speed of {positionInfo.speed !== null ? `${positionInfo.speed} meters/second` : 'unavailable'}
+        You're moving at a speed of {positionInfo.speed !== null ? `${positionInfo.speed} meters/second` : 'unavailable'}
         <br />
         Data updated at {positionInfo.timestamp !== null ? new Date(positionInfo.timestamp).toLocaleTimeString() : 'unavailable'}
       </p>
 
-<div className='flex gap-4'>
-
-      <button className='border px-4 py-2 bg-sky-500 text-white font-semibold text-sm' onClick={getCurrentPosition}>Get current position</button>
-      <button className='border px-4 py-2 bg-sky-500 text-white font-semibold text-sm' onClick={watchPosition}>Watch position</button>
-      <button className='border px-4 py-2 bg-sky-500 text-white font-semibold text-sm' onClick={stopWatchingPosition}>Stop watching position</button>
-</div>
+      <div className='flex gap-4'>
+        <button
+          className={`border px-4 py-2 font-semibold text-sm ${
+            isPositionChanging ? 'bg-green-500 text-white animate-pulse' : 'bg-sky-500 text-white'
+          }`}
+          onClick={getCurrentPosition}
+        >
+          Get current position
+        </button>
+        <button
+          className={`border px-4 py-2 font-semibold text-sm ${
+            isPositionChanging ? 'bg-green-500 text-white animate-pulse' : 'bg-sky-500 text-white'
+          }`}
+          onClick={watchPosition}
+        >
+          Watch position
+        </button>
+        <button
+          className={`border px-4 py-2 font-semibold text-sm ${
+            isPositionChanging ? 'bg-green-500 text-white animate-pulse' : 'bg-sky-500 text-white'
+          }`}
+          onClick={stopWatchingPosition}
+        >
+          Stop watching position
+        </button>
+      </div>
     </div>
   );
 };
