@@ -1,193 +1,88 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from "react";
 
-interface Position {
-  coords: {
+export default function TestGeolocation() {
+  const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
     accuracy: number;
-    altitude: number | null;
-    altitudeAccuracy: number | null;
-    heading: number | null;
     speed: number | null;
-  };
-  timestamp: number;
-}
-
-interface Error {
-  message: string;
-}
-
-const GeolocationApi: React.FC = () => {
-  const [apiSupported, setApiSupported] = useState(true);
-  const [log, setLog] = useState('');
+  } | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
-  const [position, setPosition] = useState<Position | null>(null);
-  const [getPositionActive, setGetPositionActive] = useState(false);
-  const [watchPositionActive, setWatchPositionActive] = useState(false);
 
-  const positionOptions = {
-    enableHighAccuracy: true,
-    timeout: 10 * 1000, // 10 seconds
-    maximumAge: 30 * 1000, // 30 seconds
+  const getUserLocation = () => {
+    console.log("getuserlocation")
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude, accuracy, speed } = position.coords;
+          setUserLocation({ latitude, longitude, accuracy, speed });
+          console.log("get position", latitude, longitude)
+        },
+        (error) => {
+          console.error("Error getting user location: ", error);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser");
+    }
+  };
+
+  const watchUserLocation = () => {
+    if (navigator.geolocation) {
+      const id = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude, accuracy, speed } = position.coords;
+          setUserLocation({ latitude, longitude, accuracy, speed });
+          console.log("Position update:", position);
+        },
+        (error) => {
+          console.error("Error watching user location: ", error);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 0, // Force a new location update
+          timeout: 5000, // 5 seconds timeout
+        }
+      );
+      setWatchId(id);
+    } else {
+      console.log("Geolocation is not supported by this browser");
+    }
+  };
+
+  const stopWatchUserLocation = () => {
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+      setWatchId(null);
+    }
+    console.log("stop watch")
   };
 
   useEffect(() => {
-    console.log('watchPositionActive:', watchPositionActive);
-
-    if (getPositionActive) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setPosition(position);
-          setLog('Position successfully retrieved<br />' + log);
-        },
-        (error) => {
-          setLog('Error: ' + error.message + '<br />' + log);
-        },
-        positionOptions
-      );
-      setGetPositionActive(false);
-    }
-
-    if (watchPositionActive) {
-      setWatchId(navigator.geolocation.watchPosition(
-        (position) => {
-          setPosition(position);
-          setLog('Position updated<br />' + log);
-        },
-        (error) => {
-          setLog('Error: ' + error.message + '<br />' + log);
-        },
-        positionOptions
-      ));
-      setWatchPositionActive(false);
-    }
-  }, [getPositionActive, watchPositionActive]);
-
-
-  const handleGetPosition = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setPosition(position);
-        setLog('Position successfully retrieved<br />' + log);
-      },
-      (error) => {
-        setLog('Error: ' + error.message + '<br />' + log);
-      },
-      positionOptions
-    );
-  };
-
-  const handleWatchPosition = () => {
-    setWatchId(navigator.geolocation.watchPosition(
-      (position) => {
-        setPosition(position);
-        setLog('Position updated<br />' + log);
-      },
-      (error) => {
-        setLog('Error: ' + error.message + '<br />' + log);
-      },
-      positionOptions
-    ));
-  };
-
-  const handleStopWatching = () => {
-    if (watchId !== null) {
-      navigator.geolocation.clearWatch(watchId);
-      setLog('Stopped watching position<br />' + log);
-      setWatchId(null);
-    }
-  };
-
-  const handleClearLog = () => {
-    setLog('');
-  };
+    return () => {
+      // Clear watch position when the component is unmounted
+      stopWatchUserLocation();
+    };
+  }, []);
 
   return (
-    <div className="container">
-
-      <span id="g-unsupported" className={`api-support ${!apiSupported ? '' : 'hidden'}`}>
-        API not supported
-      </span>
-
-      <h1>Geolocation API</h1>
-      <div className="buttons-wrapper">
-        <button id="button-get-position" className="button" onClick={handleGetPosition}>
-          Get current position
-        </button>
-        <button id="button-watch-position" className="button" onClick={handleWatchPosition}>
-          Watch position
-        </button>
-        <button id="button-stop-watching" className="button" onClick={handleStopWatching}>
-          Stop watching position
-        </button>
-      </div>
-
-      <h2>Information</h2>
-      <div id="g-information">
-        <ul>
-          <li>
-            Your position is
-            <span id="latitude" className="g-info">
-              {position ? position.coords.latitude : 'unavailable'}
-            </span>{' '}
-            ° latitude,
-            <span id="longitude" className="g-info">
-              {position ? position.coords.longitude : 'unavailable'}
-            </span>{' '}
-            ° longitude (with an accuracy of{' '}
-            <span id="position-accuracy" className="g-info">
-              {position ? position.coords.accuracy : 'unavailable'}
-            </span>{' '}
-            meters)
-          </li>
-          <li>
-            Your altitude is{' '}
-            <span id="altitude" className="g-info">
-              {position ? (position.coords.altitude ? position.coords.altitude : 'unavailable') : 'unavailable'}
-            </span>{' '}
-            meters (with an accuracy of{' '}
-            <span id="altitude-accuracy" className="g-info">
-              {position ? (position.coords.altitudeAccuracy ? position.coords.altitudeAccuracy : 'unavailable') : 'unavailable'}
-            </span>
-            {' '}
-            meters)
-          </li>
-          <li>
-            Youre{' '}
-            <span id="heading" className="g-info">
-              {position ? (position.coords.heading ? position.coords.heading : 'unavailable') : 'unavailable'}
-            </span>{' '}
-            ° from the True north
-          </li>
-          <li>
-            Youre moving at a speed of{' '}
-            <span id="speed" className="g-info">
-              {position ? (position.coords.speed ? position.coords.speed : 'unavailable') : 'unavailable'}
-            </span>{' '}
-            meters/second
-          </li>
-          <li>
-            Data updated at{' '}
-            <span id="timestamp" className="g-info">
-              {position ? (new Date(position.timestamp)).toString() : 'unavailable'}
-            </span>
-          </li>
-        </ul>
-      </div>
-
-      <h3>Log</h3>
-      <div>
-        {log}
-      </div>
-      <button id="clear-log" className="button" onClick={handleClearLog}>
-        Clear log
-      </button>
-
-
-    </div>
+    <>
+      <h1>Geolocation App</h1>
+      <button onClick={getUserLocation}>Get User Location</button>
+      <button onClick={watchUserLocation}>Start Watching User Location</button>
+      <button onClick={stopWatchUserLocation}>Stop Watching User Location</button>
+      {userLocation && (
+        <div>
+          <h2>User Location</h2>
+          <p>Latitude: {userLocation.latitude}</p>
+          <p>Longitude: {userLocation.longitude}</p>
+          <p>Accuracy: {userLocation.accuracy} meters</p>
+          <p>Speed: {userLocation.speed} meters/second</p>
+        </div>
+      )}
+    </>
   );
-};
-
-export default GeolocationApi;
+}
