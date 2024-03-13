@@ -1,149 +1,200 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-interface Location {
-  latitude: number;
-  longitude: number;
+interface Position {
+  coords: {
+    latitude: number;
+    longitude: number;
+    accuracy: number;
+    altitude: number | null;
+    altitudeAccuracy: number | null;
+    heading: number | null;
+    speed: number | null;
+  };
+  timestamp: number;
 }
 
-interface PositionInfo {
-  position: Location | null;
-  altitude: number | null;
-  speed: number | null;
-  accuracy: number | null;
-  heading: number | null;
-  timestamp: number | null;
+interface Error {
+  message: string;
 }
 
-const GeoLocationExample: React.FC = () => {
-  const [positionInfo, setPositionInfo] = useState<PositionInfo>({
-    position: null,
-    altitude: null,
-    speed: null,
-    accuracy: null,
-    heading: null,
-    timestamp: null,
-  });
+const GeolocationApi: React.FC = () => {
+  const [apiSupported, setApiSupported] = useState(true);
+  const [log, setLog] = useState('');
   const [watchId, setWatchId] = useState<number | null>(null);
-  const [isPositionChanging, setIsPositionChanging] = useState<boolean>(false);
+  const [position, setPosition] = useState<Position | null>(null);
+  const [getPositionActive, setGetPositionActive] = useState(false);
+  const [watchPositionActive, setWatchPositionActive] = useState(false);
 
-  const getCurrentPosition = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setPositionInfo({
-            position: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            },
-            altitude: position.coords.altitude,
-            speed: position.coords.speed,
-            accuracy: position.coords.accuracy,
-            heading: position.coords.heading,
-            timestamp: position.timestamp,
-          });
-        },
-        (error) => {
-          console.error('Error getting current position:', error.message);
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  };
-
-  const watchPosition = () => {
-    if (navigator.geolocation) {
-      const id = navigator.geolocation.watchPosition(
-        (position) => {
-          setIsPositionChanging(true);
-          setPositionInfo({
-            position: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            },
-            altitude: position.coords.altitude,
-            speed: position.coords.speed,
-            accuracy: position.coords.accuracy,
-            heading: position.coords.heading,
-            timestamp: position.timestamp,
-          });
-
-          console.log(
-            `Position updated: Latitude ${position.coords.latitude}, Longitude ${position.coords.longitude}`
-          );
-          
-        },
-        (error) => {
-          console.error('Error watching position:', error.message);
-        }
-      );
-      setWatchId(id);
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  };
-
-  const stopWatchingPosition = () => {
-    if (navigator.geolocation && watchId !== null) {
-      navigator.geolocation.clearWatch(watchId);
-      setWatchId(null);
-      setIsPositionChanging(false);
-    }
+  const positionOptions = {
+    enableHighAccuracy: true,
+    timeout: 10 * 1000, // 10 seconds
+    maximumAge: 30 * 1000, // 30 seconds
   };
 
   useEffect(() => {
-    return () => {
-      stopWatchingPosition();
-    };
-  }, [stopWatchingPosition]);
+    console.log('watchPositionActive:', watchPositionActive);
+
+    if (getPositionActive) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setPosition(position);
+          setLog('Position successfully retrieved<br />' + log);
+        },
+        (error) => {
+          setLog('Error: ' + error.message + '<br />' + log);
+        },
+        positionOptions
+      );
+      setGetPositionActive(false);
+    }
+
+    if (watchPositionActive) {
+      setWatchId(navigator.geolocation.watchPosition(
+        (position) => {
+          setPosition(position);
+          setLog('Position updated<br />' + log);
+        },
+        (error) => {
+          setLog('Error: ' + error.message + '<br />' + log);
+        },
+        positionOptions
+      ));
+      setWatchPositionActive(false);
+    }
+  }, [getPositionActive, watchPositionActive]);
+
+
+  const handleGetPosition = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setPosition(position);
+        setLog('Position successfully retrieved<br />' + log);
+      },
+      (error) => {
+        setLog('Error: ' + error.message + '<br />' + log);
+      },
+      positionOptions
+    );
+  };
+
+  const handleWatchPosition = () => {
+    setWatchId(navigator.geolocation.watchPosition(
+      (position) => {
+        setPosition(position);
+        setLog('Position updated<br />' + log);
+      },
+      (error) => {
+        setLog('Error: ' + error.message + '<br />' + log);
+      },
+      positionOptions
+    ));
+  };
+
+  const handleStopWatching = () => {
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+      setLog('Stopped watching position<br />' + log);
+      setWatchId(null);
+    }
+  };
+
+  const handleClearLog = () => {
+    setLog('');
+  };
 
   return (
-    <div>
-      <h2>Geolocation Example</h2>
-      <p>
-        Information
-        <br />
-        Your position is {positionInfo.position ? `${positionInfo.position.latitude}° latitude, ${positionInfo.position.longitude}° longitude (with an accuracy of ${positionInfo.accuracy} meters)` : 'unavailable'}
-        <br />
-        Your altitude is {positionInfo.altitude !== null ? `${positionInfo.altitude} meters (with an accuracy of ${positionInfo.accuracy} meters)` : 'unavailable'}
-        <br />
-        You're {positionInfo.heading !== null ? `${positionInfo.heading}° from the True north` : 'unavailable'}
-        <br />
-        You're moving at a speed of {positionInfo.speed !== null ? `${positionInfo.speed} meters/second` : 'unavailable'}
-        <br />
-        Data updated at {positionInfo.timestamp !== null ? new Date(positionInfo.timestamp).toLocaleTimeString() : 'unavailable'}
-      </p>
+    <div className="container">
+      <a href="https://code.tutsplus.com/tutorials/an-introduction-to-the-geolocation-api--cms-20071">
+        Go back to the article
+      </a>
 
-      <div className='flex gap-4'>
-        <button
-          className={`border px-4 py-2 font-semibold text-sm ${
-            isPositionChanging ? 'bg-green-500 text-white animate-pulse' : 'bg-sky-500 text-white'
-          }`}
-          onClick={getCurrentPosition}
-        >
+      <span id="g-unsupported" className={`api-support ${!apiSupported ? '' : 'hidden'}`}>
+        API not supported
+      </span>
+
+      <h1>Geolocation API</h1>
+      <div className="buttons-wrapper">
+        <button id="button-get-position" className="button" onClick={handleGetPosition}>
           Get current position
         </button>
-        <button
-          className={`border px-4 py-2 font-semibold text-sm ${
-            isPositionChanging ? 'bg-green-500 text-white animate-pulse' : 'bg-sky-500 text-white'
-          }`}
-          onClick={watchPosition}
-        >
+        <button id="button-watch-position" className="button" onClick={handleWatchPosition}>
           Watch position
         </button>
-        <button
-          className={`border px-4 py-2 font-semibold text-sm ${
-            isPositionChanging ? 'bg-green-500 text-white animate-pulse' : 'bg-sky-500 text-white'
-          }`}
-          onClick={stopWatchingPosition}
-        >
+        <button id="button-stop-watching" className="button" onClick={handleStopWatching}>
           Stop watching position
         </button>
       </div>
+
+      <h2>Information</h2>
+      <div id="g-information">
+        <ul>
+          <li>
+            Your position is{' '}
+            <span id="latitude" className="g-info">
+              {position ? position.coords.latitude : 'unavailable'}
+            </span>{' '}
+            ° latitude,
+            <span id="longitude" className="g-info">
+              {position ? position.coords.longitude : 'unavailable'}
+            </span>{' '}
+            ° longitude (with an accuracy of{' '}
+            <span id="position-accuracy" className="g-info">
+              {position ? position.coords.accuracy : 'unavailable'}
+            </span>{' '}
+            meters)
+          </li>
+          <li>
+            Your altitude is{' '}
+            <span id="altitude" className="g-info">
+              {position ? (position.coords.altitude ? position.coords.altitude : 'unavailable') : 'unavailable'}
+            </span>{' '}
+            meters (with an accuracy of{' '}
+            <span id="altitude-accuracy" className="g-info">
+              {position ? (position.coords.altitudeAccuracy ? position.coords.altitudeAccuracy : 'unavailable') : 'unavailable'}
+            </span>
+            {' '}
+            meters)
+          </li>
+          <li>
+            You're{' '}
+            <span id="heading" className="g-info">
+              {position ? (position.coords.heading ? position.coords.heading : 'unavailable') : 'unavailable'}
+            </span>{' '}
+            ° from the True north
+          </li>
+          <li>
+            You're moving at a speed of{' '}
+            <span id="speed" className="g-info">
+              {position ? (position.coords.speed ? position.coords.speed : 'unavailable') : 'unavailable'}
+            </span>{' '}
+            meters/second
+          </li>
+          <li>
+            Data updated at{' '}
+            <span id="timestamp" className="g-info">
+              {position ? (new Date(position.timestamp)).toString() : 'unavailable'}
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <h3>Log</h3>
+      <div id="log" dangerouslySetInnerHTML={{ __html: log }} />
+      <button id="clear-log" className="button" onClick={handleClearLog}>
+        Clear log
+      </button>
+
+      <small className="author">
+        Demo created by{' '}
+        <a href="https://www.audero.it">Aurelio De Rosa</a> (
+        <a href="https://twitter.com/AurelioDeRosa">@AurelioDeRosa</a>).<br />
+        This demo is part of the{' '}
+        <a href="https://github.com/AurelioDeRosa/HTML5-API-demos">HTML5 API demos repository</a>.
+      </small>
     </div>
   );
 };
 
-export default GeoLocationExample;
+export default GeolocationApi;
