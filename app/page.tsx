@@ -106,9 +106,6 @@ const GeolocationApi: React.FC = () => {
 
   return (
     <div className="container">
-      <a href="https://code.tutsplus.com/tutorials/an-introduction-to-the-geolocation-api--cms-20071">
-        Go back to the article
-      </a>
 
       <span id="g-unsupported" className={`api-support ${!apiSupported ? '' : 'hidden'}`}>
         API not supported
@@ -131,7 +128,7 @@ const GeolocationApi: React.FC = () => {
       <div id="g-information">
         <ul>
           <li>
-            Your position is{' '}
+            Your position is
             <span id="latitude" className="g-info">
               {position ? position.coords.latitude : 'unavailable'}
             </span>{' '}
@@ -158,14 +155,14 @@ const GeolocationApi: React.FC = () => {
             meters)
           </li>
           <li>
-            You're{' '}
+            Youre{' '}
             <span id="heading" className="g-info">
               {position ? (position.coords.heading ? position.coords.heading : 'unavailable') : 'unavailable'}
             </span>{' '}
             ° from the True north
           </li>
           <li>
-            You're moving at a speed of{' '}
+            Youre moving at a speed of{' '}
             <span id="speed" className="g-info">
               {position ? (position.coords.speed ? position.coords.speed : 'unavailable') : 'unavailable'}
             </span>{' '}
@@ -181,18 +178,14 @@ const GeolocationApi: React.FC = () => {
       </div>
 
       <h3>Log</h3>
-      <div id="log" dangerouslySetInnerHTML={{ __html: log }} />
+      <div>
+        {log}
+      </div>
       <button id="clear-log" className="button" onClick={handleClearLog}>
         Clear log
       </button>
 
-      <small className="author">
-        Demo created by{' '}
-        <a href="https://www.audero.it">Aurelio De Rosa</a> (
-        <a href="https://twitter.com/AurelioDeRosa">@AurelioDeRosa</a>).<br />
-        This demo is part of the{' '}
-        <a href="https://github.com/AurelioDeRosa/HTML5-API-demos">HTML5 API demos repository</a>.
-      </small>
+
     </div>
   );
 };
