@@ -73,9 +73,11 @@ export default function TestGeolocation() {
   return (
     <>
       <h1>Geolocation App</h1>
-      <button onClick={getUserLocation}>Get User Location</button>
-      <button onClick={watchUserLocation}>Start Watching User Location</button>
-      <button onClick={stopWatchUserLocation}>Stop Watching User Location</button>
+      <div className="w-full flex justify-center items-center gap-4">
+      <button className="border border-slate-300 text-sm font-semibold px-4 py-2" onClick={getUserLocation}>Get User Location</button>
+      <button className="border border-slate-300 text-sm font-semibold px-4 py-2" onClick={watchUserLocation}>Start Watching User Location</button>
+      <button className="border border-slate-300 text-sm font-semibold px-4 py-2" onClick={stopWatchUserLocation}>Stop Watching User Location</button>
+      </div>
       {userLocation && (
         <div>
           <h2>User Location</h2>
