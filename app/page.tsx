@@ -20,11 +20,9 @@ export default function TestGeolocation() {
   }
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925313705469832, longitude: 107.66511906753878, radius: 10 },
-    { latitude: -6.925448111721237, longitude: 107.66466304701494, radius: 10 },
-    { latitude: -6.925701257133712, longitude: 107.6648333279027, radius: 10 },
-    {latitude: -6.925384919069931, longitude: 107.66489167793485, radius: 10},
-    { latitude:-6.925638535435458, longitude: 107.66496946199146, radius: 10}
+ 
+    {latitude: -6.925644862223442, longitude: 107.66499022775501, radius: 1},
+    {latitude:-6.92567826074911, longitude:107.66500503111955, radius: 1}
 
   ];
 
