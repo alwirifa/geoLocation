@@ -1,17 +1,29 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+
+interface UserLocation {
+  latitude: number;
+  longitude: number;
+  accuracy: number;
+  speed: number | null;
+}
 
 export default function TestGeolocation() {
-  const [userLocation, setUserLocation] = useState<{
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [watchId, setWatchId] = useState<number | null>(null);
+
+  interface GeofenceArea {
     latitude: number;
     longitude: number;
-    accuracy: number;
-    speed: number | null;
-  } | null>(null);
-  const [watchId, setWatchId] = useState<number | null>(null);
+    radius: number;
+  }
+
+  const geofenceAreas: GeofenceArea[] = [
+    { latitude: -6.925313705469832, longitude: 107.66511906753878, radius: 10 },
+    { latitude: -6.925448111721237, longitude: 107.66466304701494, radius: 10 },
+    { latitude: -6.925701257133712, longitude: 107.6648333279027, radius: 10 },
+  ];
 
   const getUserLocation = () => {
     console.log("getuserlocation");
@@ -38,6 +50,15 @@ export default function TestGeolocation() {
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
+
+          // Check if user is within any geofence area
+          geofenceAreas.forEach((area) => {
+            const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
+            if (distance <= area.radius) {
+              alert(`You are in geofence area ${geofenceAreas.indexOf(area) + 1}`);
+            }
+          });
+
           console.log("Position update:", position);
         },
         (error) => {
@@ -45,8 +66,8 @@ export default function TestGeolocation() {
         },
         {
           enableHighAccuracy: true,
-          maximumAge: 0, // Force a new location update
-          timeout: 5000, // 5 seconds timeout
+          maximumAge: 0,
+          timeout: 5000,
         }
       );
       setWatchId(id);
@@ -70,13 +91,31 @@ export default function TestGeolocation() {
     };
   }, []);
 
+  // Function to calculate distance between two coordinates using Haversine formula
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in km
+    return distance * 1000; // Convert to meters
+  };
+
+  // Function to convert degrees to radians
+  const deg2rad = (deg: number): number => {
+    return deg * (Math.PI / 180);
+  };
+
   return (
     <>
       <h1>Geolocation App</h1>
       <div className="w-full flex justify-center items-center gap-4">
-      <button className="border border-slate-300 text-sm font-semibold px-4 py-2" onClick={getUserLocation}>Get User Location</button>
-      <button className="border border-slate-300 text-sm font-semibold px-4 py-2" onClick={watchUserLocation}>Start Watching User Location</button>
-      <button className="border border-slate-300 text-sm font-semibold px-4 py-2" onClick={stopWatchUserLocation}>Stop Watching User Location</button>
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={getUserLocation}>Get User Location</button>
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={watchUserLocation}>Start Watching User Location</button>
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={stopWatchUserLocation}>Stop Watching User Location</button>
       </div>
       {userLocation && (
         <div>
@@ -86,25 +125,6 @@ export default function TestGeolocation() {
           <p>Accuracy: {userLocation.accuracy} meters</p>
           <p>Speed: {userLocation.speed} meters/second</p>
         </div>
-      )}
-      {userLocation && (
-        <MapContainer
-          center={[userLocation.latitude, userLocation.longitude]}
-          zoom={15}
-          style={{ height: "400px", width: "100%" }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <Marker position={[userLocation.latitude, userLocation.longitude]}>
-            <Popup>
-              User Location <br />
-              Latitude: {userLocation.latitude} <br />
-              Longitude: {userLocation.longitude}
-            </Popup>
-          </Marker>
-        </MapContainer>
       )}
     </>
   );
