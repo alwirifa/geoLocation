@@ -1,6 +1,8 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 export default function TestGeolocation() {
   const [userLocation, setUserLocation] = useState<{
@@ -12,13 +14,13 @@ export default function TestGeolocation() {
   const [watchId, setWatchId] = useState<number | null>(null);
 
   const getUserLocation = () => {
-    console.log("getuserlocation")
+    console.log("getuserlocation");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-          console.log("get position", latitude, longitude)
+          console.log("get position", latitude, longitude);
         },
         (error) => {
           console.error("Error getting user location: ", error);
@@ -58,7 +60,7 @@ export default function TestGeolocation() {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-    console.log("stop watch")
+    console.log("stop watch");
   };
 
   useEffect(() => {
@@ -82,6 +84,25 @@ export default function TestGeolocation() {
           <p>Accuracy: {userLocation.accuracy} meters</p>
           <p>Speed: {userLocation.speed} meters/second</p>
         </div>
+      )}
+      {userLocation && (
+        <MapContainer
+          center={[userLocation.latitude, userLocation.longitude]}
+          zoom={15}
+          style={{ height: "400px", width: "100%" }}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker position={[userLocation.latitude, userLocation.longitude]}>
+            <Popup>
+              User Location <br />
+              Latitude: {userLocation.latitude} <br />
+              Longitude: {userLocation.longitude}
+            </Popup>
+          </Marker>
+        </MapContainer>
       )}
     </>
   );
