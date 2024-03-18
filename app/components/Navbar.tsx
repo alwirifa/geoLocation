@@ -1,9 +1,8 @@
-"use client"
+"use client";
 
 import Link from 'next/link';
-import React from 'react'
+import React from 'react';
 import { useGlobalContext } from '../context/store';
-import { enData, idData } from '../data';
 
 const routes = [
   {
@@ -20,10 +19,8 @@ const routes = [
   },
 ];
 
-const navbar = () => {
+const Navbar = () => {
   const { language, toggleLanguage } = useGlobalContext();
-  const data = language === 'en' ? enData : idData;
-
 
   return (
     <div>
@@ -36,10 +33,9 @@ const navbar = () => {
             {language === 'en' ? 'IND/ENG' : 'IND/ENG'}
           </button>
         </ul>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default navbar
+export default Navbar;
