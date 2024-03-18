@@ -44,13 +44,13 @@ const Page = (props: Props) => {
             <a href="#" className='underline text-purple font-bold'>WEBSITE</a>
             <a href="#" className='underline text-purple font-bold'>INSTAGRAM</a>
             <a href="#" className='underline text-purple font-bold'>CONTACT</a>
+            <p className='text-transparent'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias iste ipsa consequatur harum. Nobis doloremque quisquam .</p>
           </div>
 
-          <p className='text-transparent'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias iste ipsa consequatur harum. Nobis doloremque quisquam .</p>
         </div>
       </div>
 
-      <div className='absolute bottom-0 w-full'>
+      <div className='fixed bottom-0 w-full'>
         <Navbar />
       </div>
 
