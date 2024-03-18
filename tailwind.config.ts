@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       backgroundImage: {
         'background': "url('../public/images/background.png')",
+        'backgroundTall': "url('../public/images/backgroundTall.png')",
         'photo': "url('../public/images/photo.png')",
       },
       screens: {

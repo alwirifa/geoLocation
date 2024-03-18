@@ -13,10 +13,8 @@ const Page = (props: Props) => {
   const { language, toggleLanguage } = useGlobalContext();
   const data = language === 'en' ? enData : idData;
   return (
-    <div className='h-[100svh] w-full relative overflow-scroll'>
-
-
-      <div className='flex flex-col'>
+    <div className='h-[100svh] w-full relative'>
+      <div className='flex flex-col h-full overflow-scroll relative'>
 
         <div className=' bg-center w-full  flex justify-between'>
           <div className='absolute top-0 flex justify-between w-full p-8'>
@@ -33,7 +31,7 @@ const Page = (props: Props) => {
         </div>
 
 
-        <div className='bg-background bg-cover h-full w-full flex flex-col items-center   px-8 pt-8'>
+        <div className='bg-backgroundTall bg-cover max-h-max w-full flex flex-col items-center   px-8 pt-8'>
 
           <img src="/images/artwork.png" alt="" className=' ' />
 
@@ -52,12 +50,18 @@ const Page = (props: Props) => {
             <p className='text-purple font-bold text-justify'>
               THIS INSTALLATION IS FULLY SUPPORTED BY IFORTE FOR ART JAKARTA GARDEN 2024.
             </p>
+
+            <p className='text-transparent'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. M</p>
+       
           </div>
 
         </div>
-        <Navbar />
-
       </div>
+
+      <div className='absolute bottom-0 w-full'>
+        <Navbar />
+      </div>
+
     </div>
   );
 };
