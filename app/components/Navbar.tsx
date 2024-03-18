@@ -25,7 +25,7 @@ const Navbar = () => {
   return (
     <div>
       <div className='w-full bg-purple text-white'>
-        <ul className='p-6 text-white text-sm font-semibold uppercase flex gap-8 justify-center'>
+        <ul className='p-6 text-white text-sm font-semibold uppercase flex gap-4 justify-center'>
           {routes.map((item, index) => (
             <Link href={item.href} key={index}>{item.label}</Link>
           ))}
