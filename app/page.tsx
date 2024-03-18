@@ -27,7 +27,7 @@ const Page = (props: Props) => {
             <p className='text-sm'>Tomy Herseta, 2024.</p>
           </div>
 
-          <p className='text-justify p-8 mt-6'>
+          <p className='text-justify p-8 mt-6 font-medium'>
             Instalasi ini merupakan sebuah pengalaman mendengar yang membutuhkan partisipasi aktif dari pengunjung. <br /><br />
 
             Silakan gunakan earphone Anda untuk pengalaman yang lebih optimal.

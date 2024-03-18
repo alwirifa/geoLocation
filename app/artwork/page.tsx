@@ -37,13 +37,13 @@ const Page = (props: Props) => {
 
           <div className='flex flex-col gap-8 pb-8'>
 
-            <p className='text-justify'>
+            <p className='text-justify font-medium'>
               {data.artwork1}
             </p>
 
             <img src="/images/flow.png" alt="" className=' h-32 w-auto sm:w-64' />
 
-            <p className='text-justify'>
+            <p className='text-justify font-medium'>
               {data.artwork2}
             </p>
 

@@ -30,7 +30,7 @@ const Page = (props: Props) => {
         <img src="/images/photo.png" alt="" className='h-[420px] bg-cover bg-center ' />
         <div className='bg-backgroundTall bg-cover max-h-max w-full p-8 '>
 
-          <p className='text-justify'>
+          <p className='text-justify font-medium'>
             {data.artist1}
             <br /><br />
 
@@ -44,7 +44,7 @@ const Page = (props: Props) => {
             <a href="#" className='underline text-purple font-bold'>WEBSITE</a>
             <a href="#" className='underline text-purple font-bold'>INSTAGRAM</a>
             <a href="#" className='underline text-purple font-bold'>CONTACT</a>
-            <p className='text-transparent'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias iste ipsa consequatur harum. Nobis doloremque quisquam .</p>
+            <p className='text-transparent'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. </p>
           </div>
 
         </div>

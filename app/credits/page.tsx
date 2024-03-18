@@ -49,9 +49,9 @@ const Page = (props: Props) => {
 
           <div className='flex flex-col gap-4 mt-8'>
             {credits.map((credit, index) => (
-              <div key={index} className='grid gap-1'>
-                <p className='text-sm'>{credit.label}</p>
-                <p className=' font-semibold'>{credit.text}</p>
+              <div key={index} className='grid gap-[2px]'>
+                <p className='text-sm font-medium'>{credit.label}</p>
+                <p className=' font-bold'>{credit.text}</p>
               </div>
             ))}
           </div>
