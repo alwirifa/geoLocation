@@ -33,7 +33,7 @@ const Page = (props: Props) => {
             Silakan gunakan earphone Anda untuk pengalaman yang lebih optimal.
           </p>
 
-          <div className='absolute bottom-[20svh] flex flex-col gap-4 justify-center items-center'>
+          <div className='absolute bottom-[18svh] flex flex-col gap-4 justify-center items-center'>
             <img src="/images/headphones.png" alt="" className='h-24 w-24' />
             <Link href={'/geolocation'} className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max'>MULAI PENGALAMAN</Link>
 
