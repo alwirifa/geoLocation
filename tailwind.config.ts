@@ -9,10 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'background': "url('../public/images/background.png')",
+        'photo': "url('../public/images/photo.png')",
       },
+      screens: {
+        'tallXS2': { 'raw': '(min-height: 400px)' },
+        'tallXS': { 'raw': '(min-height: 500px)' },
+        'tallSM': { 'raw': '(min-height: 600px)' },
+        'tall': { 'raw': '(min-height: 700px)' },
+        'tallMD': { 'raw': '(min-height: 800px)' },
+        'tallLG': { 'raw': '(min-height: 900px)' },
+        'tallXL': { 'raw': '(min-height: 1000px)' },
+        'tall2XL': { 'raw': '(min-height: 1300px)' },
+        'wXS': { 'raw': '(min-width: 300px)' },
+      },
+      colors: {
+        'purple': '#430098'
+      }
     },
   },
   plugins: [],
