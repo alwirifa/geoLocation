@@ -50,17 +50,17 @@ export default function TestGeolocation() {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
-          setUserLocation({ latitude, longitude, accuracy, speed });
+          if (accuracy <= 4) {
+            setUserLocation({ latitude, longitude, accuracy, speed });
 
-          // Check if user is within any geofence area
-          geofenceAreas.forEach((area) => {
-            const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
-            if (distance <= area.radius) {
-              alert(`You are in geofence area ${geofenceAreas.indexOf(area) + 1}`);
-            }
-          });
-
-          console.log("Position update:", position);
+            // Check if user is within any geofence area
+            geofenceAreas.forEach((area) => {
+              const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
+              if (distance <= area.radius) {
+                alert(`You are in geofence area ${geofenceAreas.indexOf(area) + 1}`);
+              }
+            });
+          }
         },
         (error) => {
           console.error("Error watching user location: ", error);
