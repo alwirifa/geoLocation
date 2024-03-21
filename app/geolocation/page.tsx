@@ -21,6 +21,8 @@ const TestGeolocation = () => {
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
+  const [isInsideGeofence, setIsInsideGeofence] = useState<boolean>(false);
 
   const geofenceAreas: GeofenceArea[] = [
     { latitude: -6.925536627901488, longitude: 107.66501751536497, radius: 15, videoId: "DOOrIxw5xOw" },
@@ -56,13 +58,23 @@ const TestGeolocation = () => {
           setUserLocation({ latitude, longitude, accuracy, speed });
 
           // Check if user is within any geofence area
+          let isInside = false;
           geofenceAreas.forEach((area) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
-            if (distance <= area.radius) {
-              alert(`You are in geofence area ${geofenceAreas.indexOf(area) + 1}`);
+            if (distance <= area.radius && currentVideoId !== area.videoId) {
+              isInside = true;
               setCurrentVideoId(area.videoId); // Set currentVideoId here
+              if (!isVideoPlaying) {
+                setIsVideoPlaying(true);
+              }
             }
           });
+
+          if (!isInside && isVideoPlaying) {
+            setIsVideoPlaying(false);
+          }
+
+          setIsInsideGeofence(isInside);
 
           console.log("Position update:", position);
         },
@@ -136,7 +148,7 @@ const TestGeolocation = () => {
           <h2>Current Video</h2>
           <YouTube
             videoId={currentVideoId}
-            opts={{ height: "400", width: "400", controls: 0 }} // Hiding YouTube controls
+            opts={{ height: "400", width: "400", controls: 0, autoplay: isInsideGeofence && isVideoPlaying ? 1 : 0 }} // Hiding YouTube controls and autoplaying the video if inside geofence and video playing
           />
         </div>
       )}
