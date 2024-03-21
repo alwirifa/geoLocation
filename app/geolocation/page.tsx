@@ -23,7 +23,7 @@ const TestGeolocation = () => {
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925536627901488, longitude: 107.66501751536497, radius: 15, videoId: "DOOrIxw5xOw" },
     { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
     { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
     { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
