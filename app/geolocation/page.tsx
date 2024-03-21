@@ -25,28 +25,23 @@ const TestGeolocation = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [player, setPlayer] = useState<any>(null);
 
-  useEffect(() => {
-    getUserLocation(); // Memanggil untuk mendapatkan lokasi pengguna saat komponen dimuat
-  }, []);
 
-  const onReady = (event: any) => {
-    setPlayer(event.target);
-  };
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925365384155353, longitude: 107.66494545222442, radius: 15, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.925497850456106, longitude: 107.66499037922092, radius: 7, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925383356966224, longitude: 107.66488711417902, radius: 7, videoId: "36YnV9STBqc" },
     { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
     { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
   ];
 
   const getUserLocation = () => {
+    console.log("getuserlocation");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-          checkGeofence(latitude, longitude);
+          console.log("get position", latitude, longitude);
         },
         (error) => {
           console.error("Error getting user location: ", error);
@@ -58,13 +53,34 @@ const TestGeolocation = () => {
     }
   };
 
+
   const watchUserLocation = () => {
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ latitude, longitude, accuracy: 0, speed: 0 });
-          checkGeofence(latitude, longitude);
+          const { latitude, longitude, accuracy, speed } = position.coords;
+          setUserLocation({ latitude, longitude, accuracy, speed });
+
+          let isInsideAnyGeofence = false;
+
+          geofenceAreas.forEach((area) => {
+            const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
+            if (distance <= area.radius) {
+              // Jika pengguna berada dalam geofence area, set isInsideAnyGeofence menjadi true
+              isInsideAnyGeofence = true;
+              // Jika pengguna berada dalam geofence area yang berbeda dengan video yang sedang diputar, ubah video yang diputar
+              if (currentVideoId !== area.videoId) {
+                setCurrentVideoId(area.videoId);
+              }
+            }
+          });
+
+          // Jika pengguna berada di dalam setidaknya satu geofence area, tampilkan toggle play
+          if (isInsideAnyGeofence) {
+            setIsPlaying(true); // Jika diinginkan, Anda bisa menambahkan logika lain di sini untuk menentukan apakah video harus diputar otomatis saat masuk ke dalam geofence area
+          } else {
+            setIsPlaying(false); // Sembunyikan toggle play jika pengguna tidak berada di dalam geofence area
+          }
         },
         (error) => {
           console.error("Error watching user location: ", error);
@@ -81,29 +97,23 @@ const TestGeolocation = () => {
     }
   };
 
+
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
+    console.log("stop watch");
   };
 
-  const checkGeofence = (latitude: number, longitude: number) => {
-    geofenceAreas.forEach((area) => {
-      const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
-      if (distance <= area.radius && currentVideoId !== area.videoId) {
-        setCurrentVideoId(area.videoId);
-        if (player) {
-          if (!isPlaying) {
-            player.playVideo();
-            setIsPlaying(true);
-            console.log(isPlaying)
-          }
-        }
-      }
-    });
-  };
+  useEffect(() => {
+    return () => {
+      // Clear watch position when the component is unmounted
+      stopWatchUserLocation();
+    };
+  }, []);
 
+  // Function to calculate distance between two coordinates using Haversine formula
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Radius of the earth in km
     const dLat = deg2rad(lat2 - lat1);
@@ -116,8 +126,33 @@ const TestGeolocation = () => {
     return distance * 1000; // Convert to meters
   };
 
+  // Function to convert degrees to radians
   const deg2rad = (deg: number): number => {
     return deg * (Math.PI / 180);
+  };
+  const togglePlay = () => {
+    if (player) {
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+      setIsPlaying(prevState => !prevState);
+    }
+  };
+
+  useEffect(() => {
+    // Lakukan inisialisasi pemutaran video saat komponen pertama kali dimuat
+    if (player && currentVideoId) {
+      player.loadVideoById(currentVideoId);
+      if (isPlaying) {
+        player.playVideo();
+      }
+    }
+  }, [player, currentVideoId, isPlaying]);
+
+  const onReady = (event: any) => {
+    setPlayer(event.target);
   };
 
   return (
@@ -139,19 +174,26 @@ const TestGeolocation = () => {
       )}
 
       <h2>Current Video</h2>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-4">
         {geofenceAreas.map((area) => (
           <YouTube
             key={area.videoId}
             videoId={area.videoId}
             onReady={onReady}
-            opts={{ height: "400", width: "400", controls: 0, autoplay: 0 }} // Autoplaying the video if inside geofence and video playing
-            />
-          ))}
+            opts={{ height: "400", width: "400", controls: 0, autoplay: 0 }}
+          />
+        ))}
+      </div>
+
+      {isPlaying && (
+        <div className='absolute bottom-[18svh] flex flex-col gap-4 justify-center items-center'>
+          <img src="/images/headphones.png" alt="" className='h-24 w-24' />
+          <button onClick={togglePlay} className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max'>Listen The music</button>
         </div>
-      </>
-    );
-  };
-  
-  export default TestGeolocation;
-  
+      )}
+    </>
+  );
+
+}
+
+export default TestGeolocation;
