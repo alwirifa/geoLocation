@@ -1,37 +1,79 @@
-import React from 'react'
+"use client"
+
+import React, { useState } from 'react';
+import YouTube from 'react-youtube';
 
 type Props = {}
 
-const page = (props: Props) => {
+const Page = (props: Props) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [player, setPlayer] = useState<any>(null);
+  const [Speed, setSpeed] = useState(1); // Default Speed: 1
+
+  const togglePlay = () => {
+    if (player) {
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+      setIsPlaying(prevState => !prevState);
+    }
+  };
+
+  const changeSpeed = (delta: number) => {
+    const newSpeed = Speed + delta;
+    if (player) {
+      player.setPlaybackRate(newSpeed);
+      setSpeed(newSpeed);
+    }
+  };
+
+  const onReady = (event: any) => {
+    setPlayer(event.target);
+  };
+
   return (
     <div className='h-screen w-full flex justify-center items-center'>
+      <div className='grid grid-cols-4 gap-2  justify-center items-center'>
+        <YouTube
+          videoId="DOOrIxw5xOw"
+          onReady={onReady}
+          opts={{ height: '400', width: '400', controls: 0 }} // Hiding YouTube controls
+        />
 
-      <p className='text-4xl'>geomusic</p>
-      <div className='grid grid-cols-2 gap-10'>
+        <YouTube
+          videoId="36YnV9STBqc"
+          onReady={onReady}
+          opts={{ height: '400', width: '400', controls: 0 }} // Hiding YouTube controls
+        />
+        
+        <YouTube
+          videoId="lP26UCnoH9s"
+          onReady={onReady}
+          opts={{ height: '400', width: '400', controls: 0 }} // Hiding YouTube controls
+        />
 
-        <div className='flex flex-col gap-2 overflow-hidden bg-red-500'>
-        <p>VIDEO1</p>
-          <iframe height='400px' width='400px' src="https://www.youtube.com/embed/lP26UCnoH9s" title="Coffee Shop Radio ☕ - 24/7 lofi jazzy hip-hop beats" allowFullScreen></iframe>
+        <YouTube
+          videoId="bk8WKwHDUNk"
+          onReady={onReady}
+          opts={{ height: '400', width: '400', controls: 0 }} // Hiding YouTube controls
+        />
+
+        <div className="flex gap-2">
+          <button onClick={() => changeSpeed(0.1)} className='px-4 py-2 fong-semibold text-sm rounded-md bg-purple text-white'>
+            Speed Up
+          </button>
+          <button onClick={() => changeSpeed(-0.1)} className='px-4 py-2 fong-semibold text-sm rounded-md bg-purple text-white'>
+            Speed Down
+          </button>
+          <button onClick={togglePlay} className='px-4 py-2 fong-semibold text-sm rounded-md bg-purple text-white'>
+            {isPlaying ? "Pause" : "Play"}
+          </button>
         </div>
-       
-        <div className='flex flex-col gap-2 overflow-hidden bg-red-500'>
-        <p>VIDEO2</p>
-        <iframe height='400px' width='400px'  src="https://www.youtube.com/embed/NVXgPsK_eTw" title="Top 100 NoCopyRightSounds | Best of NCS | Most Viewed Songs | The Best of All Time | 2022 | 6H" allowFullScreen></iframe>
-        </div>
-       
-        <div className='flex flex-col gap-2 overflow-hidden bg-red-500'>
-        <p>VIDEO3</p>
-        <iframe height='400px' width='400px' src="https://www.youtube.com/embed/XnUNOaxw6bs" title="Pop Rock Radio [ 24/7 LIVE ] Best of Pop Rock Songs! Best Rock Music Hits Mix"  allowFullScreen></iframe>
-        </div>
-       
-        <div className='flex flex-col gap-2 overflow-hidden bg-red-500'>
-        <p>VIDEO4</p>
-        <iframe height='400px' width='400px' src="https://www.youtube.com/embed/Dx5qFachd3A" title="Relaxing Jazz Piano Radio - Slow Jazz Music - 24/7 Live Stream - Music For WorkStudy" ></iframe>
-        </div>
-       
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

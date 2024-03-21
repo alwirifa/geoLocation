@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
 
@@ -9,30 +9,37 @@ interface UserLocation {
   speed: number | null;
 }
 
-interface GeofenceArea {
-  latitude: number;
-  longitude: number;
-  radius: number;
-}
-
-const geofenceAreas: GeofenceArea[] = [
-  { latitude: -6.925536627901488, longitude: 107.66501751536497, radius: 15 },
-  { latitude: -6.9167522, longitude: 107.6614443, radius: 4 },
-  { latitude: -6.9165868, longitude: 107.6613089, radius: 4 },
-  { latitude: -6.9164866, longitude: 107.6614578, radius: 4 },
-];
-
 export default function TestGeolocation() {
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
-  const [currentVideo, setCurrentVideo] = useState<number | null>(null);
+
+  interface GeofenceArea {
+    latitude: number;
+    longitude: number;
+    radius: number;
+  }
+
+  const geofenceAreas: GeofenceArea[] = [
+
+    { latitude: -6.9166349, longitude: 107.6615918, radius: 4 },
+    { latitude: -6.9167522, longitude: 107.6614443, radius: 4 },
+    { latitude: -6.9165868, longitude: 107.6613089, radius: 4 },
+    { latitude: -6.9164866, longitude: 107.6614578, radius: 4 },
+    
+  ];
 
   const getUserLocation = () => {
+    console.log("getuserlocation");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
-          setUserLocation({ latitude, longitude, accuracy, speed });
+          if (accuracy <= 4) {
+            setUserLocation({ latitude, longitude, accuracy, speed });
+            console.log("get position", latitude, longitude);
+          } else {
+            console.log("Accuracy too low:", accuracy);
+          }
         },
         (error) => {
           console.error("Error getting user location: ", error);
@@ -49,21 +56,18 @@ export default function TestGeolocation() {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
-          setUserLocation({ latitude, longitude, accuracy, speed });
-
-          // Check if user is within any geofence area
-          geofenceAreas.forEach((area, index) => {
-            const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
-            if (distance <= area.radius) {
-              if (currentVideo !== index) {
-                setCurrentVideo(index);
+          if (accuracy <= 4) {
+            setUserLocation({ latitude, longitude, accuracy, speed });
+            geofenceAreas.forEach((area) => {
+              const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
+              if (distance <= area.radius) {
+                alert(`You are in geofence area ${geofenceAreas.indexOf(area) + 1}`);
               }
-            } else {
-              if (currentVideo === index) {
-                setCurrentVideo(null);
-              }
-            }
-          });
+            });
+            console.log("Position update:", position);
+          } else {
+            console.log("Accuracy too low:", accuracy);
+          }
         },
         (error) => {
           console.error("Error watching user location: ", error);
@@ -85,29 +89,17 @@ export default function TestGeolocation() {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
+    console.log("stop watch");
   };
 
   useEffect(() => {
-    getUserLocation();
-    watchUserLocation();
     return () => {
+      // Clear watch position when the component is unmounted
       stopWatchUserLocation();
     };
   }, []);
 
-  useEffect(() => {
-    if (currentVideo !== null) {
-      playVideo();
-    }
-  }, [currentVideo]);
-
-  const playVideo = () => {
-    const videoElement = document.getElementById(`video-${currentVideo}`);
-    if (videoElement) {
-      (videoElement as HTMLVideoElement).play();
-    }
-  };
-
+  // Function to calculate distance between two coordinates using Haversine formula
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Radius of the earth in km
     const dLat = deg2rad(lat2 - lat1);
@@ -120,29 +112,18 @@ export default function TestGeolocation() {
     return distance * 1000; // Convert to meters
   };
 
+  // Function to convert degrees to radians
   const deg2rad = (deg: number): number => {
     return deg * (Math.PI / 180);
-  };
-
-  const handleGetUserLocation = () => {
-    getUserLocation();
-  };
-
-  const handleStartWatchUserLocation = () => {
-    watchUserLocation();
-  };
-
-  const handleStopWatchUserLocation = () => {
-    stopWatchUserLocation();
   };
 
   return (
     <>
       <h1>Geolocation App</h1>
       <div className="w-full flex justify-center items-center gap-4">
-        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={handleGetUserLocation}>Get User Location</button>
-        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={handleStartWatchUserLocation}>Start Watching User Location</button>
-        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={handleStopWatchUserLocation}>Stop Watching User Location</button>
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={getUserLocation}>Get User Location</button>
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={watchUserLocation}>Start Watching User Location</button>
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={stopWatchUserLocation}>Stop Watching User Location</button>
       </div>
       {userLocation && (
         <div>
@@ -153,27 +134,6 @@ export default function TestGeolocation() {
           <p>Speed: {userLocation.speed} meters/second</p>
         </div>
       )}
-      {/* Video Players */}
-      <div className="flex justify-center items-center mt-64">
-        <div className='grid grid-cols-2 gap-10'>
-          {geofenceAreas.map((area, index) => (
-            <div key={index} className='flex flex-col gap-2 overflow-hidden bg-red-500'>
-              <p>VIDEO {index + 1}</p>
-              <video id={`video-${index}`} height='400px' width='400px' src={getVideoSource(index)} title={`Video ${index + 1}`} autoPlay loop controls />
-            </div>
-          ))}
-        </div>
-      </div>
     </>
   );
 }
-
-const getVideoSource = (index: number): string => {
-  const videoSources = [
-    "https://www.youtube.com/embed/lP26UCnoH9s",
-    "https://www.youtube.com/embed/NVXgPsK_eTw",
-    "https://www.youtube.com/embed/XnUNOaxw6bs",
-    "https://www.youtube.com/embed/Dx5qFachd3A",
-  ];
-  return videoSources[index];
-};
