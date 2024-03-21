@@ -1,6 +1,7 @@
-"use client";
+"use client"
 
 import React, { useState, useEffect } from "react";
+import YouTube from "react-youtube";
 
 interface UserLocation {
   latitude: number;
@@ -9,23 +10,23 @@ interface UserLocation {
   speed: number | null;
 }
 
-export default function TestGeolocation() {
+interface GeofenceArea {
+  latitude: number;
+  longitude: number;
+  radius: number;
+  videoId: string;
+}
+
+const TestGeolocation = () => {
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
-
-  interface GeofenceArea {
-    latitude: number;
-    longitude: number;
-    radius: number;
-  }
+  const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
 
   const geofenceAreas: GeofenceArea[] = [
-
-    { latitude: -6.9166349, longitude: 107.6615918, radius: 4 },
-    { latitude: -6.9167522, longitude: 107.6614443, radius: 4 },
-    { latitude: -6.9165868, longitude: 107.6613089, radius: 4 },
-    { latitude: -6.9164866, longitude: 107.6614578, radius: 4 },
-    
+    { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
+    { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
   ];
 
   const getUserLocation = () => {
@@ -34,12 +35,8 @@ export default function TestGeolocation() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
-          if (accuracy <= 4) {
-            setUserLocation({ latitude, longitude, accuracy, speed });
-            console.log("get position", latitude, longitude);
-          } else {
-            console.log("Accuracy too low:", accuracy);
-          }
+          setUserLocation({ latitude, longitude, accuracy, speed });
+          console.log("get position", latitude, longitude);
         },
         (error) => {
           console.error("Error getting user location: ", error);
@@ -56,18 +53,17 @@ export default function TestGeolocation() {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
-          if (accuracy <= 4) {
-            setUserLocation({ latitude, longitude, accuracy, speed });
-            geofenceAreas.forEach((area) => {
-              const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
-              if (distance <= area.radius) {
-                alert(`You are in geofence area ${geofenceAreas.indexOf(area) + 1}`);
-              }
-            });
-            console.log("Position update:", position);
-          } else {
-            console.log("Accuracy too low:", accuracy);
-          }
+          setUserLocation({ latitude, longitude, accuracy, speed });
+
+          // Check if user is within any geofence area
+          geofenceAreas.forEach((area) => {
+            const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
+            if (distance <= area.radius) {
+              alert(`You are in geofence area ${geofenceAreas.indexOf(area) + 1}`);
+            }
+          });
+
+          console.log("Position update:", position);
         },
         (error) => {
           console.error("Error watching user location: ", error);
@@ -134,6 +130,17 @@ export default function TestGeolocation() {
           <p>Speed: {userLocation.speed} meters/second</p>
         </div>
       )}
+      {currentVideoId && (
+        <div>
+          <h2>Current Video</h2>
+          <YouTube
+            videoId={currentVideoId}
+            opts={{ height: "400", width: "400", controls: 0 }} // Hiding YouTube controls
+          />
+        </div>
+      )}
     </>
   );
-}
+};
+
+export default TestGeolocation;
