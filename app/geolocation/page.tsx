@@ -60,6 +60,7 @@ const TestGeolocation = () => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
               alert(`You are in geofence area ${geofenceAreas.indexOf(area) + 1}`);
+              setCurrentVideoId(area.videoId); // Set currentVideoId here
             }
           });
 
