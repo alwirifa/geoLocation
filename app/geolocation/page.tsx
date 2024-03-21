@@ -21,24 +21,32 @@ const TestGeolocation = () => {
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
-  const [isInsideGeofence, setIsInsideGeofence] = useState<boolean>(false);
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [player, setPlayer] = useState<any>(null);
+
+  useEffect(() => {
+    getUserLocation(); // Memanggil untuk mendapatkan lokasi pengguna saat komponen dimuat
+  }, []);
+
+  const onReady = (event: any) => {
+    setPlayer(event.target);
+  };
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925536627901488, longitude: 107.66501751536497, radius: 15, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925365384155353, longitude: 107.66494545222442, radius: 15, videoId: "DOOrIxw5xOw" },
     { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
     { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
     { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
   ];
 
   const getUserLocation = () => {
-    console.log("getuserlocation");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-          console.log("get position", latitude, longitude);
+          checkGeofence(latitude, longitude);
         },
         (error) => {
           console.error("Error getting user location: ", error);
@@ -54,27 +62,9 @@ const TestGeolocation = () => {
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
-          const { latitude, longitude, accuracy, speed } = position.coords;
-          setUserLocation({ latitude, longitude, accuracy, speed });
-
-          // Check if user is within any geofence area
-          let isInside = false;
-          geofenceAreas.forEach((area) => {
-            const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
-            if (distance <= area.radius && currentVideoId !== area.videoId) {
-              isInside = true;
-              setCurrentVideoId(area.videoId); // Set currentVideoId here
-              setIsVideoPlaying(true); // Play video when entering geofence
-            }
-          });
-
-          if (!isInside && isVideoPlaying) {
-            setIsVideoPlaying(false); // Pause video when leaving geofence
-          }
-
-          setIsInsideGeofence(isInside);
-
-          console.log("Position update:", position);
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ latitude, longitude, accuracy: 0, speed: 0 });
+          checkGeofence(latitude, longitude);
         },
         (error) => {
           console.error("Error watching user location: ", error);
@@ -96,17 +86,24 @@ const TestGeolocation = () => {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-    console.log("stop watch");
   };
 
-  useEffect(() => {
-    return () => {
-      // Clear watch position when the component is unmounted
-      stopWatchUserLocation();
-    };
-  }, []);
+  const checkGeofence = (latitude: number, longitude: number) => {
+    geofenceAreas.forEach((area) => {
+      const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
+      if (distance <= area.radius && currentVideoId !== area.videoId) {
+        setCurrentVideoId(area.videoId);
+        if (player) {
+          if (!isPlaying) {
+            player.playVideo();
+            setIsPlaying(true);
+            console.log(isPlaying)
+          }
+        }
+      }
+    });
+  };
 
-  // Function to calculate distance between two coordinates using Haversine formula
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Radius of the earth in km
     const dLat = deg2rad(lat2 - lat1);
@@ -119,7 +116,6 @@ const TestGeolocation = () => {
     return distance * 1000; // Convert to meters
   };
 
-  // Function to convert degrees to radians
   const deg2rad = (deg: number): number => {
     return deg * (Math.PI / 180);
   };
@@ -141,17 +137,21 @@ const TestGeolocation = () => {
           <p>Speed: {userLocation.speed} meters/second</p>
         </div>
       )}
-      {currentVideoId && (
-        <div>
-          <h2>Current Video</h2>
-          <YouTube
-            videoId={currentVideoId}
-            opts={{ height: "400", width: "400", controls: 0, autoplay: isInsideGeofence && isVideoPlaying ? 1 : 0 }} // Hiding YouTube controls and autoplaying the video if inside geofence and video playing
-          />
-        </div>
-      )}
-    </>
-  );
-};
 
-export default TestGeolocation;
+      <h2>Current Video</h2>
+      <div className="grid grid-cols-4 gap-2">
+        {geofenceAreas.map((area) => (
+          <YouTube
+            key={area.videoId}
+            videoId={area.videoId}
+            onReady={onReady}
+            opts={{ height: "400", width: "400", controls: 0, autoplay: 0 }} // Autoplaying the video if inside geofence and video playing
+            />
+          ))}
+        </div>
+      </>
+    );
+  };
+  
+  export default TestGeolocation;
+  

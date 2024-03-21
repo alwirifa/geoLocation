@@ -35,31 +35,12 @@ const Page = (props: Props) => {
 
   return (
     <div className='h-screen w-full flex justify-center items-center'>
-      <div className='grid grid-cols-4 gap-2  justify-center items-center'>
+      <div className='flex flex-col gap-2  justify-center items-center'>
         <YouTube
-          videoId="DOOrIxw5xOw"
+          videoId="P5mwtvf0yCU"
           onReady={onReady}
           opts={{ height: '400', width: '400', controls: 0 }} // Hiding YouTube controls
         />
-
-        <YouTube
-          videoId="36YnV9STBqc"
-          onReady={onReady}
-          opts={{ height: '400', width: '400', controls: 0 }} // Hiding YouTube controls
-        />
-        
-        <YouTube
-          videoId="lP26UCnoH9s"
-          onReady={onReady}
-          opts={{ height: '400', width: '400', controls: 0 }} // Hiding YouTube controls
-        />
-
-        <YouTube
-          videoId="bk8WKwHDUNk"
-          onReady={onReady}
-          opts={{ height: '400', width: '400', controls: 0 }} // Hiding YouTube controls
-        />
-
         <div className="flex gap-2">
           <button onClick={() => changeSpeed(0.1)} className='px-4 py-2 fong-semibold text-sm rounded-md bg-purple text-white'>
             Speed Up
