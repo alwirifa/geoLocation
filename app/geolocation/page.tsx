@@ -28,8 +28,8 @@ const TestGeolocation = () => {
 
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925497850456106, longitude: 107.66499037922092, radius: 7, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.925383356966224, longitude: 107.66488711417902, radius: 7, videoId: "36YnV9STBqc" },
+    { latitude: -6.925497850456106, longitude: 107.66499037922092, radius: 15, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925383356966224, longitude: 107.66488711417902, radius: 15, videoId: "36YnV9STBqc" },
     { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
     { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
   ];
@@ -195,5 +195,4 @@ const TestGeolocation = () => {
   );
 
 }
-
 export default TestGeolocation;
