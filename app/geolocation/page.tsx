@@ -64,14 +64,12 @@ const TestGeolocation = () => {
             if (distance <= area.radius && currentVideoId !== area.videoId) {
               isInside = true;
               setCurrentVideoId(area.videoId); // Set currentVideoId here
-              if (!isVideoPlaying) {
-                setIsVideoPlaying(true);
-              }
+              setIsVideoPlaying(true); // Play video when entering geofence
             }
           });
 
           if (!isInside && isVideoPlaying) {
-            setIsVideoPlaying(false);
+            setIsVideoPlaying(false); // Pause video when leaving geofence
           }
 
           setIsInsideGeofence(isInside);
