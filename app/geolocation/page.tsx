@@ -154,9 +154,9 @@ const TestGeolocation = () => {
     const y2 = 100;
  
 
-    const fixedUserX = (((x2-x1) * longtitude - geofenceAreas[0].longitude )/ (geofenceAreas[3].longitude - geofenceAreas[0].longitude) ) + x1
-    const fixedUserY = (((y2-y1) * latitude - geofenceAreas[0].latitude )/ (geofenceAreas[3].latitude - geofenceAreas[0].latitude)) + y1
-
+    const fixedUserX = (((x2 - x1) * (longtitude - geofenceAreas[0].longitude)) / (geofenceAreas[3].longitude - geofenceAreas[0].longitude)) + x1;
+    const fixedUserY = (((y2 - y1) * (latitude - geofenceAreas[0].latitude)) / (geofenceAreas[3].latitude - geofenceAreas[0].latitude)) + y1;
+    
     // sudut x
     // const area1x = Math.cos(geofenceAreas[0].latitude) * Math.cos(geofenceAreas[0].longitude)
     // const area2x = Math.cos(geofenceAreas[1].latitude) * Math.cos(geofenceAreas[1].longitude)
