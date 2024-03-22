@@ -30,18 +30,18 @@ const TestGeolocation = () => {
 
   const geofenceAreas: GeofenceArea[] = [
     //  artha
-    { latitude: -6.925384884463918, longitude: 107.66489072432168, radius: 6, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.925649148328804, longitude: 107.66496931178035, radius: 6, videoId: "36YnV9STBqc" },
-    { latitude: -6.92546781835236, longitude: 107.6646188541944, radius: 6, videoId: "lP26UCnoH9s" },
-    { latitude: -6.925740516119996, longitude: 107.66469602566282, radius: 6, videoId: "bk8WKwHDUNk" },
-    
+    { latitude: -6.925479356355771, longitude: 107.6645709917322,   radius: 6, videoId: "lP26UCnoH9s" },
+    { latitude: -6.925384166999025, longitude:  107.66488749238019, radius: 6, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925742957551122, longitude: 107.66467023346081,  radius: 6, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.9256437742903625, longitude: 107.66496997030328, radius: 6, videoId: "36YnV9STBqc" },
+
   ];
-  
+
   // gasmin
-    // { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
-    // { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
-    // { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
-    // { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
+  // { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
+  // { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
+  // { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
+  // { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -145,42 +145,64 @@ const TestGeolocation = () => {
 
   const userTracker = (latitude: number, longtitude: number) => {
 
+    // 1 (Latitude 1, Longitude 1) = (-6.925479356355771, 107.6645709917322)
+    // 4 (Latitude 2, Longitude 2) = (-6.9256437742903625, 107.66496997030328)
+
+    const x1 = 0;
+    const y1 = 0;
+    const x2 = 100;
+    const y2 = 100;
+ 
+
+    const fixedUserX = (((x2-x1) * longtitude - geofenceAreas[0].longitude )/ (geofenceAreas[3].longitude - geofenceAreas[0].longitude) ) + x1
+    const fixedUserY = (((y2-y1) * latitude - geofenceAreas[0].latitude )/ (geofenceAreas[3].latitude - geofenceAreas[0].latitude)) + y1
+
     // sudut x
-    const area1x = Math.cos(geofenceAreas[0].latitude) * Math.cos(geofenceAreas[0].longitude)
-    const area2x = Math.cos(geofenceAreas[1].latitude) * Math.cos(geofenceAreas[1].longitude)
-    const area3x = Math.cos(geofenceAreas[2].latitude) * Math.cos(geofenceAreas[2].longitude)
+    // const area1x = Math.cos(geofenceAreas[0].latitude) * Math.cos(geofenceAreas[0].longitude)
+    // const area2x = Math.cos(geofenceAreas[1].latitude) * Math.cos(geofenceAreas[1].longitude)
+    // const area3x = Math.cos(geofenceAreas[2].latitude) * Math.cos(geofenceAreas[2].longitude)
 
-    // sudut y
-    const area1y = Math.cos(geofenceAreas[0].latitude) * Math.sin(geofenceAreas[0].longitude)
-    const area2y = Math.cos(geofenceAreas[1].latitude) * Math.sin(geofenceAreas[1].longitude)
-    const area3y = Math.cos(geofenceAreas[2].latitude) * Math.sin(geofenceAreas[2].longitude)
+    // // sudut y
+    // const area1y = Math.cos(geofenceAreas[0].latitude) * Math.sin(geofenceAreas[0].longitude)
+    // const area2y = Math.cos(geofenceAreas[1].latitude) * Math.sin(geofenceAreas[1].longitude)
+    // const area3y = Math.cos(geofenceAreas[2].latitude) * Math.sin(geofenceAreas[2].longitude)
 
 
-    // titik acu/jarak x 
-    const jarakX = area2x - area1x
+    // // titik acu/jarak x 
+    // const jarakX = area3x - area1x
 
-    // titik acu/jarak y
-    const jarakY = area3y - area1y
+    // // titik acu/jarak y
+    // const jarakY = area2y - area1y
 
-    // user x
-    const userPositionX = Math.cos(latitude) * Math.cos(longtitude)
+   
 
-    // user y
-    const userPositionY = Math.cos(latitude) * Math.sin(longtitude)
+    // const userPositionX = Math.cos(geofenceAreas[3].latitude) * Math.cos(geofenceAreas[3].longitude)
+    // const userPositionY = Math.cos(geofenceAreas[3].latitude) * Math.sin(geofenceAreas[3].longitude)
 
-    // calculate x dan y untuk dapat posisi user
+    // // user y
 
-    // posisi user x 
-    const updateUserPositionX = userPositionX - area3x
+    // // calculate x dan y untuk dapat posisi user
 
-    // posisi user y 
-    const updateUserPositionY = userPositionY - area2y
+    // // posisi user x 
+    // const updateUserPositionX = userPositionX - area1x
 
-    // fixed posisi x
-    const fixedUserX = (updateUserPositionX / jarakX) * 100 
+    // // posisi user y 
+    // const updateUserPositionY = userPositionY - area1y
 
-    // fixed posisi y 
-    const fixedUserY = (updateUserPositionY / jarakY) * 100 
+    // // fixed posisi x
+    // let fixedUserX = (updateUserPositionX / jarakX) * 100
+
+    // // fixed posisi y 
+    // let fixedUserY = (updateUserPositionY / jarakY) * 100
+
+    // if (fixedUserX > 100) {
+    //   fixedUserX = 100;
+    // }
+  
+    // // Pastikan fixedUserY tidak melebihi 100
+    // if (fixedUserY > 100) {
+    //   fixedUserY = 100;
+    // }
 
     setFixedUserX(fixedUserX);
     setFixedUserY(fixedUserY);
@@ -225,7 +247,7 @@ const TestGeolocation = () => {
           <div
             className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
             style={{
-              top: `${fixedUserX}px`,
+              top: `${fixedUserX}%`,
               left: `${fixedUserY}%`,
             }}
           ></div>
