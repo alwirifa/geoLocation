@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import YouTube from "react-youtube";
 
+
 interface UserLocation {
   latitude: number;
   longitude: number;
@@ -24,21 +25,21 @@ const TestGeolocation = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [player, setPlayer] = useState<any>(null);
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
-  const [mapPosition, setMapPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const [fixedUserX, setFixedUserX] = useState<number | null>(null);
+  const [fixedUserY, setFixedUserY] = useState<number | null>(null);
 
   const geofenceAreas: GeofenceArea[] = [
     //  artha
-    { latitude: -6.925646303061493, longitude: 107.66497786550748, radius: 4, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.925384033131933, longitude: 107.66488734095772, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.925384884463918, longitude: 107.66489072432168, radius: 6, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925649148328804, longitude: 107.66496931178035, radius: 6, videoId: "36YnV9STBqc" },
+    { latitude: -6.92546781835236, longitude: 107.6646188541944, radius: 6, videoId: "lP26UCnoH9s" },
+    { latitude: -6.925740516119996, longitude: 107.66469602566282, radius: 6, videoId: "bk8WKwHDUNk" },
 
     // gasmin
     // { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
     // { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
-    { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
-    { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
-    
-    // error
-    // { latitude: -6.9158979, longitude: 107.6785185, radius: 4, videoId: "qoZXtRddtek" },
+    // { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
+    // { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
   ];
 
   const getUserLocation = () => {
@@ -47,7 +48,7 @@ const TestGeolocation = () => {
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-          updateMapPosition(latitude, longitude);
+
         },
         (error) => {
           console.error("Error getting user location: ", error);
@@ -65,7 +66,7 @@ const TestGeolocation = () => {
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-          updateMapPosition(latitude, longitude);
+          userTracker(latitude, longitude);
 
           let isInsideAnyGeofence = false;
           let areaIndex: number | null = null;
@@ -117,11 +118,6 @@ const TestGeolocation = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (userLocation) {
-      updateMapPosition(userLocation.latitude, userLocation.longitude);
-    }
-  }, [userLocation]);
 
   const onReady = (event: any) => {
     setPlayer(event.target);
@@ -132,16 +128,63 @@ const TestGeolocation = () => {
       player.loadVideoById(currentVideoId);
       if (isPlaying) {
         player.playVideo();
+      } else {
+        player.pauseVideo();
       }
     }
   }, [player, currentVideoId, isPlaying]);
 
-  const updateMapPosition = (latitude: number, longitude: number) => {
-    // Calculate relative position of map based on user's location
-    const top = (latitude - geofenceAreas[0].latitude) * 100; // Assuming 1 latitude degree equals 100 pixels
-    const left = (longitude - geofenceAreas[0].longitude) * 100; // Assuming 1 longitude degree equals 100 pixels
-    setMapPosition({ top, left });
-  };
+  useEffect(() => {
+    // Panggil fungsi userTracker ketika mendapatkan lokasi pengguna
+    if (userLocation) {
+      userTracker(userLocation.latitude, userLocation.longitude);
+    }
+  }, [userLocation]);
+
+
+  const userTracker = (latitude: number, longtitude: number) => {
+
+    // sudut x
+    const area1x = Math.cos(geofenceAreas[0].longitude) * Math.cos(geofenceAreas[0].longitude)
+    const area2x = Math.cos(geofenceAreas[1].longitude) * Math.cos(geofenceAreas[1].longitude)
+    const area3x = Math.cos(geofenceAreas[2].longitude) * Math.cos(geofenceAreas[2].longitude)
+
+    // sudut y
+    const area1y = Math.cos(geofenceAreas[0].longitude) * Math.sin(geofenceAreas[0].longitude)
+    const area2y = Math.cos(geofenceAreas[1].longitude) * Math.sin(geofenceAreas[1].longitude)
+    const area3y = Math.cos(geofenceAreas[2].longitude) * Math.sin(geofenceAreas[2].longitude)
+
+
+    // titik acu/jarak x 
+    const jarakX = area3x - area1x
+
+    // titik acu/jarak y
+    const jarakY = area2y - area1y
+
+    // user x
+    const userPositionX = Math.cos(latitude) * Math.cos(longtitude)
+
+    // user y
+    const userPositionY = Math.cos(latitude) * Math.sin(longtitude)
+
+    // calculate x dan y untuk dapat posisi user
+
+    // posisi user x 
+    const updateUserPositionX = userPositionX - area1x
+
+    // posisi user y 
+    const updateUserPositionY = userPositionY - area1y
+
+    // fixed posisi x
+    const fixedUserX = (updateUserPositionX / jarakX) * (1 / 100)
+
+    // fixed posisi y 
+    const fixedUserY = (updateUserPositionY / jarakY) * (1 / 100)
+
+    setFixedUserX(fixedUserX);
+    setFixedUserY(fixedUserY);
+
+  }
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Earth's radius in kilometers
@@ -175,17 +218,21 @@ const TestGeolocation = () => {
           <p>Speed: {userLocation.speed} meters/second</p>
         </div>
       )}
+
       <div className="relative h-96 w-96 border">
         {userLocation && (
           <div
             className="bg-red-500 h-4 w-4 rounded-full absolute"
             style={{
-              top: `${mapPosition.top}px`,
-              left: `${mapPosition.left}px`,
+              top: `${fixedUserX}px`,
+              left: `${fixedUserY}px`,
             }}
           ></div>
         )}
       </div>
+
+
+      <p>User Location (Fixed): {fixedUserX}, {fixedUserY}</p>
       {currentAreaIndex !== null ? (
         <p className="mt-4">You are currently inside geofence area {currentAreaIndex}</p>
       ) : (
@@ -197,7 +244,7 @@ const TestGeolocation = () => {
             key={area.videoId}
             videoId={area.videoId}
             onReady={onReady}
-            opts={{ height: "300", width: "300", controls: 0, autoplay: 0 }}
+            opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
           />
         ))}
       </div>
