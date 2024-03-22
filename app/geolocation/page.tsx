@@ -34,13 +34,14 @@ const TestGeolocation = () => {
     { latitude: -6.925649148328804, longitude: 107.66496931178035, radius: 6, videoId: "36YnV9STBqc" },
     { latitude: -6.92546781835236, longitude: 107.6646188541944, radius: 6, videoId: "lP26UCnoH9s" },
     { latitude: -6.925740516119996, longitude: 107.66469602566282, radius: 6, videoId: "bk8WKwHDUNk" },
-
-    // gasmin
+    
+  ];
+  
+  // gasmin
     // { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
     // { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
     // { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
     // { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
-  ];
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -145,41 +146,41 @@ const TestGeolocation = () => {
   const userTracker = (latitude: number, longtitude: number) => {
 
     // sudut x
-    const area1x = Math.cos(geofenceAreas[0].longitude) * Math.cos(geofenceAreas[0].longitude)
-    const area2x = Math.cos(geofenceAreas[1].longitude) * Math.cos(geofenceAreas[1].longitude)
-    const area3x = Math.cos(geofenceAreas[2].longitude) * Math.cos(geofenceAreas[2].longitude)
+    const area1x = Math.cos(geofenceAreas[0].latitude) * Math.cos(geofenceAreas[0].longitude)
+    const area2x = Math.cos(geofenceAreas[1].latitude) * Math.cos(geofenceAreas[1].longitude)
+    const area3x = Math.cos(geofenceAreas[2].latitude) * Math.cos(geofenceAreas[2].longitude)
 
     // sudut y
-    const area1y = Math.cos(geofenceAreas[0].longitude) * Math.sin(geofenceAreas[0].longitude)
-    const area2y = Math.cos(geofenceAreas[1].longitude) * Math.sin(geofenceAreas[1].longitude)
-    const area3y = Math.cos(geofenceAreas[2].longitude) * Math.sin(geofenceAreas[2].longitude)
+    const area1y = Math.cos(geofenceAreas[0].latitude) * Math.sin(geofenceAreas[0].longitude)
+    const area2y = Math.cos(geofenceAreas[1].latitude) * Math.sin(geofenceAreas[1].longitude)
+    const area3y = Math.cos(geofenceAreas[2].latitude) * Math.sin(geofenceAreas[2].longitude)
 
 
     // titik acu/jarak x 
-    const jarakX = area3x - area1x
+    const jarakX = area2x - area1x
 
     // titik acu/jarak y
-    const jarakY = area2y - area1y
+    const jarakY = area3y - area1y
 
     // user x
-    const userPositionX = Math.cos(latitude) * Math.cos(longtitude)
+    const userPositionX = Math.cos(-6.9256544) * Math.cos(107.6648951)
 
     // user y
-    const userPositionY = Math.cos(latitude) * Math.sin(longtitude)
+    const userPositionY = Math.cos(-6.9256544) * Math.sin(107.6648951)
 
     // calculate x dan y untuk dapat posisi user
 
     // posisi user x 
-    const updateUserPositionX = userPositionX - area1x
+    const updateUserPositionX = userPositionX - area3x
 
     // posisi user y 
-    const updateUserPositionY = userPositionY - area1y
+    const updateUserPositionY = userPositionY - area2y
 
     // fixed posisi x
-    const fixedUserX = (updateUserPositionX / jarakX) * (1 / 100)
+    const fixedUserX = (updateUserPositionX / jarakX) * 100 
 
     // fixed posisi y 
-    const fixedUserY = (updateUserPositionY / jarakY) * (1 / 100)
+    const fixedUserY = (updateUserPositionY / jarakY) * 100 
 
     setFixedUserX(fixedUserX);
     setFixedUserY(fixedUserY);
@@ -222,10 +223,10 @@ const TestGeolocation = () => {
       <div className="relative h-96 w-96 border">
         {userLocation && (
           <div
-            className="bg-red-500 h-4 w-4 rounded-full absolute"
+            className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
             style={{
               top: `${fixedUserX}px`,
-              left: `${fixedUserY}px`,
+              left: `${fixedUserY}%`,
             }}
           ></div>
         )}
@@ -238,7 +239,7 @@ const TestGeolocation = () => {
       ) : (
         <p className="mt-4">You are not inside any geofence area</p>
       )}
-      <div className="flex">
+      {/* <div className="flex">
         {geofenceAreas.map((area) => (
           <YouTube
             key={area.videoId}
@@ -247,7 +248,7 @@ const TestGeolocation = () => {
             opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
