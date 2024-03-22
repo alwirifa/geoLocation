@@ -32,10 +32,10 @@ const Page = () => {
 
   const geofenceAreas: GeofenceArea[] = [
     // //  artha
-    { latitude: -6.925479356355771, longitude: 107.6645709917322, radius: 6, videoId: "lP26UCnoH9s" },
     { latitude: -6.925384166999025, longitude: 107.66488749238019, radius: 6, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.925742957551122, longitude: 107.66467023346081, radius: 6, videoId: "bk8WKwHDUNk" },
     { latitude: -6.9256437742903625, longitude: 107.66496997030328, radius: 6, videoId: "36YnV9STBqc" },
+    { latitude: -6.925479356355771, longitude: 107.6645709917322, radius: 6, videoId: "lP26UCnoH9s" },
+    { latitude: -6.925742957551122, longitude: 107.66467023346081, radius: 6, videoId: "bk8WKwHDUNk" },
 
     // // gasmin
     // { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
@@ -45,7 +45,7 @@ const Page = () => {
 
   ];
 
-  
+
 
   const watchUserLocation = () => {
 
@@ -199,7 +199,7 @@ const Page = () => {
           <div className="flex flex-col gap-8 items-center p-24 pt-[16svh]">
 
             <div className="relative h-[250px] w-[250px] border-2 border-black">
-              {userLocation && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100 && (
+              {userLocation && (
                 <div
                   className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
                   style={{
