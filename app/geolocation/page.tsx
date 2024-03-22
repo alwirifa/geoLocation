@@ -163,10 +163,10 @@ const TestGeolocation = () => {
     const jarakY = area3y - area1y
 
     // user x
-    const userPositionX = Math.cos(-6.9256544) * Math.cos(107.6648951)
+    const userPositionX = Math.cos(latitude) * Math.cos(longtitude)
 
     // user y
-    const userPositionY = Math.cos(-6.9256544) * Math.sin(107.6648951)
+    const userPositionY = Math.cos(latitude) * Math.sin(longtitude)
 
     // calculate x dan y untuk dapat posisi user
 
