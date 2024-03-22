@@ -196,7 +196,7 @@ const Page = () => {
           </div>
         ) : (
 
-          <div className="flex flex-col gap-8 items-center p-24 pt-[16svh]">
+          <div className="flex flex-col gap-4 items-center p-24 pt-[16svh]">
 
             <div className="relative h-[250px] w-[250px] border-2 border-black">
               {userLocation && (
@@ -210,11 +210,13 @@ const Page = () => {
               )}
             </div>
 
-            {currentAreaIndex !== null ? (
-              <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
-            ) : (
-              <p className="mt-4 font-semibold">You are not inside any geofence area</p>
-            )}
+            <div className='text-center'>
+              {currentAreaIndex !== null ? (
+                <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
+              ) : (
+                <p className="mt-4 font-semibold">You are not inside any geofence area</p>
+              )}
+            </div>
             <div className="hidden">
               {geofenceAreas.map((area) => (
                 <YouTube
