@@ -19,6 +19,8 @@ const routes = [
   },
 ];
 
+
+
 const Navbar = () => {
   const { language, toggleLanguage } = useGlobalContext();
 

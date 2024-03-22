@@ -30,10 +30,10 @@ const TestGeolocation = () => {
 
   const geofenceAreas: GeofenceArea[] = [
     //  artha
-    { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
-    { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
+    { latitude: -6.925479356355771, longitude: 107.6645709917322, radius: 6, videoId: "lP26UCnoH9s" },
+    { latitude: -6.925384166999025, longitude: 107.66488749238019, radius: 6, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925742957551122, longitude: 107.66467023346081, radius: 6, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.9256437742903625, longitude: 107.66496997030328, radius: 6, videoId: "36YnV9STBqc" },
 
   ];
 
@@ -203,7 +203,7 @@ const TestGeolocation = () => {
           ></div>
         )} */}
 
-        {userLocation && (
+        {/* {userLocation && (
           <div
             className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
             style={{
@@ -211,7 +211,7 @@ const TestGeolocation = () => {
               left: `${fixedUserY}%`,
             }}
           ></div>
-        )}
+        )} */}
       </div>
 
 
