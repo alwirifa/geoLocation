@@ -199,6 +199,11 @@ const Page = () => {
           <div className="flex flex-col gap-4 items-center p-24 pt-[16svh]">
 
             <div className="relative h-[250px] w-[250px] border-2 border-black">
+             
+            {/* {userLocation && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100 && (
+    <div
+   */}
+             
               {userLocation && (
                 <div
                   className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
@@ -210,12 +215,14 @@ const Page = () => {
               )}
             </div>
 
-            <div className='text-center'>
+            <div className=''>
               {currentAreaIndex !== null ? (
                 <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
               ) : (
                 <p className="mt-4 font-semibold">You are not inside any geofence area</p>
               )}
+
+
 
               {userLocation && (
                 <div>
