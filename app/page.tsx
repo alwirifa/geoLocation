@@ -41,14 +41,14 @@ const Page = () => {
     { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
     
     
- { latitude: -6.9167883, longitude: 107.661473, radius: 4, videoId: "bk8WKwHDUNk" },
+ { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "bk8WKwHDUNk" },
 
 { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
 
    
 
 
-{ latitude: -6.9167383, longitude: 107.6615612, radius: 4, videoId: "lP26UCnoH9s" },
+{ latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "lP26UCnoH9s" },
   ]
 
 
