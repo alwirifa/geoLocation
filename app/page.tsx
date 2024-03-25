@@ -37,13 +37,13 @@ const Page = () => {
 
 
     // // gasmin
-    { latitude: -6.9167175, longitude: 107.661395, radius: 6, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9167175, longitude: 107.661395, radius: 4, videoId: "DOOrIxw5xOw" },
 
-    { latitude: -6.9165822, longitude: 107.6615319, radius: 6, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.9165822, longitude: 107.6615319, radius: 4, videoId: "6fF9zjaCDFBwm9_I" },
 
-    { latitude: -6.9167204, longitude: 107.6616406, radius: 6, videoId: "36YnV9STBqc" },
+    { latitude: -6.9167204, longitude: 107.6616406, radius: 4, videoId: "36YnV9STBqc" },
 
-    { latitude: -6.9167987, longitude: 107.6614773, radius: 6, videoId: "lP26UCnoH9s" },
+    { latitude: -6.9167987, longitude: 107.6614773, radius: 4, videoId: "lP26UCnoH9s" },
   ]
 
 
@@ -59,7 +59,7 @@ const Page = () => {
           setUserLocation({ latitude, longitude, accuracy, speed });
 
           let isInsideAnyGeofence = false;
-          let areaIndex: number | null = null;
+          let areaIndex: number + 1 | null = null;
 
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
