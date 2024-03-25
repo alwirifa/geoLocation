@@ -1,7 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import Navbar from './components/Navbar';
+import React, { useState, useEffect } from "react";
 import YouTube from "react-youtube";
 
 
@@ -19,8 +18,7 @@ interface GeofenceArea {
   videoId: string;
 }
 
-const Page = () => {
-  const [experienceStarted, setExperienceStarted] = useState(false);
+const TestGeolocation = () => {
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
@@ -31,20 +29,39 @@ const Page = () => {
   const [fixedUserY, setFixedUserY] = useState<number | null>(null);
 
   const geofenceAreas: GeofenceArea[] = [
- 
-    { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
-    { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
-    { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" }
+    //  artha
+    { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
+    { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
 
-  ]
+  ];
 
+  // gasmin
+  // { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
+  // { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
+  // { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
+  // { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
 
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude, accuracy, speed } = position.coords;
+          setUserLocation({ latitude, longitude, accuracy, speed });
+
+        },
+        (error) => {
+          console.error("Error getting user location: ", error);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser");
+    }
+  };
 
   const watchUserLocation = () => {
-
-    setExperienceStarted(true);
-
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
@@ -94,8 +111,6 @@ const Page = () => {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-
-    setExperienceStarted(false)
   };
 
   useEffect(() => {
@@ -128,7 +143,7 @@ const Page = () => {
   }, [userLocation]);
 
 
-  const userTracker = (latitude: number, longitude: number) => {
+  const userTracker = (latitude: number, longtitude: number) => {
 
     const x1 = 0;
     const y1 = 0;
@@ -136,7 +151,7 @@ const Page = () => {
     const y2 = 100;
 
 
-    const fixedUserX = (((x2 - x1) * (longitude - geofenceAreas[0].longitude)) / (geofenceAreas[3].longitude - geofenceAreas[0].longitude)) + x1;
+    const fixedUserX = (((x2 - x1) * (longtitude - geofenceAreas[0].longitude)) / (geofenceAreas[3].longitude - geofenceAreas[0].longitude)) + x1;
     const fixedUserY = (((y2 - y1) * (latitude - geofenceAreas[0].latitude)) / (geofenceAreas[3].latitude - geofenceAreas[0].latitude)) + y1;
 
     setFixedUserX(fixedUserX);
@@ -161,115 +176,64 @@ const Page = () => {
   };
 
   return (
-    <div className='h-[100svh] w-full relative '>
-      <div className='bg-background h-[100svh] w-full bg-cover bg-center'>
-
-        <div className='absolute top-0 flex justify-between w-full p-8'>
-          <div>
-            <img src="/images/ttd.png" alt="" className='w-auto h-8' />
-          </div>
-          <div className='flex gap-4 items-center'>
-            <img src="/images/jakartaLogo.png" alt="" className='w-auto h-4' />
-            <img src="/images/forteLogo.png" alt="" className='w-auto h-4' />
-          </div>
+    <div className="h-screen w-full flex flex-col gap-8 items-center p-24">
+      <div className="w-full flex justify-center items-center gap-4">
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={getUserLocation}>Get User Location</button>
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={watchUserLocation}>Start Watching User Location</button>
+        <button className="border border-slate-300 text-sm font-semibold px-4 py-2 rounded-md" onClick={stopWatchUserLocation}>Stop Watching User Location</button>
+      </div>
+      {userLocation && (
+        <div>
+          <h2>User Location</h2>
+          <p>Latitude: {userLocation.latitude}</p>
+          <p>Longitude: {userLocation.longitude}</p>
+          <p>Accuracy: {userLocation.accuracy} meters</p>
+          <p>Speed: {userLocation.speed} meters/second</p>
         </div>
+      )}
 
-        {!experienceStarted ? (
-          <div className={`flex flex-col items-center justify-center w-full pt-[16svh]`}>
+      <div className="relative h-96 w-96 border">
+        {/* {userLocation && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100 && (
+          <div
+            className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
+            style={{
+              top: `${fixedUserX}%`,
+              left: `${fixedUserY}%`,
+            }}
+          ></div>
+        )} */}
 
-            <div className='flex flex-col justify-center items-center gap-1'>
-              <p className='text-lg text-purple font-semibold'>HERE, NOWHERE HEAR</p>
-              <p className='text-sm'>Tomy Herseta, 2024.</p>
-            </div>
-
-            <p className='text-justify p-8 mt-6 font-medium'>
-              Instalasi ini merupakan sebuah pengalaman mendengar yang membutuhkan partisipasi aktif dari pengunjung. <br /><br />
-
-              Silakan gunakan earphone Anda untuk pengalaman yang lebih optimal.
-            </p>
-          </div>
-        ) : (
-
-          <div className="flex flex-col gap-4 items-center  pt-[16svh]">
-
-            <div className="relative h-[250px] w-[250px] border-2 border-black">
-             
-            {/* {userLocation && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100 && (
-    <div
-   */}
-             
-              {userLocation && (
-                <div
-                  className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
-                  style={{
-                    top: `${fixedUserX}%`,
-                    left: `${fixedUserY}%`,
-                  }}
-                ></div>
-              )}
-            </div>
-
-            <div className=''>
-              {currentAreaIndex !== null ? (
-                <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
-              ) : (
-                <p className="mt-4 font-semibold">You are not inside any geofence area</p>
-              )}
-
-
-
-              {userLocation && (
-                <div>
-                  <p>User Location (Fixed): {fixedUserX}, {fixedUserY}</p>
-                  <p>Latitude: {userLocation.latitude}</p>
-                  <p>Longitude: {userLocation.longitude}</p>
-                  <p>Accuracy: {userLocation.accuracy} meters</p>
-                  <p>Speed: {userLocation.speed} meters/second</p>
-                </div>
-              )}
-
-            </div>
-            <div className="flex">
-              {geofenceAreas.map((area) => (
-                <YouTube
-                  key={area.videoId}
-                  videoId={area.videoId}
-                  onReady={onReady}
-                  opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
-                />
-              ))}
-            </div>
-          </div>
-
-        )
-        }
-
-        {experienceStarted ? (
-
-          <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
-            <img src="/images/headphones.png" alt="" className='h-24 w-24' />
-
-            <button className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max' onClick={stopWatchUserLocation}>
-              BERHENTI MENDENGARKAN
-            </button>
-          </div>
-        ) : (
-          <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
-            <img src="/images/headphones.png" alt="" className='h-24 w-24' />
-
-            <button className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max' onClick={watchUserLocation}>
-              MULAI PENGALAMAN
-            </button>
-          </div>
+        {userLocation && (
+          <div
+            className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
+            style={{
+              top: `${fixedUserX}%`,
+              left: `${fixedUserY}%`,
+            }}
+          ></div>
         )}
+      </div>
 
-        <div className='absolute bottom-0 w-full'>
-          <Navbar />
-        </div>
 
+      <p>User Location (Fixed): {fixedUserX}, {fixedUserY}</p>
+      {currentAreaIndex !== null ? (
+        <p className="mt-4">You are currently inside geofence area {currentAreaIndex}</p>
+      ) : (
+        <p className="mt-4">You are not inside any geofence area</p>
+      )}
+      <div className="flex">
+        {geofenceAreas.map((area) => (
+          <YouTube
+            key={area.videoId}
+            videoId={area.videoId}
+            onReady={onReady}
+            opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
+          />
+        ))}
       </div>
     </div>
   );
 };
 
-export default Page;
+export default TestGeolocation;
+
