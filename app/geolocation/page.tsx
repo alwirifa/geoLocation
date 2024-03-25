@@ -37,7 +37,7 @@ const Page = () => {
     { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
     { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" }
 
-  ];
+  ]
 
 
 
