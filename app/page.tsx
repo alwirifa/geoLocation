@@ -34,13 +34,13 @@ const Page = () => {
 
 
     // // gasmin
-    { latitude: -6.9166084, longitude: 107.6615128, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9167175, longitude: 107.661395, radius: 4, videoId: "DOOrIxw5xOw" },
 
-    { latitude: -6.9167234, longitude: 107.6613576, radius: 4, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.9165822, longitude: 107.6615319, radius: 4, videoId: "6fF9zjaCDFBwm9_I" },
 
-    { latitude: -6.9168428, longitude: 107.6614639, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.9167204, longitude: 107.6616406, radius: 4, videoId: "36YnV9STBqc" },
 
-    { latitude: -6.9167631, longitude: 107.6616306, radius: 4, videoId: "lP26UCnoH9s" },
+    { latitude: -6.9167987, longitude: 107.6614773, radius: 4, videoId: "lP26UCnoH9s" },
   ]
 
 
@@ -56,7 +56,7 @@ const Page = () => {
           setUserLocation({ latitude, longitude, accuracy, speed });
 
           let isInsideAnyGeofence = false;
-          let areaIndex: number | null = null;
+          let areaIndex: number || null = null;
 
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
@@ -179,20 +179,20 @@ const Page = () => {
               </div>
               <div className='absolute top-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
                 <p>Area 2</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area 3</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
+                <p>Area 4</p>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area 4</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
+                <p>Area 3</p>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3? 'visible' : 'hidden'}`} />
               </div>
             </div>
 
             {currentAreaIndex !== null ? (
-              <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
+              <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex + 1}</p>
             ) : (
               <p className="mt-4 font-semibold">You are not inside any geofence area</p>
             )}
