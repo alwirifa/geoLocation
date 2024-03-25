@@ -59,7 +59,7 @@ const Page = () => {
           setUserLocation({ latitude, longitude, accuracy, speed });
 
           let isInsideAnyGeofence = false;
-          let areaIndex: number + 1 | null = null;
+          let areaIndex: number || null = null;
 
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
@@ -195,7 +195,7 @@ const Page = () => {
             </div>
 
             {currentAreaIndex !== null ? (
-              <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
+              <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex + 1}</p>
             ) : (
               <p className="mt-4 font-semibold">You are not inside any geofence area</p>
             )}
