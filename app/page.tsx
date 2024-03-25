@@ -174,25 +174,25 @@ const Page = () => {
           <div className="flex flex-col gap-4 items-center  pt-[16svh]">
             <div className="relative h-[250px] w-[250px] border-2 border-black">
               <div className='absolute top-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area 4</p>
+                <p>Area </p>
                 <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute top-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area 1</p>
+                <p>Area </p>
                 <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area 3</p>
+                <p>Area </p>
                 <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area 2</p>
+                <p>Area </p>
                 <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
               </div>
             </div>
 
             {currentAreaIndex !== null ? (
-              <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex + 1}</p>
+              <p className="mt-4 font-semibold">You are currently inside geofence area </p>
             ) : (
               <p className="mt-4 font-semibold">You are not inside any geofence area</p>
             )}
