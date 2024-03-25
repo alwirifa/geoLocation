@@ -31,24 +31,21 @@ const Page = () => {
   const [fixedUserY, setFixedUserY] = useState<number | null>(null);
 
   const geofenceAreas: GeofenceArea[] = [
-    // //  artha
-    // { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
-    // { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
-    // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
-    // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
+
+    { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
+    { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
+
 
     // // gasmin
-    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
-    
-    
- { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "bk8WKwHDUNk" },
+    // { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
 
-{ latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
+    // { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "bk8WKwHDUNk" },
 
-   
+    // { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
 
-
-{ latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "lP26UCnoH9s" },
+    // { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "lP26UCnoH9s" },
   ]
 
 
@@ -141,20 +138,20 @@ const Page = () => {
 
 
   const userTracker = (latitude: number, longitude: number) => {
+    let newX = null;
+    let newY = null;
 
-    const x1 = 0;
-    const y1 = 0;
-    const x2 = 100;
-    const y2 = 100;
+    if (currentAreaIndex !== null) {
+      newX = currentAreaIndex === 0 || currentAreaIndex === 2 ? 0 : 100;
+      newY = currentAreaIndex === 0 || currentAreaIndex === 1 ? 0 : 100;
+    }
+
+    // Perbarui nilai fixedUserX dan fixedUserY
+    setFixedUserX(newX);
+    setFixedUserY(newY);
+  };
 
 
-    const fixedUserX = (((x2 - x1) * (longitude - geofenceAreas[0].longitude)) / (geofenceAreas[3].longitude - geofenceAreas[0].longitude)) + x1;
-    const fixedUserY = (((y2 - y1) * (latitude - geofenceAreas[0].latitude)) / (geofenceAreas[3].latitude - geofenceAreas[0].latitude)) + y1;
-
-    setFixedUserX(fixedUserX);
-    setFixedUserY(fixedUserY);
-
-  }
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Earth's radius in kilometers
@@ -203,32 +200,32 @@ const Page = () => {
         ) : (
 
           <div className="flex flex-col gap-4 items-center  pt-[16svh]">
-
             <div className="relative h-[250px] w-[250px] border-2 border-black">
-             
-            {/* {userLocation && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100 && (
-    <div
-   */}
-             
-              {userLocation && (
-                <div
-                  className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
-                  style={{
-                    top: `${fixedUserX}%`,
-                    left: `${fixedUserY}%`,
-                  }}
-                ></div>
-              )}
+              <div className='absolute top-0 left-0 p-4 border-2 border-green-500'>
+                <p>Area 1</p>
+                <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
+              </div>
+              <div className='absolute top-0 right-0 p-4 border-2 border-green-500'>
+                <p>Area 2</p>
+                <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
+              </div>
+              <div className='absolute bottom-0 left-0 p-4 border-2 border-green-500'>
+                <p>Area 3</p>
+                <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
+              </div>
+              <div className='absolute bottom-0 right-0 p-4 border-2 border-green-500'>
+                <p>Area 4</p>
+                <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
+              </div>
             </div>
 
+            {currentAreaIndex !== null ? (
+              <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
+            ) : (
+              <p className="mt-4 font-semibold">You are not inside any geofence area</p>
+            )}
+
             <div className=''>
-              {currentAreaIndex !== null ? (
-                <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
-              ) : (
-                <p className="mt-4 font-semibold">You are not inside any geofence area</p>
-              )}
-
-
 
               {userLocation && (
                 <div>
