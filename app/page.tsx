@@ -32,16 +32,16 @@ const Page = () => {
 
   const geofenceAreas: GeofenceArea[] = [
     // //  artha
-    { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
-    { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
+    // { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
+    // { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
+    // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
+    // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
 
     // // gasmin
-    // { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
-    // { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
-    // { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
-    // { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
+    { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
 
   ];
 
@@ -199,6 +199,8 @@ const Page = () => {
           <div className="flex flex-col gap-4 items-center p-24 pt-[16svh]">
 
             <div className="relative h-[250px] w-[250px] border-2 border-black">
+              {/* && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100  */}
+
               {userLocation && (
                 <div
                   className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
@@ -216,18 +218,18 @@ const Page = () => {
               ) : (
                 <p className="mt-4 font-semibold">You are not inside any geofence area</p>
               )}
-
-{userLocation && (
-        <div>
-          <h2>User Location</h2>
-          <p>Latitude: {userLocation.latitude}</p>
-          <p>Longitude: {userLocation.longitude}</p>
-          <p>Accuracy: {userLocation.accuracy} meters</p>
-          <p>Speed: {userLocation.speed} meters/second</p>
-        </div>
-      )}
+              {/* 
+              {userLocation && (
+                <div>
+                  <h2>User Location</h2>
+                  <p>Latitude: {userLocation.latitude}</p>
+                  <p>Longitude: {userLocation.longitude}</p>
+                  <p>Accuracy: {userLocation.accuracy} meters</p>
+                  <p>Speed: {userLocation.speed} meters/second</p>
+                </div>
+              )} */}
             </div>
-            <div className="flex">
+            <div className="hidden">
               {geofenceAreas.map((area) => (
                 <YouTube
                   key={area.videoId}

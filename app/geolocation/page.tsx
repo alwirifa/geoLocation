@@ -203,6 +203,8 @@ const TestGeolocation = () => {
           ></div>
         )} */}
 
+        {/* && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100  */}
+
         {userLocation && (
           <div
             className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
