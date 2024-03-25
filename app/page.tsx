@@ -37,7 +37,7 @@ const Page = () => {
     // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
     // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
 
-    // // gasmin
+    // gasmin
     { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
     { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
     { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
@@ -196,11 +196,13 @@ const Page = () => {
           </div>
         ) : (
 
-          <div className="flex flex-col gap-4 items-center p-24 pt-[16svh]">
+          <div className="flex flex-col gap-4 items-center  pt-[16svh]">
 
             <div className="relative h-[250px] w-[250px] border-2 border-black">
-              {/* && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100  */}
 
+            {/* {userLocation && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100 && (
+    <div
+   */}
               {userLocation && (
                 <div
                   className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
@@ -212,24 +214,24 @@ const Page = () => {
               )}
             </div>
 
-            <div className='text-center'>
+            <div className='w-full'>
               {currentAreaIndex !== null ? (
                 <p className="mt-4 font-semibold">You are currently inside geofence area {currentAreaIndex}</p>
               ) : (
                 <p className="mt-4 font-semibold">You are not inside any geofence area</p>
               )}
-              {/* 
-              {userLocation && (
+
+              {userLocation && (                
                 <div>
-                  <h2>User Location</h2>
+                  <p>User Location (Fixed): {fixedUserX}, {fixedUserY}</p>
                   <p>Latitude: {userLocation.latitude}</p>
                   <p>Longitude: {userLocation.longitude}</p>
                   <p>Accuracy: {userLocation.accuracy} meters</p>
                   <p>Speed: {userLocation.speed} meters/second</p>
                 </div>
-              )} */}
+              )}
             </div>
-            <div className="hidden">
+            <div className="flex">
               {geofenceAreas.map((area) => (
                 <YouTube
                   key={area.videoId}
