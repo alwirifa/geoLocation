@@ -196,7 +196,7 @@ const Page = () => {
           </div>
         ) : (
 
-          <div className="flex flex-col gap-4 items-center p-24 pt-[16svh]">
+          <div className="flex flex-col gap-4 items-center  pt-[16svh]">
 
             <div className="relative h-[250px] w-[250px] border-2 border-black">
              
