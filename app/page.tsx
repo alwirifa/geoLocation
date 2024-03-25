@@ -218,7 +218,7 @@ const Page = () => {
               ) : (
                 <p className="mt-4 font-semibold">You are not inside any geofence area</p>
               )}
-              {/* 
+              
               {userLocation && (
                 <div>
                   <h2>User Location</h2>
@@ -226,8 +226,9 @@ const Page = () => {
                   <p>Longitude: {userLocation.longitude}</p>
                   <p>Accuracy: {userLocation.accuracy} meters</p>
                   <p>Speed: {userLocation.speed} meters/second</p>
+<p>(fixedUserX},{fixedUserY}</p>
                 </div>
-              )} */}
+              )} 
             </div>
             <div className="hidden">
               {geofenceAreas.map((area) => (
