@@ -38,10 +38,10 @@ const Page = () => {
     // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
 
     // // gasmin
-    { latitude: -6.9166349, longitude: 107.6615918, radius: 4, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.9167522, longitude: 107.6614443, radius: 4, videoId: "36YnV9STBqc" },
-    { latitude: -6.9165868, longitude: 107.6613089, radius: 4, videoId: "lP26UCnoH9s" },
-    { latitude: -6.9164866, longitude: 107.6614578, radius: 4, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.9167383, longitude: 107.6615612, radius: 4, videoId: "lP26UCnoH9s" },
+    { latitude: -6.9167883, longitude: 107.661473, radius: 4, videoId: "bk8WKwHDUNk" },
 
   ]
 
