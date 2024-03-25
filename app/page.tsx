@@ -30,20 +30,21 @@ const Page = () => {
 
   const geofenceAreas: GeofenceArea[] = [
 
-  
+    // { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
+    // { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
+    // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
+    // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
 
 
     // // gasmin
-    { latitude: -6.9167175, longitude: 107.661395, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
 
-    { latitude: -6.9165822, longitude: 107.6615319, radius: 4, videoId: "6fF9zjaCDFBwm9_I" },
+    { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
 
-    { latitude: -6.9167204, longitude: 107.6616406, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
 
-    { latitude: -6.9167987, longitude: 107.6614773, radius: 4, videoId: "lP26UCnoH9s" },
+    { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
   ]
-
-
 
   const watchUserLocation = () => {
 
@@ -56,7 +57,7 @@ const Page = () => {
           setUserLocation({ latitude, longitude, accuracy, speed });
 
           let isInsideAnyGeofence = false;
-          let areaIndex: number || null = null;
+          let areaIndex: number | null = null;
 
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
@@ -124,7 +125,6 @@ const Page = () => {
   }, [player, currentVideoId, isPlaying]);
 
 
-
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Earth's radius in kilometers
     const dLat = deg2rad(lat2 - lat1);
@@ -179,15 +179,15 @@ const Page = () => {
               </div>
               <div className='absolute top-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
                 <p>Area 2</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
                 <p>Area 4</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
                 <p>Area 3</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
               </div>
             </div>
 
@@ -197,17 +197,7 @@ const Page = () => {
               <p className="mt-4 font-semibold">You are not inside any geofence area</p>
             )}
 
-            <div className='hidden'>
-              {userLocation && (
-                <div>
-                  <p>Latitude: {userLocation.latitude}</p>
-                  <p>Longitude: {userLocation.longitude}</p>
-                  <p>Accuracy: {userLocation.accuracy} meters</p>
-                  <p>Speed: {userLocation.speed} meters/second</p>
-                </div>
-              )}
 
-            </div>
             <div className="hidden">
               {geofenceAreas.map((area) => (
                 <YouTube
