@@ -37,13 +37,13 @@ const Page = () => {
 
 
     // // gasmin
-    { latitude: -6.9166084, longitude: 107.6615128, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9167175, longitude: 107.661395, radius: 6, videoId: "DOOrIxw5xOw" },
 
-    { latitude: -6.9167234, longitude: 107.6613576, radius: 4, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.9165822, longitude: 107.6615319, radius: 6, videoId: "bk8WKwHDUNk" },
 
-    { latitude: -6.9168428, longitude: 107.6614639, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.9167204, longitude: 107.6616406, radius: 6, videoId: "36YnV9STBqc" },
 
-    { latitude: -6.9167631, longitude: 107.6616306, radius: 4, videoId: "lP26UCnoH9s" },
+    { latitude: -6.9167987, longitude: 107.6614773, radius: 6, videoId: "lP26UCnoH9s" },
   ]
 
 
@@ -185,12 +185,12 @@ const Page = () => {
                 <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area 3</p>
+                <p>Area 4</p>
                 <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area 4</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
+                <p>Area 3</p>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3? 'visible' : 'hidden'}`} />
               </div>
             </div>
 
