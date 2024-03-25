@@ -30,10 +30,7 @@ const Page = () => {
 
   const geofenceAreas: GeofenceArea[] = [
 
-    // { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
-    // { latitude: -6.925635929284283, longitude: 107.66496699177638, radius: 6, videoId: "DOOrIxw5xOw" },
-    // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
-    // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
+  
 
 
     // // gasmin
