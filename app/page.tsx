@@ -32,10 +32,10 @@ const Page = () => {
 
   const geofenceAreas: GeofenceArea[] = [
 
-    { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
-    { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
+    // { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
+    // { latitude: -6.925635929284283, longitude: 107.66496699177638, radius: 6, videoId: "DOOrIxw5xOw" },
+    // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
+    // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
 
 
     // // gasmin
@@ -59,7 +59,6 @@ const Page = () => {
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-          userTracker(latitude, longitude);
 
           let isInsideAnyGeofence = false;
           let areaIndex: number | null = null;
@@ -129,28 +128,6 @@ const Page = () => {
     }
   }, [player, currentVideoId, isPlaying]);
 
-  useEffect(() => {
-    // Panggil fungsi userTracker ketika mendapatkan lokasi pengguna
-    if (userLocation) {
-      userTracker(userLocation.latitude, userLocation.longitude);
-    }
-  }, [userLocation]);
-
-
-  const userTracker = (latitude: number, longitude: number) => {
-    let newX = null;
-    let newY = null;
-
-    if (currentAreaIndex !== null) {
-      newX = currentAreaIndex === 0 || currentAreaIndex === 2 ? 0 : 100;
-      newY = currentAreaIndex === 0 || currentAreaIndex === 1 ? 0 : 100;
-    }
-
-    // Perbarui nilai fixedUserX dan fixedUserY
-    setFixedUserX(newX);
-    setFixedUserY(newY);
-  };
-
 
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
@@ -201,21 +178,21 @@ const Page = () => {
 
           <div className="flex flex-col gap-4 items-center  pt-[16svh]">
             <div className="relative h-[250px] w-[250px] border-2 border-black">
-              <div className='absolute top-0 left-0 p-4 border-2 border-green-500'>
+              <div className='absolute top-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
                 <p>Area 1</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute top-0 right-0 p-4 border-2 border-green-500'>
                 <p>Area 2</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 left-0 p-4 border-2 border-green-500'>
                 <p>Area 3</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
               </div>
               <div className='absolute bottom-0 right-0 p-4 border-2 border-green-500'>
                 <p>Area 4</p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
               </div>
             </div>
 
@@ -225,8 +202,7 @@ const Page = () => {
               <p className="mt-4 font-semibold">You are not inside any geofence area</p>
             )}
 
-            <div className=''>
-
+            <div className='hidden'>
               {userLocation && (
                 <div>
                   <p>User Location (Fixed): {fixedUserX}, {fixedUserY}</p>
@@ -238,7 +214,7 @@ const Page = () => {
               )}
 
             </div>
-            <div className="flex">
+            <div className="hidden">
               {geofenceAreas.map((area) => (
                 <YouTube
                   key={area.videoId}
