@@ -1,94 +1,133 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { XSound, X, FileEvent } from 'xsound';
 
-type Props = {}
+type FileChangeEvent = React.ChangeEvent<HTMLInputElement> & {
+  target: HTMLInputElement & {
+    files: FileList;
+  };
+};
 
-const Page = (props: Props) => {
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
-  const [sourceNode, setSourceNode] = useState<AudioBufferSourceNode | null>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+export default function Home() {
+  const resultRef = useRef<HTMLParagraphElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const uploaderRef = useRef<HTMLInputElement>(null);
+  const [overdriveParams, setOverdriveParams] = useState({
+    drive: 1.0
+  });
 
-  useEffect(() => {
-    const newAudioContext = new (window.AudioContext);
-    setAudioContext(newAudioContext);
+  const handleOverdriveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.type === 'checkbox' ? event.target.checked : parseFloat(event.target.value);
+    const name = event.target.name;
 
-    return () => {
-      newAudioContext.close();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!audioContext) return;
-
-    const loadAudioFile = async () => {
-      try {
-        const response = await fetch('/music/habibi.mp3');
-        const audioData = await response.arrayBuffer();
-        const decodedAudioData = await audioContext.decodeAudioData(audioData);
-        setAudioBuffer(decodedAudioData);
-      } catch (error) {
-        console.error('Error loading audio file:', error);
-      }
-    };
-
-    loadAudioFile();
-  }, [audioContext, props]);
-
-  useEffect(() => {
-    if (!audioContext || !audioBuffer || !isPlaying) return;
-
-    const playAudio = () => {
-      const newSourceNode = audioContext.createBufferSource();
-      const overdriveNode = audioContext.createGain();
-      overdriveNode.gain.value = 0.5; // Adjust this value to control overdrive effect
-      newSourceNode.buffer = audioBuffer;
-      newSourceNode.connect(overdriveNode);
-      
-      // Overdrive effect
-      const waveShaperNode = audioContext.createWaveShaper();
-      const overdriveCurve = makeOverdriveCurve(100); // Adjust the parameter for shaping the overdrive
-      waveShaperNode.curve = overdriveCurve;
-      overdriveNode.connect(waveShaperNode);
-      waveShaperNode.connect(audioContext.destination);
-      
-      newSourceNode.start(0);
-      setSourceNode(newSourceNode);
-    };
-
-    playAudio();
-
-    return () => {
-      if (sourceNode) {
-        sourceNode.stop();
-        setSourceNode(null);
-      }
-    };
-  }, [audioContext, audioBuffer, isPlaying]);
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
+    if (name === 'drive') {
+      setOverdriveParams({
+        ...overdriveParams,
+        [name]: Math.max(0, Math.min(1, value as number))
+      });
+    }
+    handleApplyOverdrive(); // Call apply function whenever value changes
   };
 
-  // Function to create the overdrive curve
-  const makeOverdriveCurve = (amount: number) => {
-    const sampleRate = audioContext ? audioContext.sampleRate : 44100;
-    const curve = new Float32Array(1024);
+  const handleApplyOverdrive = () => {
+    X('audio').module('overdrive').param(overdriveParams);
+  };
 
-    for (let i = 0; i < 512; i++) {
-      const x = i * 2 / 512 - 1;
-      curve[i] = (3 + amount) * x * 20 * (Math.PI / 180) / (Math.PI + amount * Math.abs(x));
+  useEffect(() => {
+    if (!resultRef.current || !canvasRef.current || !uploaderRef.current) {
+      return;
     }
 
-    return curve;
+    const result = resultRef.current;
+    const uploader = uploaderRef.current;
+
+    X('audio').setup({
+      decodeCallback: (audiobuffer: AudioBuffer) => {
+        result.textContent = `sampling rate ${audiobuffer.sampleRate} Hz\n${audiobuffer.length} samples\n${audiobuffer.duration} sec\n${audiobuffer.numberOfChannels} channels\n`;
+      },
+      updateCallback: (source, currentTime) => {
+        // do something ...
+      },
+      endedCallback: (source, currentTime) => {
+        result.textContent = currentTime.toString();
+      },
+      errorCallback: (error: Error) => {
+        result.textContent = error.message;
+      }
+    });
+
+   
+
+    X('audio')
+      .module('analyser')
+      .domain('timeoverview', 0)
+      .setup(canvasRef.current)
+     
+      .drag((event, startTime, endTime, mode, direction) => {
+        X('audio').param({ currentTime: endTime });
+      });
+
+    uploader.onchange = (event) => {
+      const file = (event as unknown as FileChangeEvent).target.files[0];
+
+      if (!file) {
+        result.textContent = 'There is no uploaded file';
+        return;
+      }
+
+      X.file({
+        event           : event as unknown as FileEvent,
+        type            : 'arraybuffer',
+        successCallback : (event, arraybuffer) => {
+          X('audio').ready(arraybuffer);
+          result.textContent = `filename ${file.name}\nMIME ${file.type}\n${file.size} bytes\n`;
+        },
+        errorCallback  : (event, textStatus) => {
+          result.textContent = textStatus;
+        },
+        progressCallback: (event) => {
+          if (event.lengthComputable && (event.total > 0)) {
+            result.textContent = `${Math.trunc((event.loaded / event.total) * 100)} %`;
+          }
+        }
+      });
+    };
+
+    // Activate overdrive effect
+    X('audio').module('overdrive').activate();
+
+    // Set overdrive effect parameters
+    X('audio').module('overdrive').param(overdriveParams);
+
+  }, []);
+
+  const handleStart = () => {
+    X('audio').start(X('audio').param('currentTime'));
+  };
+
+  const handleStop = () => {
+    X('audio').stop();
+  };
+
+  const handleUpload = () => {
+    uploaderRef.current?.click();
   };
 
   return (
     <div>
-      <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+      <p id="result-text" ref={resultRef}></p>
+      <canvas className="hidden" ref={canvasRef}></canvas>
+      <h2>Overdrive Parameters</h2>
+      <label>
+        Drive:
+        <input type="range" min="0" max="1" step="0.01" name="drive" value={overdriveParams.drive} onChange={handleOverdriveChange} />
+        <output>{overdriveParams.drive}</output>
+      </label>
+      <button id="button-start" onClick={handleStart}>Start</button>
+      <button id="button-stop" onClick={handleStop}>Stop</button>
+      <button id="button-uploader" onClick={handleUpload}>Upload</button>
+      <input type="file" ref={uploaderRef} style={{ display: 'none' }} />
     </div>
   );
 }
-
-export default Page;
