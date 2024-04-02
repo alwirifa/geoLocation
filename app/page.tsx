@@ -23,10 +23,6 @@ interface GeofenceArea {
   videoId: string;
 }
 
-
-
-
-
 const Page = () => {
   const [experienceStarted, setExperienceStarted] = useState(false);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -62,8 +58,8 @@ const Page = () => {
 
     
     { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
-    { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.2216925, longitude: 106.8064602, radius: 20, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "WkBX4N79r4w" },
+    { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "bk8WKwHDUNk" },
     { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "36YnV9STBqc" },
     { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "RP0vhIfNOQQ" },
     { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "ku5VKha1VB8" },
@@ -95,6 +91,10 @@ const Page = () => {
           if (isInsideAnyGeofence) {
             setIsPlaying(true);
             setCurrentAreaIndex(areaIndex);
+            // Pause the specified video if it's currently playing
+            if (currentVideoId === "yNKvkPJl-tg") {
+              setIsPlaying(false);
+            }
           } else {
             // If the user is outside of any geofence area, play the specified video
             setCurrentVideoId("yNKvkPJl-tg");
