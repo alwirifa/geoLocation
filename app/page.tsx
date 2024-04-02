@@ -235,11 +235,11 @@ const Page = () => {
               </div>
               
               <div className='absolute bottom-40 left-4 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 4 ? 'visible' : 'hidden'}`} />
               </div>
               
               <div className='absolute top-16 right-8 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 5 ? 'visible' : 'hidden'}`} />
               </div>
             </div>
 
