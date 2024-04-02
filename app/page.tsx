@@ -70,18 +70,17 @@ const Page = () => {
   ]
 
   const watchUserLocation = () => {
-
     setExperienceStarted(true);
-
+  
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-
+  
           let isInsideAnyGeofence = false;
-          let areaIndex: number | null = null;
-
+          let areaIndex = null;
+  
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
@@ -92,12 +91,14 @@ const Page = () => {
               }
             }
           });
-
+  
           if (isInsideAnyGeofence) {
             setIsPlaying(true);
             setCurrentAreaIndex(areaIndex);
           } else {
-            setIsPlaying(false);
+            // If the user is outside of any geofence area, play the specified video
+            setCurrentVideoId("yNKvkPJl-tg");
+            setIsPlaying(true);
             setCurrentAreaIndex(null);
           }
         },
@@ -115,12 +116,7 @@ const Page = () => {
       console.log("Geolocation is not supported by this browser");
     }
   };
-
-  if (currentAreaIndex === null) {
-    // Play the specific YouTube video for out of area
-    setCurrentVideoId("m52ynxt1mOo");
-    setIsPlaying(true);
-  }
+  
   
 
   const stopWatchUserLocation = () => {
@@ -128,12 +124,10 @@ const Page = () => {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-  
-    if (experienceStarted) {
-      setExperienceStarted(false);
-    }
+
+    setExperienceStarted(false)
   };
-  
+
   useEffect(() => {
     return () => {
       stopWatchUserLocation();
