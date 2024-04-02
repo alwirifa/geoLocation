@@ -59,12 +59,14 @@ const Page = () => {
 
     // jkt
 
-    { latitude: -6.2223542, longitude: 106.806881, radius: 10, videoId: "lP26UCnoH9s" },
-    { latitude: -6.2220232, longitude: 106.8068387, radius: 10, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.2216925, longitude: 106.8064602, radius: 10, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 6, videoId: "36YnV9STBqc" },
-    { latitude: -6.2222515, longitude: 106.8060507, radius: 10, videoId: "RP0vhIfNOQQ" },
-    { latitude: -6.2216579, longitude: 106.806822, radius: 10, videoId: "ku5VKha1VB8" },
+
+    
+    { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
+    { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.2216925, longitude: 106.8064602, radius: 20, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "36YnV9STBqc" },
+    { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "RP0vhIfNOQQ" },
+    { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "ku5VKha1VB8" },
   ]
 
   const watchUserLocation = () => {
@@ -113,6 +115,13 @@ const Page = () => {
       console.log("Geolocation is not supported by this browser");
     }
   };
+
+  if (currentAreaIndex === null) {
+    // Play the specific YouTube video for out of area
+    setCurrentVideoId("m52ynxt1mOo");
+    setIsPlaying(true);
+  }
+  
 
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
@@ -244,12 +253,12 @@ const Page = () => {
             </div>
 
 
-            {/* 
-            {currentAreaIndex !== null ? (
+            
+            {/* {currentAreaIndex !== null ? (
               <p className="mt-4 font-semibold">You are currently inside geofence area </p>
             ) : (
               <p className="mt-4 font-semibold">You are not inside any geofence area</p>
-            )}
+            )} */}
 
 
             <div className="hidden">
@@ -261,7 +270,7 @@ const Page = () => {
                   opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
                 />
               ))}
-            </div> */}
+            </div>
           </div>
 
         )
