@@ -128,10 +128,12 @@ const Page = () => {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-
-    setExperienceStarted(false)
+  
+    if (experienceStarted) {
+      setExperienceStarted(false);
+    }
   };
-
+  
   useEffect(() => {
     return () => {
       stopWatchUserLocation();
