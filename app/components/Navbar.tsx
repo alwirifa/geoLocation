@@ -30,7 +30,7 @@ const Navbar = () => {
             <Link href={item.href} key={index}>{item.label}</Link>
           ))}
           <button onClick={toggleLanguage}>
-            {language === 'en' ? 'IND/ENG' : 'IND/ENG'}
+            {language === 'en' ? 'EXPERIENCE' : 'EXPERIENCE'}
           </button>
         </ul>
       </div>
