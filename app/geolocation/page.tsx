@@ -30,11 +30,19 @@ const TestGeolocation = () => {
 
   const geofenceAreas: GeofenceArea[] = [
     //  artha
-    { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
-    { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
+    // { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
+    // { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
+    // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
+    // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
 
+
+    { latitude: -6.2223542, longitude: 106.806881, radius: 10, videoId: "lP26UCnoH9s" },
+    { latitude: -6.2220232, longitude: 106.8068387, radius: 10, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.2216925, longitude: 106.8064602, radius: 10, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.221902133889262, longitude:  106.80623434081818, radius: 6, videoId: "36YnV9STBqc" },
+    { latitude: -6.2222515, longitude: 106.8060507, radius: 10, videoId: "RP0vhIfNOQQ" },
+    { latitude: -6.2216579, longitude: 106.806822, radius: 10, videoId: "ku5VKha1VB8" },
+    
   ];
 
   // gasmin

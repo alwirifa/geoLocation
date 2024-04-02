@@ -49,13 +49,22 @@ const Page = () => {
 
 
     // // gasmin
-    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
+    // { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
 
-    { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
+    // { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
 
-    { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
+    // { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
 
-    { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
+    // { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
+
+    // jkt
+
+    { latitude: -6.2223542, longitude: 106.806881, radius: 10, videoId: "lP26UCnoH9s" },
+    { latitude: -6.2220232, longitude: 106.8068387, radius: 10, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.2216925, longitude: 106.8064602, radius: 10, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 6, videoId: "36YnV9STBqc" },
+    { latitude: -6.2222515, longitude: 106.8060507, radius: 10, videoId: "RP0vhIfNOQQ" },
+    { latitude: -6.2216579, longitude: 106.806822, radius: 10, videoId: "ku5VKha1VB8" },
   ]
 
   const watchUserLocation = () => {
@@ -188,22 +197,7 @@ const Page = () => {
 
           <div className="flex flex-col gap-4 items-center  pt-[16svh]">
             {/* <div className="relative h-[250px] w-[250px] border-2 border-black">
-              <div className='absolute top-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area </p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
-              </div>
-              <div className='absolute top-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area </p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
-              </div>
-              <div className='absolute bottom-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area </p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
-              </div>
-              <div className='absolute bottom-0 right-0 p-4 border-2 border-green-500 flex justify-center items-center'>
-                <p>Area </p>
-                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
-              </div>
+             
             </div> */}
 
 
@@ -225,6 +219,27 @@ const Page = () => {
                 <div>
                   <img src="/images/audio.png" alt="" className='h-6 w-6' />
                 </div>
+              </div>
+
+              <div className='absolute bottom-[134px] right-16 p-4 border-2 border-green-500 flex justify-center items-center'>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
+              </div>
+              <div className='absolute top-36 right-24 p-4 border-2 border-green-500 flex justify-center items-center'>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
+              </div>
+              <div className='absolute top-20 left-32 p-4 border-2 border-green-500 flex justify-center items-center'>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
+              </div>
+              <div className='absolute top-32 left-16 p-4 border-2 border-green-500 flex justify-center items-center'>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
+              </div>
+              
+              <div className='absolute bottom-40 left-4 p-4 border-2 border-green-500 flex justify-center items-center'>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
+              </div>
+              
+              <div className='absolute top-16 right-8 p-4 border-2 border-green-500 flex justify-center items-center'>
+                <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
               </div>
             </div>
 
@@ -266,7 +281,7 @@ const Page = () => {
             <img src="/images/headphones.png" alt="" className='h-24 w-24' />
 
             <button className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max' onClick={watchUserLocation}>
-             {data.button}
+              {data.button}
             </button>
           </div>
         )}
