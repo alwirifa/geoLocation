@@ -4,6 +4,10 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import YouTube from "react-youtube";
 
+import { enData, idData } from './data';
+import { useGlobalContext } from './context/store';
+
+
 
 interface UserLocation {
   latitude: number;
@@ -19,6 +23,10 @@ interface GeofenceArea {
   videoId: string;
 }
 
+
+
+
+
 const Page = () => {
   const [experienceStarted, setExperienceStarted] = useState(false);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -27,6 +35,10 @@ const Page = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [player, setPlayer] = useState<any>(null);
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
+
+  const { language, toggleLanguage } = useGlobalContext();
+  const data = language === 'en' ? enData : idData;
+
 
   const geofenceAreas: GeofenceArea[] = [
 
@@ -160,19 +172,22 @@ const Page = () => {
 
             <div className='flex flex-col justify-center items-center gap-1'>
               <p className='text-lg text-purple font-semibold'>HERE, NOWHERE HEAR</p>
-              <p className='text-sm'>Tomy Herseta, 2024.</p>
+              <p className='text-xs'>Tomy Herseta, 2024.</p>
             </div>
 
-            <p className='text-justify p-8 mt-6 font-medium'>
-              Instalasi ini merupakan sebuah pengalaman mendengar yang membutuhkan partisipasi aktif dari pengunjung. <br /><br />
-
-              Silakan gunakan earphone Anda untuk pengalaman yang lebih optimal.
-            </p>
+            <div className='flex flex-col gap-4 p-8 mt-6 '>
+              <p className='text-justify font-medium'>
+                {data.home1}
+              </p>
+              <p className='text-justify font-medium'>
+                {data.home2}
+              </p>
+            </div>
           </div>
         ) : (
 
           <div className="flex flex-col gap-4 items-center  pt-[16svh]">
-            <div className="relative h-[250px] w-[250px] border-2 border-black">
+            {/* <div className="relative h-[250px] w-[250px] border-2 border-black">
               <div className='absolute top-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
                 <p>Area </p>
                 <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
@@ -189,8 +204,32 @@ const Page = () => {
                 <p>Area </p>
                 <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
               </div>
+            </div> */}
+
+
+            <div className='flex flex-col justify-center items-center gap-1'>
+              <p className='text-lg text-purple font-semibold'>HERE, NOWHERE HEAR</p>
+              <p className='text-xs'>Tomy Herseta, 2024.</p>
+            </div>
+            <div className='relative'>
+              <div className='bg-purple  flex justify-end items-center px-3 py-1 absolute top-0 w-full'>
+                <img src="/images/close.png" className='h-[30px] w-[30px]' alt="" onClick={() => { setExperienceStarted(false) }} />
+              </div>
+              <img src="/images/map.png" alt="" className='h-auto w-[300px]' />
+              <div className='bg-purple  flex justify-between items-center p-2 px-4 absolute bottom-0 w-full'>
+                {currentAreaIndex !== null ? (
+                  <p className="text-white font-semibold">AUDIO {currentAreaIndex}</p>
+                ) : (
+                  <p className="text-white font-semibold">OUT OF AREA</p>
+                )}
+                <div>
+                  <img src="/images/audio.png" alt="" className='h-6 w-6' />
+                </div>
+              </div>
             </div>
 
+
+            {/* 
             {currentAreaIndex !== null ? (
               <p className="mt-4 font-semibold">You are currently inside geofence area </p>
             ) : (
@@ -207,7 +246,7 @@ const Page = () => {
                   opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
                 />
               ))}
-            </div>
+            </div> */}
           </div>
 
         )
@@ -216,18 +255,18 @@ const Page = () => {
         {experienceStarted ? (
 
           <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
-            <img src="/images/headphones.png" alt="" className='h-24 w-24' />
+            {/* <img src="/images/headphones.png" alt="" className='h-24 w-24' />
 
             <button className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max' onClick={stopWatchUserLocation}>
               BERHENTI MENDENGARKAN
-            </button>
+            </button> */}
           </div>
         ) : (
           <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
             <img src="/images/headphones.png" alt="" className='h-24 w-24' />
 
             <button className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max' onClick={watchUserLocation}>
-              MULAI PENGALAMAN
+             {data.button}
             </button>
           </div>
         )}
