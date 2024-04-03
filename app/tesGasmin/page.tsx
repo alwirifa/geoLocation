@@ -34,6 +34,7 @@ const Page = () => {
     { latitude: -6.9168766, longitude: 107.6614897, radius: 10, videoId: "bk8WKwHDUNk" },
   ];
 
+
   const watchUserLocation = () => {
     setExperienceStarted(true);
 
@@ -56,18 +57,18 @@ const Page = () => {
             }
           });
 
+          setIsPlaying(true); // Assume video should play by default
+
+          if (currentVideoId !== videoToPlay) {
+            setCurrentVideoId(videoToPlay); // Set the video to play if it's different from the current one
+          }
+
+          setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null); // Set the current area index
+
           // Pause the specified video if it's currently playing and not in any geofence area
           if (!isInsideAnyGeofence && currentVideoId === "yNKvkPJl-tg") {
             setIsPlaying(false);
-          } else {
-            // Check if the new video to play is different from the current one
-            if (currentVideoId !== videoToPlay) {
-              setCurrentVideoId(videoToPlay); // Set the video to play if it's different from the current one
-            }
           }
-
-          setIsPlaying(true); // Assume video should play by default
-          setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null); // Set the current area index
         },
         (error) => {
           console.error("Error watching user location: ", error);
