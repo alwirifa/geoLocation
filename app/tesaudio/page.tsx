@@ -1,26 +1,11 @@
-"use client"
+import React from 'react'
 
-import React, { useState } from 'react';
+type Props = {}
 
-type Props = {};
-
-const Page = (props: Props) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handleClick = () => {
-    setIsPlaying(true);
-    const audio = new Audio('/music/habibi.mp3');
-    audio.play();
-    audio.onended = () => setIsPlaying(false);
-  };
-
+const page = (props: Props) => {
   return (
-    <div>
-      <button onClick={handleClick} disabled={isPlaying}>
-        {isPlaying ? 'Playing...' : 'Play Music'}
-      </button>
-    </div>
-  );
-};
+    <div>page</div>
+  )
+}
 
-export default Page;
+export default page
