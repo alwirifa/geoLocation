@@ -184,13 +184,14 @@ const Page = () => {
             )}
 
             <div className="flex">
-
-              <YouTube
-                videoId={currentVideoId || ''}
-                onReady={onReady}
-                opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
-              />
-
+              {geofenceAreas.map((area) => (
+                <YouTube
+                  key={area.videoId}
+                  videoId={area.videoId}
+                  onReady={onReady}
+                  opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
+                />
+              ))}
             </div>
           </div>
 
