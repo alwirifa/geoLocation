@@ -225,17 +225,8 @@ const Page = () => {
                   key={area.videoId}
                   videoId={area.videoId}
                   onReady={onReady}
-                  opts={{
-                    height: "100",
-                    width: "100",
-                    controls: 0,
-                    autoplay: 0,
-                    playerVars: {
-                      autoplay: 0,
-                    },
-                  }}
+                  opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
                 />
-
               ))}
             </div>
           </div>
