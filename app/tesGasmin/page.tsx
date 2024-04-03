@@ -112,15 +112,13 @@ const Page = () => {
     }
   };
 
-
-
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
 
-    setExperienceStarted(false)
+    setExperienceStarted(false);
   };
 
   useEffect(() => {
@@ -128,7 +126,6 @@ const Page = () => {
       stopWatchUserLocation();
     };
   }, []);
-
 
   const onReady = (event: any) => {
     setPlayer(event.target);
@@ -154,7 +151,7 @@ const Page = () => {
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c;  // in km
+    const distance = R * c; // in km
     return distance * 1000; // Convert to meters
   };
 
@@ -225,8 +222,17 @@ const Page = () => {
                   key={area.videoId}
                   videoId={area.videoId}
                   onReady={onReady}
-                  opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
+                  opts={{
+                    height: "100",
+                    width: "100",
+                    controls: 0,
+                    autoplay: 0,
+                    playerVars: {
+                      autoplay: 0,
+                    },
+                  }}
                 />
+
               ))}
             </div>
           </div>
