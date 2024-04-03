@@ -235,14 +235,28 @@ const Page = () => {
         }
 
         {experienceStarted ? (
+          <div>
 
-          <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
-            <img src="/images/headphones.png" alt="" className='h-24 w-24' />
+            <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
+              <img src="/images/headphones.png" alt="" className='h-24 w-24' />
 
-            <button className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max' onClick={stopWatchUserLocation}>
-              STOP LISTENING
-            </button>
+              <button className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max' onClick={stopWatchUserLocation}>
+                STOP LISTENING
+              </button>
+            </div>
+            {isLoading && (
+              // Modal loading
+              <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
+                <CircleSpinner
+                  color='#FFF'
+                  outerBorderOpacity={0.5}
+                  outerBorderWidth={3}
+                  innerBorderWidth={3}
+                />
+              </div>
+            )}
           </div>
+
         ) : (
           <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
             <img src="/images/headphones.png" alt="" className='h-24 w-24' />
@@ -253,17 +267,7 @@ const Page = () => {
           </div>
         )}
 
-        {isLoading && (
-          // Modal loading
-          <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
-            <CircleSpinner
-              color='#FFF'
-              outerBorderOpacity={0.5}
-              outerBorderWidth={3}
-              innerBorderWidth={3}
-            />
-          </div>
-        )}
+
 
         <div className='absolute bottom-0 w-full'>
           <Navbar />
