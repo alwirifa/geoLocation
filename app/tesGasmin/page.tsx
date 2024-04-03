@@ -228,11 +228,11 @@ const Page = () => {
                     controls: 0,
                     autoplay: 0,
                     playerVars: {
-                      autoplay: 0,
+                      autoplay: 1,
+                      playsinline: 1, // Tambahkan properti playsinline
                     },
                   }}
                 />
-
               ))}
             </div>
           </div>
