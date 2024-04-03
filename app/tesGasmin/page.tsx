@@ -36,17 +36,17 @@ const Page = () => {
 
   const watchUserLocation = () => {
     setExperienceStarted(true);
-  
+
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-  
+
           let isInsideAnyGeofence = false;
           let areaIndex = null;
           let videoToPlay = "yNKvkPJl-tg"; // Default video to play if not in any geofence area
-  
+
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
@@ -55,7 +55,7 @@ const Page = () => {
               videoToPlay = area.videoId; // Set the video to play if inside a geofence area
             }
           });
-  
+
           // Pause the specified video if it's currently playing and not in any geofence area
           if (!isInsideAnyGeofence && currentVideoId === "yNKvkPJl-tg") {
             setIsPlaying(false);
@@ -65,7 +65,7 @@ const Page = () => {
               setCurrentVideoId(videoToPlay); // Set the video to play if it's different from the current one
             }
           }
-  
+
           setIsPlaying(true); // Assume video should play by default
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null); // Set the current area index
         },
@@ -84,7 +84,7 @@ const Page = () => {
     }
   };
 
-  
+
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
@@ -190,8 +190,7 @@ const Page = () => {
             <div className="flex">
               {geofenceAreas.map((area) => (
                 <YouTube
-                  key={area.videoId}
-                  videoId={area.videoId}
+                  videoId={currentVideoId || ''}
                   onReady={onReady}
                   opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
                 />
