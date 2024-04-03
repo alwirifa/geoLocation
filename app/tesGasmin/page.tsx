@@ -158,7 +158,7 @@ const Page = () => {
         ) : (
 
           <div className="flex flex-col gap-4 items-center  pt-[16svh]">
-            <div className="relative h-[250px] w-[250px] border-2 border-black">
+            <div className="relative h-[200px] w-[200px] border-2 border-black">
               <div className='absolute top-0 left-0 p-4 border-2 border-green-500 flex justify-center items-center'>
                 <p>Area 1</p>
                 <div className={`bg-red-500 h-4 w-4 rounded-full absolute animate-ping ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
@@ -183,7 +183,7 @@ const Page = () => {
               <p className="mt-4 font-semibold">You are not inside any geofence area</p>
             )}
 
-            <div className="hidden">
+            <div className="flex">
               {geofenceAreas.map((area) => (
                 <YouTube
                   key={area.videoId}
