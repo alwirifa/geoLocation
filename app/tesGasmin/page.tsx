@@ -112,13 +112,15 @@ const Page = () => {
     }
   };
 
+
+
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
 
-    setExperienceStarted(false);
+    setExperienceStarted(false)
   };
 
   useEffect(() => {
@@ -126,6 +128,7 @@ const Page = () => {
       stopWatchUserLocation();
     };
   }, []);
+
 
   const onReady = (event: any) => {
     setPlayer(event.target);
@@ -151,7 +154,7 @@ const Page = () => {
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // in km
+    const distance = R * c;  // in km
     return distance * 1000; // Convert to meters
   };
 
@@ -228,11 +231,11 @@ const Page = () => {
                     controls: 0,
                     autoplay: 0,
                     playerVars: {
-                      autoplay: 1,
-                      playsinline: 1, // Tambahkan properti playsinline
+                      autoplay: 0,
                     },
                   }}
                 />
+
               ))}
             </div>
           </div>
