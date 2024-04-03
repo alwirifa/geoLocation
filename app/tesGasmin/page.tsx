@@ -34,36 +34,40 @@ const Page = () => {
     { latitude: -6.9168766, longitude: 107.6614897, radius: 10, videoId: "bk8WKwHDUNk" },
   ];
 
+
   const watchUserLocation = () => {
     setExperienceStarted(true);
-
+  
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-
+  
           let isInsideAnyGeofence = false;
-          let areaIndex: number | null = null;
-
+          let areaIndex = null;
+          let videoToPlay = "yNKvkPJl-tg"; // Default video to play if not in any geofence area
+  
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
               isInsideAnyGeofence = true;
               areaIndex = index;
-              if (currentVideoId !== area.videoId) {
-                setCurrentVideoId(area.videoId);
-              }
+              videoToPlay = area.videoId; // Set the video to play if inside a geofence area
             }
           });
-
-          if (isInsideAnyGeofence) {
-            setIsPlaying(true);
-            setCurrentAreaIndex(areaIndex);
-          } else {
+  
+          setIsPlaying(true); // Assume video should play by default
+  
+          if (currentVideoId !== videoToPlay) {
+            setCurrentVideoId(videoToPlay); // Set the video to play if it's different from the current one
+          }
+  
+          setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null); // Set the current area index
+  
+          // Pause the specified video if it's currently playing and not in any geofence area
+          if (!isInsideAnyGeofence && currentVideoId === "yNKvkPJl-tg") {
             setIsPlaying(false);
-            setCurrentAreaIndex(null);
-            setCurrentVideoId("yNKvkPJl-tg"); // Mengatur video yang akan diputar saat di luar area
           }
         },
         (error) => {
@@ -80,6 +84,7 @@ const Page = () => {
       console.log("Geolocation is not supported by this browser");
     }
   };
+  
 
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
