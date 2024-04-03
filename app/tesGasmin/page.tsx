@@ -32,12 +32,6 @@ const Page = () => {
 
   const geofenceAreas: GeofenceArea[] = [
 
-    // { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
-    // { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
-    // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
-    // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
-
-
     // // gasmin
     { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
 
@@ -47,14 +41,6 @@ const Page = () => {
 
     { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
 
-  
-
-    // { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
-    // { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "WkBX4N79r4w" },
-    // { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "bk8WKwHDUNk" },
-    // { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "36YnV9STBqc" },
-    // { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "RP0vhIfNOQQ" },
-    // { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "ku5VKha1VB8" },
   ]
 
   const watchUserLocation = () => {
@@ -130,6 +116,7 @@ const Page = () => {
   useEffect(() => {
     if (player && currentVideoId) {
       player.loadVideoById(currentVideoId);
+      player.playVideo(); // Tambahkan pemutaran video secara otomatis saat komponen dimount
       if (isPlaying) {
         player.playVideo();
       } else {
@@ -138,6 +125,7 @@ const Page = () => {
       setIsLoading(false);
     }
   }, [player, currentVideoId, isPlaying]);
+
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
@@ -203,7 +191,7 @@ const Page = () => {
                   key={area.videoId}
                   videoId={area.videoId}
                   onReady={onReady}
-                  opts={{ height: '100', width: '100', controls: 0, autoplay: 0, playsinline: 1 }}
+                  opts={{ height: '100', width: '100', controls: 1, autoplay: 1, playsinline: 1 }}
                 />
               ))}
             </div>
