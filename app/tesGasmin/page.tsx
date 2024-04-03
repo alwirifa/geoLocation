@@ -19,7 +19,7 @@ const CustomYouTubePlayer = () => {
     width: '640',
     playerVars: {
       // https://developers.google.com/youtube/player_parameters
-      autoplay: 0, // Atur ke 1 untuk autoplay
+      autoplay: 1, // Atur ke 1 untuk autoplay
     },
   };
 
