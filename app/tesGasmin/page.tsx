@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import YouTube from "react-youtube";
+import { CircleSpinner } from 'react-spinner-overlay';
+
+
 
 interface UserLocation {
   latitude: number;
@@ -26,6 +29,7 @@ const Page = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [player, setPlayer] = useState<any>(null);
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // State to manage loading modal
 
 
   const geofenceAreas: GeofenceArea[] = [
@@ -48,7 +52,7 @@ const Page = () => {
     // jkt
 
 
-    
+
     { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
     { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "WkBX4N79r4w" },
     { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "bk8WKwHDUNk" },
@@ -59,17 +63,18 @@ const Page = () => {
 
   const watchUserLocation = () => {
     setExperienceStarted(true);
-  
+    setIsLoading(true);
+
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-  
+
           let isInsideAnyGeofence = false;
           let areaIndex = null;
           let videoToPlay = "yNKvkPJl-tg"; // Default video to play if not in any geofence area
-  
+
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
@@ -78,15 +83,15 @@ const Page = () => {
               videoToPlay = area.videoId; // Set the video to play if inside a geofence area
             }
           });
-  
+
           setIsPlaying(true); // Assume video should play by default
-  
+
           if (currentVideoId !== videoToPlay) {
             setCurrentVideoId(videoToPlay); // Set the video to play if it's different from the current one
           }
-  
+
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null); // Set the current area index
-  
+
           // Pause the specified video if it's currently playing and not in any geofence area
           if (!isInsideAnyGeofence && currentVideoId === "yNKvkPJl-tg") {
             setIsPlaying(false);
@@ -106,8 +111,8 @@ const Page = () => {
       console.log("Geolocation is not supported by this browser");
     }
   };
-  
-  
+
+
 
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
@@ -137,9 +142,9 @@ const Page = () => {
       } else {
         player.pauseVideo();
       }
+      setIsLoading(false); // Hide loading modal after video is ready to play
     }
   }, [player, currentVideoId, isPlaying]);
-
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Earth's radius in kilometers
@@ -245,6 +250,18 @@ const Page = () => {
             <button className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max' onClick={watchUserLocation}>
               START EXPERIENCE
             </button>
+          </div>
+        )}
+
+        {isLoading && (
+          // Modal loading
+          <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
+            <CircleSpinner
+              color='#FFF'
+              outerBorderOpacity={0.5}
+              outerBorderWidth={3}
+              innerBorderWidth={3}
+            />
           </div>
         )}
 
