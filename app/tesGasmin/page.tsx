@@ -31,11 +31,17 @@ const Page = () => {
   const playerRef = useRef<any>(null);
 
   const geofenceAreas: GeofenceArea[] = [
+
+    // // gasmin
     { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
+
     { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
+
     { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
+
     { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
-  ];
+
+  ]
 
   const watchUserLocation = () => {
     setExperienceStarted(true);
@@ -110,6 +116,7 @@ const Page = () => {
   useEffect(() => {
     if (player && currentVideoId) {
       player.loadVideoById(currentVideoId);
+      player.playVideo(); // Tambahkan pemutaran video secara otomatis saat komponen dimount
       if (isPlaying) {
         player.playVideo();
       } else {
@@ -118,6 +125,7 @@ const Page = () => {
       setIsLoading(false);
     }
   }, [player, currentVideoId, isPlaying]);
+
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
@@ -135,75 +143,101 @@ const Page = () => {
     return deg * (Math.PI / 180);
   };
 
-  const startExperience = () => {
-    watchUserLocation();
-  };
-
-  useEffect(() => {
-    if (experienceStarted) {
-      watchUserLocation();
-    }
-  }, [experienceStarted]);
-
-  const onAreaChange = (areaIndex: number) => {
-    setCurrentAreaIndex(areaIndex);
-    setIsPlaying(true);
-  };
-
   return (
     <div className='h-[100svh] w-full relative'>
-      {/* Konten lainnya */}
-
-      {!experienceStarted && (
-        <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
-          <img src='/images/headphones.png' alt='' className='h-24 w-24' />
-          <button
-            className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max'
-            onClick={startExperience}
-          >
-            START EXPERIENCE
-          </button>
+      <div className='bg-background h-[100svh] w-full bg-cover bg-center'>
+        <div className='absolute top-0 flex justify-between w-full p-8'>
+          <div>
+            <img src='/images/ttd.png' alt='' className='w-auto h-8' />
+          </div>
+          <div className='flex gap-4 items-center'>
+            <img src='/images/jakartaLogo.png' alt='' className='w-auto h-4' />
+            <img src='/images/forteLogo.png' alt='' className='w-auto h-4' />
+          </div>
         </div>
-      )}
 
-      <div className='flex'>
-        {geofenceAreas.map((area, index) => (
-          <YouTube
-            key={area.videoId}
-            videoId={area.videoId}
-            onReady={onReady}
-            opts={{ height: '100', width: '100', controls: 0, autoplay: 0, playsinline: 1 }}
-            onPlay={() => onAreaChange(index)}
-          />
-        ))}
-      </div>
+        <div className='flex'>
+          {geofenceAreas.map((area) => (
+            <YouTube
+              key={area.videoId}
+              videoId={area.videoId}
+              onReady={onReady}
+              opts={{ height: '100', width: '100', controls: 1, autoplay: 1, playsinline: 1 }}
+            />
+          ))}
+        </div>
 
-      {/* Bottom section */}
-      {experienceStarted && (
-        <div>
+        {!experienceStarted ? (
+          <div className={`flex flex-col items-center justify-center w-full pt-[16svh]`}>
+            <div className='flex flex-col justify-center items-center gap-1'>
+              <p className='text-lg text-purple font-semibold'>HERE, NOWHERE HEAR</p>
+              <p className='text-sm'>Tomy Herseta, 2024.</p>
+            </div>
+
+            <p className='text-justify p-8 mt-6 font-medium'>
+              Instalasi ini merupakan sebuah pengalaman mendengar yang membutuhkan partisipasi aktif dari pengunjung.{' '}
+              <br />
+              <br />
+              Silakan gunakan earphone Anda untuk pengalaman yang lebih optimal.
+            </p>
+          </div>
+        ) : (
+          <div className='flex flex-col gap-4 items-center  pt-[16svh]'>
+            {/* Geofence area indicators */}
+            <div className='relative h-[200px] w-[200px] border-2 border-black'>
+              {/* Render geofence areas here */}
+            </div>
+
+            {/* Current geofence area info */}
+            {currentAreaIndex !== null ? (
+              <p className='mt-4 font-semibold'>You are currently inside geofence area {currentAreaIndex + 1}</p>
+            ) : (
+              <p className='mt-4 font-semibold'>You are not inside any geofence area</p>
+            )}
+
+            {/* YouTube players */}
+
+          </div>
+        )}
+
+        {/* Bottom section */}
+        {experienceStarted ? (
+          <div>
+            <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
+              <img src='/images/headphones.png' alt='' className='h-24 w-24' />
+              <button
+                className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max'
+                onClick={stopWatchUserLocation}
+              >
+                STOP LISTENING
+              </button>
+              {/* {isLoading && (
+                <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
+                  <CircleSpinner color='#FFF' outerBorderOpacity={0.5} outerBorderWidth={3} innerBorderWidth={3} />
+                </div>
+              )} */}
+            </div>
+          </div>
+        ) : (
           <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
             <img src='/images/headphones.png' alt='' className='h-24 w-24' />
             <button
               className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max'
-              onClick={stopWatchUserLocation}
+              onClick={watchUserLocation}
             >
-              STOP LISTENING
+              START EXPERIENCE
             </button>
-            {isLoading && (
-              <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
-                <CircleSpinner color='#FFF' outerBorderOpacity={0.5} outerBorderWidth={3} innerBorderWidth={3} />
-              </div>
-            )}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Navbar */}
-      <div className='absolute bottom-0 w-full'>
-        <Navbar />
+        {/* Navbar */}
+        <div className='absolute bottom-0 w-full'>
+          <Navbar />
+        </div>
       </div>
     </div>
   );
 };
 
 export default Page;
+
