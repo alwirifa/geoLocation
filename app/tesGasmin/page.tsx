@@ -34,7 +34,6 @@ const Page = () => {
     { latitude: -6.9168766, longitude: 107.6614897, radius: 10, videoId: "bk8WKwHDUNk" },
   ];
 
-
   const watchUserLocation = () => {
     setExperienceStarted(true);
 
@@ -45,29 +44,26 @@ const Page = () => {
           setUserLocation({ latitude, longitude, accuracy, speed });
 
           let isInsideAnyGeofence = false;
-          let areaIndex = null;
-          let videoToPlay = "yNKvkPJl-tg"; // Default video to play if not in any geofence area
+          let areaIndex: number | null = null;
 
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
               isInsideAnyGeofence = true;
               areaIndex = index;
-              videoToPlay = area.videoId; // Set the video to play if inside a geofence area
+              if (currentVideoId !== area.videoId) {
+                setCurrentVideoId(area.videoId);
+              }
             }
           });
 
-          setIsPlaying(true); // Assume video should play by default
-
-          if (currentVideoId !== videoToPlay) {
-            setCurrentVideoId(videoToPlay); // Set the video to play if it's different from the current one
-          }
-
-          setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null); // Set the current area index
-
-          // Pause the specified video if it's currently playing and not in any geofence area
-          if (!isInsideAnyGeofence && currentVideoId === "yNKvkPJl-tg") {
+          if (isInsideAnyGeofence) {
+            setIsPlaying(true);
+            setCurrentAreaIndex(areaIndex);
+          } else {
             setIsPlaying(false);
+            setCurrentAreaIndex(null);
+            setCurrentVideoId("M94RrCFqaw4"); // Mengatur video yang akan diputar saat di luar area
           }
         },
         (error) => {
@@ -84,7 +80,6 @@ const Page = () => {
       console.log("Geolocation is not supported by this browser");
     }
   };
-
 
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
@@ -191,7 +186,8 @@ const Page = () => {
             <div className="flex">
               {geofenceAreas.map((area) => (
                 <YouTube
-                  videoId={currentVideoId || ''}
+                  key={area.videoId}
+                  videoId={area.videoId}
                   onReady={onReady}
                   opts={{ height: "100", width: "100", controls: 0, autoplay: 0 }}
                 />
