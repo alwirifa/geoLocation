@@ -174,7 +174,7 @@ const CustomYouTubePlayer = () => {
         <div className='absolute bottom-0 w-full'>
           <button onClick={GPS}>GPS</button>
           {showPlayButton && (
-            <button className="bg-blue-500 text-white font-semibold py-2 px-4 rounded absolute bottom-4 left-4" onClick={playVideo}>Play Video</button>
+            <button className="bg-blue-500 text-white font-semibold py-2 px-4 rounded" onClick={playVideo}>Play Video</button>
           )}
           <p className="text-white font-semibold">AUDIO {currentAreaIndex}</p>
           <img src="/images/close.png" className='h-[30px] w-[30px]' alt="" onClick={stopWatchUserLocation} />
