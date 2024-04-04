@@ -266,28 +266,28 @@ const CustomYouTubePlayer = () => {
             <img src='/images/headphones.png' alt='' className='h-24 w-24' />
             <button
               className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max'
-            // onClick={() => { setExperienceStarted(true) }}
+            onClick={() => { watchUserLocation() }}
             >
               START EXPERIENCE
             </button>
           </div>
         )}
 
-<div className='absolute top-0 right-0'>
+        <div className='absolute top-0 right-0'>
 
-        {currentAreaIndex !== null ? (
-          <p className="text-white font-semibold">AUDIO {currentAreaIndex}</p>
+          {currentAreaIndex !== null ? (
+            <p className="text-white font-semibold">AUDIO {currentAreaIndex}</p>
           ) : (
             <p className="text-white font-semibold ">OUT OF AREA</p>
-            )}
+          )}
 
-        {showPlayButton && (
-          <div className='absolute top-10 bg-white right-0'>
-            <button onClick={playVideo}>Play Video</button>
-          </div>
-        )
-      }
-      </div>
+          {showPlayButton && (
+            <div className='absolute top-10 bg-white right-0'>
+              <button onClick={playVideo}>Play Video</button>
+            </div>
+          )
+          }
+        </div>
 
 
         <div className='absolute bottom-0 w-full'>
