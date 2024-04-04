@@ -57,9 +57,20 @@ const CustomYouTubePlayer = () => {
             }
           });
 
-          setIsPlaying(true);
-          setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
-          setShowCustomButton(true);
+          // Memeriksa apakah pengguna telah memainkan video sebelumnya
+          if (!isPlaying) {
+            setIsPlaying(true);
+            setShowCustomButton(true);
+          }
+
+          // Memeriksa apakah pengguna telah memasuki area baru
+          if (areaIndex !== currentAreaIndex) {
+            // Jika pengguna telah memasuki area baru, pause video dari area sebelumnya
+            if (player) {
+              player.pauseVideo();
+            }
+            setCurrentAreaIndex(areaIndex);
+          }
         },
         (error) => {
           console.error('Error watching user location: ', error);
