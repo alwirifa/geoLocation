@@ -46,25 +46,37 @@ const CustomYouTubePlayer = () => {
 
   ]
 
-  const watchUserLocation = () => {
-    setIsLoading(true);
 
+  const watchUserLocation = () => {
+    setExperienceStarted(true);
+    setIsLoading(true);
+  
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-
+  
           let isInsideAnyGeofence = false;
-
+          let areaIndex = null;
+  
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
               isInsideAnyGeofence = true;
+              areaIndex = index;
             }
           });
-
-          setShowPlayButton(isInsideAnyGeofence && !isPlaying);
+  
+          setIsPlaying(true);
+          setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
+  
+          // Check if user exits a specific area and pause video automatically
+          if (currentAreaIndex !== null && areaIndex !== currentAreaIndex) {
+            if (player) {
+              player.pauseVideo();
+            }
+          }
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -81,6 +93,7 @@ const CustomYouTubePlayer = () => {
     }
   };
 
+  
 
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
