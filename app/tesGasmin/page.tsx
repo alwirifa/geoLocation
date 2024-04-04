@@ -34,7 +34,7 @@ const CustomYouTubePlayer = () => {
   const geofenceAreas: GeofenceArea[] = [
 
     // // gasmin
-    { latitude: -6.925592410971176, longitude: 107.66503232426012, radius: 15, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
 
     { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
 
@@ -143,40 +143,10 @@ const CustomYouTubePlayer = () => {
 
   const playVideo = () => {
     watchUserLocation();
-    if (player && currentAreaIndex !== null) {
-      const area = geofenceAreas[currentAreaIndex];
-      player.loadVideoById(area.videoId);
+    if (player && currentAreaIndex !== 4) { // Memeriksa apakah currentAreaIndex bukan 4 (indeks untuk video di luar area)
+      player.playVideo(); // Memanggil fungsi playVideo() dari objek player
     }
   };
-  
-  useEffect(() => {
-    if (currentAreaIndex !== null) {
-      const area = geofenceAreas[currentAreaIndex];
-      setCurrentVideoId(area.videoId);
-      setIsPlaying(true);
-    } else {
-      // Jika di luar area, matikan suara untuk semua video
-      if (player) {
-        player.mute();
-      }
-    }
-  }, [currentAreaIndex]);
-
-  useEffect(() => {
-    if (player && currentVideoId) {
-      player.loadVideoById(currentVideoId);
-      if (isPlaying) {
-        player.playVideo();
-        // Jika di dalam area, aktifkan suara
-        if (currentAreaIndex !== null) {
-          player.unMute();
-        }
-      } else {
-        player.pauseVideo();
-      }
-      setIsLoading(false);
-    }
-  }, [player, currentVideoId, isPlaying, currentAreaIndex]);
 
   const opts = {
     height: '100',
