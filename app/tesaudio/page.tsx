@@ -104,19 +104,19 @@ const CustomYouTubePlayer = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (player && currentVideoId) {
-      player.loadVideoById(currentVideoId);
-      if (isPlaying) {
-        player.playVideo();
-        if (currentAreaIndex !== null) {
-          player.unMute();
-        }
-      } else {
-        player.pauseVideo();
-      }
-    }
-  }, [player, currentVideoId, isPlaying, currentAreaIndex]);
+  // useEffect(() => {
+  //   if (player && currentVideoId) {
+  //     player.loadVideoById(currentVideoId);
+  //     if (isPlaying) {
+  //       player.playVideo();
+  //       if (currentAreaIndex !== null) {
+  //         player.unMute();
+  //       }
+  //     } else {
+  //       player.pauseVideo();
+  //     }
+  //   }
+  // }, [player, currentVideoId, isPlaying, currentAreaIndex]);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
