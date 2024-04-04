@@ -34,7 +34,7 @@ const CustomYouTubePlayer = () => {
   const geofenceAreas: GeofenceArea[] = [
 
     // // gasmin
-    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925493078798298, longitude: 107.66492187860258, radius: 4, videoId: "DOOrIxw5xOw" },
 
     { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
 
@@ -48,16 +48,16 @@ const CustomYouTubePlayer = () => {
   const watchUserLocation = () => {
     setExperienceStarted(true);
     setIsLoading(true);
-
+  
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-
+  
           let isInsideAnyGeofence = false;
           let areaIndex = null;
-
+  
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
@@ -65,12 +65,11 @@ const CustomYouTubePlayer = () => {
               areaIndex = index;
             }
           });
-
-          setIsPlaying(true);
-
-
+  
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
-
+  
+          // Memanggil playVideo() saat pengguna berpindah ke area yang berbeda
+          playVideo();  
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -86,6 +85,7 @@ const CustomYouTubePlayer = () => {
       console.log('Geolocation is not supported by this browser');
     }
   };
+  
 
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
@@ -142,11 +142,20 @@ const CustomYouTubePlayer = () => {
   };
 
   const playVideo = () => {
-    watchUserLocation();
-    if (player && currentAreaIndex !== 4) { // Memeriksa apakah currentAreaIndex bukan 4 (indeks untuk video di luar area)
-      player.playVideo(); // Memanggil fungsi playVideo() dari objek player
+    watchUserLocation(); // Memulai pemantauan lokasi pengguna
+    if (player) { // Memeriksa apakah player telah diinisialisasi
+      if (currentAreaIndex !== null && currentAreaIndex >= 0 && currentAreaIndex <= 3) {
+        // Jika pengguna berada di dalam area index 0-3
+        player.loadVideoById(geofenceAreas[currentAreaIndex].videoId); // Memuat video sesuai dengan indeks area saat ini
+        player.playVideo(); // Memulai pemutaran video
+      } else {
+        // Jika pengguna berada di luar area index 0-3
+        player.loadVideoById(geofenceAreas[4].videoId); // Memuat video dari area index 4
+        player.playVideo(); // Memulai pemutaran video
+      }
     }
   };
+
 
   const opts = {
     height: '100',
@@ -171,7 +180,6 @@ const CustomYouTubePlayer = () => {
         </div>
 
         <div className='absolute top-0'>
-
           {geofenceAreas.map((area) => (
             <YouTube
               key={area.videoId}
