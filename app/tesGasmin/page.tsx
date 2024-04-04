@@ -28,7 +28,7 @@ const CustomYouTubePlayer = () => {
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
   const playerRef = useRef<any>(null);
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925597070588439, longitude: 107.66502964205122, radius: 15, videoId: "DOOrIxw5xOw" },
     { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
     { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
     { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
@@ -135,7 +135,7 @@ const CustomYouTubePlayer = () => {
       autoplay: 0,
     },
   };
-  
+
   return (
     <div className='h-[100svh] w-full relative '>
       <div className='bg-background h-[100svh] w-full bg-cover bg-center'>
