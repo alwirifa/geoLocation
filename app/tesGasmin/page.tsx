@@ -20,23 +20,35 @@ interface GeofenceArea {
 }
 
 const CustomYouTubePlayer = () => {
-  const [player, setPlayer] = useState<any>(null);
+  const [player, setPlayer] = useState<any>(null); // State untuk menyimpan referensi ke player YouTube
   const [experienceStarted, setExperienceStarted] = useState(false);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const playerRef = useRef<any>(null);
+
+
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925597070588439, longitude: 107.66502964205122, radius: 15, videoId: "DOOrIxw5xOw" },
+
+    // // gasmin
+    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
+
     { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
+
     { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
+
     { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
     { latitude: -6.5168766, longitude: 107.7614897, radius: 4, videoId: 'yNKvkPJl-tg' }
-  ];
+
+  ]
 
   const watchUserLocation = () => {
     setExperienceStarted(true);
+    setIsLoading(true);
+
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
@@ -54,7 +66,11 @@ const CustomYouTubePlayer = () => {
             }
           });
 
+          setIsPlaying(true);
+
+
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
+
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -78,9 +94,10 @@ const CustomYouTubePlayer = () => {
     }
     setExperienceStarted(false);
     if (player) {
-      player.pauseVideo();
+      player.pauseVideo(); // Memeriksa apakah player telah diinisialisasi sebelum memanggil pauseVideo()
     }
   };
+
 
   useEffect(() => {
     return () => {
@@ -88,21 +105,20 @@ const CustomYouTubePlayer = () => {
     };
   }, []);
 
+
   useEffect(() => {
     if (player && currentVideoId) {
       player.loadVideoById(currentVideoId);
-      player.playVideo();
+      player.playVideo(); // Tambahkan pemutaran video secara otomatis saat komponen dimount
+      if (isPlaying) {
+        player.playVideo();
+      } else {
+        player.pauseVideo();
+      }
+      setIsLoading(false);
     }
-  }, [player, currentVideoId]);
+  }, [player, currentVideoId, isPlaying]);
 
-  useEffect(() => {
-    if (currentAreaIndex !== null) {
-      const videoId = geofenceAreas[currentAreaIndex].videoId;
-      setCurrentVideoId(videoId);
-    } else {
-      setCurrentVideoId(null);
-    }
-  }, [currentAreaIndex]);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
@@ -120,19 +136,23 @@ const CustomYouTubePlayer = () => {
     return deg * (Math.PI / 180);
   };
 
+
   const onReady = (event: any) => {
     setPlayer(event.target);
   };
 
   const playVideo = () => {
     watchUserLocation();
+    if (player && currentAreaIndex !== 4) { // Memeriksa apakah currentAreaIndex bukan 4 (indeks untuk video di luar area)
+      player.playVideo(); // Memanggil fungsi playVideo() dari objek player
+    }
   };
 
   const opts = {
     height: '100',
     width: '100',
     playerVars: {
-      autoplay: 0,
+      autoplay: 0, // Atur ke 1 untuk autoplay
     },
   };
 
