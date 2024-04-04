@@ -143,10 +143,12 @@ const CustomYouTubePlayer = () => {
 
   const playVideo = () => {
     watchUserLocation();
-    if (player && currentAreaIndex !== 4) { // Memeriksa apakah currentAreaIndex bukan 4 (indeks untuk video di luar area)
-      player.playVideo(); // Memanggil fungsi playVideo() dari objek player
+    if (player && currentAreaIndex !== null) { // Memeriksa apakah currentAreaIndex tidak null
+      const area = geofenceAreas[currentAreaIndex]; // Mengambil objek area berdasarkan currentAreaIndex
+      player.loadVideoById(area.videoId); // Memuat video sesuai dengan videoId di area yang sesuai
     }
   };
+
 
   const opts = {
     height: '100',
