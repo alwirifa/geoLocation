@@ -34,7 +34,7 @@ const CustomYouTubePlayer = () => {
   const geofenceAreas: GeofenceArea[] = [
 
     // // gasmin
-    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925592410971176, longitude: 107.66503232426012, radius: 4, videoId: "DOOrIxw5xOw" },
 
     { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
 
