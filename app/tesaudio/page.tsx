@@ -38,16 +38,16 @@ const CustomYouTubePlayer = () => {
 
   const watchUserLocation = () => {
     setExperienceStarted(true);
-
+  
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-
+  
           let isInsideAnyGeofence = false;
           let areaIndex = null;
-
+  
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
@@ -55,11 +55,11 @@ const CustomYouTubePlayer = () => {
               areaIndex = index;
             }
           });
-
+  
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
           setIsPlaying(isInsideAnyGeofence);
-          setShowPlayButton(!isInsideAnyGeofence);
-
+          setShowPlayButton(!isInsideAnyGeofence); // Ubah kondisi di sini
+  
           if (player && isInsideAnyGeofence) {
             player.playVideo();
           } else if (player) {
@@ -81,6 +81,7 @@ const CustomYouTubePlayer = () => {
     }
   };
 
+  
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
