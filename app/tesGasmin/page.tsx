@@ -34,14 +34,14 @@ const CustomYouTubePlayer = () => {
   const geofenceAreas: GeofenceArea[] = [
 
     // // gasmin
-    { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.9166387, longitude: 107.6615271, radius: 8, videoId: "DOOrIxw5xOw" },
 
-    { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
+    { latitude: -6.9167608, longitude: 107.6616099, radius: 8, videoId: "XnUNOaxw6bs" },
 
-    { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
+    { latitude: -6.9167322, longitude: 107.6613635, radius: 8, videoId: "36YnV9STBqc" },
 
-    { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.5168766, longitude: 107.7614897, radius: 4, videoId: 'yNKvkPJl-tg' }
+    { latitude: -6.9168766, longitude: 107.6614897, radius: 8, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.5168766, longitude: 107.7614897, radius: 8, videoId: 'yNKvkPJl-tg' }
 
   ]
 
