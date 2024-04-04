@@ -118,6 +118,18 @@ const CustomYouTubePlayer = () => {
   //   }
   // }, [player, currentVideoId, isPlaying, currentAreaIndex]);
 
+  const playButton = () => {
+    if (player && currentVideoId) {
+      player.loadVideoById(currentVideoId);
+      if (isPlaying) {
+        player.playVideo();
+        if (currentAreaIndex !== null) {
+          player.unMute();
+        }
+      }
+    }
+  }
+
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
     const dLat = deg2rad(lat2 - lat1);
@@ -173,7 +185,7 @@ const CustomYouTubePlayer = () => {
             {showCustomButton && currentAreaIndex === index && (
               <button
                 className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max'
-                onClick={() => player.playVideo(area.videoId)}
+                onClick={playButton}
               >
                 Play Video
               </button>
