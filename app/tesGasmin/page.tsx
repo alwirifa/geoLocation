@@ -143,32 +143,40 @@ const CustomYouTubePlayer = () => {
 
   const playVideo = () => {
     watchUserLocation();
-    if (player && currentAreaIndex !== null) { // Memeriksa apakah currentAreaIndex tidak null
-      const area = geofenceAreas[currentAreaIndex]; // Mengambil objek area berdasarkan currentAreaIndex
-      player.loadVideoById(area.videoId); // Memuat video sesuai dengan videoId di area yang sesuai
+    if (player && currentAreaIndex !== null) {
+      const area = geofenceAreas[currentAreaIndex];
+      player.loadVideoById(area.videoId);
     }
   };
-
-  useEffect(() => {
-    if (currentAreaIndex !== null) { // Pastikan currentAreaIndex tidak null
-      const area = geofenceAreas[currentAreaIndex]; // Ambil objek area berdasarkan currentAreaIndex
-      setCurrentVideoId(area.videoId); // Atur currentVideoId agar sesuai dengan video di area yang sesuai
-      setIsPlaying(true); // Mulai memutar video secara otomatis
-    }
-  }, [currentAreaIndex]); // Monitor perubahan currentAreaIndex
   
+  useEffect(() => {
+    if (currentAreaIndex !== null) {
+      const area = geofenceAreas[currentAreaIndex];
+      setCurrentVideoId(area.videoId);
+      setIsPlaying(true);
+    } else {
+      // Jika di luar area, matikan suara untuk semua video
+      if (player) {
+        player.mute();
+      }
+    }
+  }, [currentAreaIndex]);
+
   useEffect(() => {
     if (player && currentVideoId) {
       player.loadVideoById(currentVideoId);
       if (isPlaying) {
         player.playVideo();
+        // Jika di dalam area, aktifkan suara
+        if (currentAreaIndex !== null) {
+          player.unMute();
+        }
       } else {
         player.pauseVideo();
       }
       setIsLoading(false);
     }
-  }, [player, currentVideoId, isPlaying]); // Monitor perubahan player, currentVideoId, dan isPlaying
-  
+  }, [player, currentVideoId, isPlaying, currentAreaIndex]);
 
   const opts = {
     height: '100',
