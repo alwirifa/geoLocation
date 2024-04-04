@@ -149,6 +149,26 @@ const CustomYouTubePlayer = () => {
     }
   };
 
+  useEffect(() => {
+    if (currentAreaIndex !== null) { // Pastikan currentAreaIndex tidak null
+      const area = geofenceAreas[currentAreaIndex]; // Ambil objek area berdasarkan currentAreaIndex
+      setCurrentVideoId(area.videoId); // Atur currentVideoId agar sesuai dengan video di area yang sesuai
+      setIsPlaying(true); // Mulai memutar video secara otomatis
+    }
+  }, [currentAreaIndex]); // Monitor perubahan currentAreaIndex
+  
+  useEffect(() => {
+    if (player && currentVideoId) {
+      player.loadVideoById(currentVideoId);
+      if (isPlaying) {
+        player.playVideo();
+      } else {
+        player.pauseVideo();
+      }
+      setIsLoading(false);
+    }
+  }, [player, currentVideoId, isPlaying]); // Monitor perubahan player, currentVideoId, dan isPlaying
+  
 
   const opts = {
     height: '100',
