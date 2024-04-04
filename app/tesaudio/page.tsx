@@ -173,7 +173,7 @@ const CustomYouTubePlayer = () => {
             {showCustomButton && currentAreaIndex === index && (
               <button
                 className='border border-purple text-purple font-semibold px-6 py-2 rounded-full max-w-max'
-                onClick={() => playVideo(area.videoId)}
+                onClick={() => player.playVideo(area.videoId)}
               >
                 Play Video
               </button>
