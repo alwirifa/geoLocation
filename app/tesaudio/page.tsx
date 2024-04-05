@@ -88,9 +88,7 @@ const CustomYouTubePlayer = () => {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-    if (player) {
-      player.pauseVideo();
-    }
+ 
   };
 
   useEffect(() => {
