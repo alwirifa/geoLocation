@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
+import Navbar from '../components/Navbar';
 interface UserLocation {
   latitude: number;
   longitude: number;
@@ -177,7 +178,7 @@ const CustomYouTubePlayer = () => {
           </div>
 
 
-          <div className='absolute top-0'>
+          <div className='absolute hidden top-0'>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={index}
@@ -285,7 +286,9 @@ const CustomYouTubePlayer = () => {
         </div>
       </div>
 
-
+      <div className='absolute bottom-0 w-full'>
+          <Navbar />
+        </div>
     </div>
   );
 };
