@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
-import Navbar from '../components/Navbar';
 interface UserLocation {
   latitude: number;
   longitude: number;
@@ -89,7 +88,7 @@ const CustomYouTubePlayer = () => {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
- 
+
   };
 
   useEffect(() => {
@@ -204,9 +203,9 @@ const CustomYouTubePlayer = () => {
               ieu eweuh
             </button>
           )}
-          
+
           {experienceStarted ? (
-            <div className="absolute top-16 flex flex-col gap-4 items-center w-full justify-center">
+            <div className="flex flex-col gap-4 items-center  pt-[16svh]">
 
               <div className='flex flex-col justify-center items-center gap-1'>
                 <p className='text-lg text-purple font-semibold'>HERE, NOWHERE HEAR</p>
@@ -253,7 +252,7 @@ const CustomYouTubePlayer = () => {
             </div>
 
           ) : (
-            <div className='absolute top-16 w-full flex justify-center items-center'>
+            <div>
 
               <div className={`flex flex-col items-center justify-center w-full pt-[16svh]`}>
 
@@ -263,7 +262,12 @@ const CustomYouTubePlayer = () => {
                 </div>
 
                 <div className='flex flex-col gap-4 p-8 mt-6 '>
-                 
+                  <p className='text-justify font-medium'>
+                    das
+                  </p>
+                  <p className='text-justify font-medium'>
+                    as
+                  </p>
                 </div>
               </div>
               <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
@@ -281,9 +285,7 @@ const CustomYouTubePlayer = () => {
         </div>
       </div>
 
-      <div className='absolute bottom-0 w-full'>
-          <Navbar />
-        </div>
+
     </div>
   );
 };
