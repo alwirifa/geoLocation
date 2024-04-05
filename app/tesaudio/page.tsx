@@ -62,7 +62,7 @@ const CustomYouTubePlayer = () => {
 
             setIsPlaying(isInsideAnyGeofence);
           }
-
+          player.playVideo();
          
         },
         (error) => {
