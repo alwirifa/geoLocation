@@ -132,6 +132,7 @@ const CustomYouTubePlayer = () => {
     width: '100',
     playerVars: {
       autoplay: 0,
+      playsinline: 1
     },
   };
 
