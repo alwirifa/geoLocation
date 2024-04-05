@@ -31,9 +31,9 @@ const CustomYouTubePlayer = () => {
   const [hasUserClicked, setHasUserClicked] = useState(false); // Track whether user has clicked on video
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude:  -6.925391401199705,  longitude: 107.66489758575915, radius: 10, videoId: "XnUNOaxw6bs" },
+    { latitude: -6.925391401199705, longitude: 107.66489758575915, radius: 10, videoId: "XnUNOaxw6bs" },
     { latitude: -6.925487185695368, longitude: 107.66453954172253, radius: 10, videoId: "36YnV9STBqc" },
-    { latitude: -6.925579012135751,  longitude: 107.66500683304874, radius: 8, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.925579012135751, longitude: 107.66500683304874, radius: 8, videoId: "bk8WKwHDUNk" },
     { latitude: -6.5168766, longitude: 107.7614897, radius: 8, videoId: 'yNKvkPJl-tg' }
   ];
 
@@ -104,8 +104,8 @@ const CustomYouTubePlayer = () => {
       }
     }
   }, [player, currentVideoId, isPlaying]);
-  
-  
+
+
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
@@ -139,10 +139,10 @@ const CustomYouTubePlayer = () => {
     if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
-    } 
+    }
   }, [currentAreaIndex]);
-  
- 
+
+
 
   const playVideo = () => {
     setHasUserClicked(true);
@@ -156,7 +156,7 @@ const CustomYouTubePlayer = () => {
     }
   };
 
-  
+
 
   return (
     <div className='h-[100svh] w-full relative '>
@@ -195,6 +195,11 @@ const CustomYouTubePlayer = () => {
             {/* Hidden button */}
           </button>
         )}
+
+<div>
+        <p>Has User Clicked: {hasUserClicked ? 'True' : 'False'}</p>
+        <p>Is Playing: {isPlaying ? 'True' : 'False'}</p>
+      </div>
 
         <div className='' onClick={watchUserLocation}>
           Watch User Location
