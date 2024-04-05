@@ -23,7 +23,7 @@ const CustomYouTubePlayer = () => {
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
-  const [showPlayButton, setShowPlayButton] = useState(false);
+  const [showPlayButton, setShowPlayButton] = useState(true);
   const [videoPlayed, setVideoPlayed] = useState(false);
   const [hasUserClicked, setHasUserClicked] = useState(false);
 
@@ -63,7 +63,7 @@ const CustomYouTubePlayer = () => {
             setIsPlaying(isInsideAnyGeofence);
           }
 
-          setShowPlayButton(isInsideAnyGeofence)
+         
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -175,7 +175,7 @@ const CustomYouTubePlayer = () => {
         ))}
       </div>
 
-      <div className='absolute bottom-0 left-0 flex flex-col gap-4'>
+      <div className='absolute bottom-10 left-0 flex flex-col gap-4'>
         {userLocation && (
           <div>
             <p>Latitude: {userLocation.latitude}</p>
