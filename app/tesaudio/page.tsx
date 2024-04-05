@@ -1,8 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
-import Navbar from '../components/Navbar';
 interface UserLocation {
   latitude: number;
   longitude: number;
@@ -19,14 +18,13 @@ interface GeofenceArea {
 
 const CustomYouTubePlayer = () => {
   const [player, setPlayer] = useState<any>(null);
-  const [experienceStarted, setExperienceStarted] = useState(false);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
   const [showPlayButton, setShowPlayButton] = useState(false);
-  const playerRef = useRef<any>(null);
+
 
   const geofenceAreas: GeofenceArea[] = [
     { latitude: -6.925572458911993, longitude: 107.66502260462097, radius: 15, videoId: "DOOrIxw5xOw" },
@@ -37,17 +35,16 @@ const CustomYouTubePlayer = () => {
   ];
 
   const watchUserLocation = () => {
-    setExperienceStarted(true);
-  
+
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-  
+
           let isInsideAnyGeofence = false;
           let areaIndex = null;
-  
+
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
@@ -55,14 +52,15 @@ const CustomYouTubePlayer = () => {
               areaIndex = index;
             }
           });
-  
+
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
           setIsPlaying(isInsideAnyGeofence);
-          setShowPlayButton(!isInsideAnyGeofence); // Ubah kondisi di sini
-  
+
+
           if (player && isInsideAnyGeofence) {
-            player.playVideo();
+            setShowPlayButton(true)
           } else if (player) {
+            setShowPlayButton(false)
             player.pauseVideo();
           }
         },
@@ -81,13 +79,12 @@ const CustomYouTubePlayer = () => {
     }
   };
 
-  
+
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-    setExperienceStarted(false);
     if (player) {
       player.pauseVideo();
     }
@@ -103,7 +100,6 @@ const CustomYouTubePlayer = () => {
     if (player && currentVideoId) {
       player.loadVideoById(currentVideoId);
       if (isPlaying) {
-        player.playVideo();
       } else {
         player.pauseVideo();
       }
@@ -130,15 +126,6 @@ const CustomYouTubePlayer = () => {
     setPlayer(event.target);
   };
 
-  const GPS = () => {
-    watchUserLocation();
-  };
-
-  const playVideo = () => {
-    setIsPlaying(true);
-    player.playVideo();
-  };
-
   const opts = {
     height: '100',
     width: '100',
@@ -147,40 +134,55 @@ const CustomYouTubePlayer = () => {
     },
   };
 
+  const playVideo = () => {
+    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
+      const { videoId } = geofenceAreas[currentAreaIndex];
+      setCurrentVideoId(videoId);
+      setIsPlaying(true);
+      player.playVideo()
+    }
+  };
+  
+
   return (
     <div className='h-[100svh] w-full relative '>
-      <div className='bg-background h-[100svh] w-full bg-cover bg-center'>
-        <div className='absolute top-0 flex justify-between w-full p-8'>
-          <div>
-            <img src="/images/ttd.png" alt="" className='w-auto h-8' />
-          </div>
-          <div className='flex gap-4 items-center'>
-            <img src="/images/jakartaLogo.png" alt="" className='w-auto h-4' />
-            <img src="/images/forteLogo.png" alt="" className='w-auto h-4' />
-          </div>
-        </div>
 
-        <div className='absolute top-0'>
-          {geofenceAreas.map((area, index) => (
-            <YouTube
-              key={index}
-              videoId={area.videoId}
-              onReady={onReady}
-              opts={opts}
-            />
-          ))}
-        </div>
-
-
-        <div className='absolute bottom-0 w-full'>
-          <button onClick={GPS}>GPS</button>
-            <button className="bg-blue-500 text-white font-semibold py-2 px-4 rounded" onClick={playVideo}>Play Video</button>
-      
-          <p className="text-white font-semibold">AUDIO {currentAreaIndex}</p>
-          <img src="/images/close.png" className='h-[30px] w-[30px]' alt="" onClick={stopWatchUserLocation} />
-        </div>
-
+      <div className='absolute top-0'>
+        {geofenceAreas.map((area, index) => (
+          <YouTube
+            key={index}
+            videoId={area.videoId}
+            onReady={onReady}
+            opts={opts}
+          />
+        ))}
       </div>
+
+      <div className='absolute bottom-0 left-0 flex flex-col gap-4'>
+        {userLocation && (
+          <div>
+            <p>Latitude: {userLocation.latitude}</p>
+            <p>Longitude: {userLocation.longitude}</p>
+            <p>Accuracy: {userLocation.accuracy} meters</p>
+          </div>
+        )}
+        {currentAreaIndex !== null ? (
+          <p className="font-semibold">AUDIO {currentAreaIndex}</p>
+        ) : (
+          <p className="font-semibold">OUT OF AREA</p>
+        )}
+
+        {showPlayButton && (
+          <button className='p-4 border font-semibold' onClick={playVideo}>
+            Play Video {currentAreaIndex}
+          </button>
+        )}
+
+        <div className='' onClick={watchUserLocation}>
+          Watch User Location
+        </div>
+      </div>
+
     </div>
   );
 };
