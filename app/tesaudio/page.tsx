@@ -1,7 +1,10 @@
 "use client"
 
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
+
 interface UserLocation {
   latitude: number;
   longitude: number;
@@ -25,10 +28,7 @@ const CustomYouTubePlayer = () => {
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
   const [showPlayButton, setShowPlayButton] = useState(false);
   const [videoPlayed, setVideoPlayed] = useState(false); // Track whether video has been played or not
-    const [hasUserClicked, setHasUserClicked] = useState(false); // Track whether user has clicked on video
-
-
-
+  const [hasUserClicked, setHasUserClicked] = useState(false); // Track whether user has clicked on video
 
   const geofenceAreas: GeofenceArea[] = [
     { latitude:  -6.925391401199705,  longitude: 107.66489758575915, radius: 10, videoId: "XnUNOaxw6bs" },
@@ -38,7 +38,6 @@ const CustomYouTubePlayer = () => {
   ];
 
   const watchUserLocation = () => {
-
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
@@ -59,11 +58,9 @@ const CustomYouTubePlayer = () => {
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
 
           if (!hasUserClicked) {
-
             setIsPlaying(isInsideAnyGeofence);
           }
           setShowPlayButton(isInsideAnyGeofence)
-
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -79,7 +76,6 @@ const CustomYouTubePlayer = () => {
       console.log('Geolocation is not supported by this browser');
     }
   };
-
 
   const stopWatchUserLocation = () => {
     if (watchId !== null) {
@@ -145,23 +141,19 @@ const CustomYouTubePlayer = () => {
   }, [currentAreaIndex]);
   
   const playVideo = () => {
-    setHasUserClicked(true)
-   
+    setHasUserClicked(true);
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
       : "6YaaRmXtJu0"; // Set videoId to "6YaaRmXtJu0" when out of area
-  
     setCurrentVideoId(videoIdToPlay);
     setIsPlaying(true);
     setVideoPlayed(true); // Set videoPlayed to true when video starts playing
     setShowPlayButton(false); // Set showPlayButton to false when video starts playing
     player.playVideo();
   };
-  
 
   return (
     <div className='h-[100svh] w-full relative '>
-
       <div className='absolute top-0'>
         {geofenceAreas.map((area, index) => (
           <YouTube
@@ -202,7 +194,6 @@ const CustomYouTubePlayer = () => {
           Watch User Location
         </div>
       </div>
-
     </div>
   );
 };
