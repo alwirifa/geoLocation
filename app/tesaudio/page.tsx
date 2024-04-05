@@ -62,7 +62,6 @@ const CustomYouTubePlayer = () => {
 
             setIsPlaying(isInsideAnyGeofence);
           }
-          player.playVideo();
          
         },
         (error) => {
@@ -187,15 +186,15 @@ const CustomYouTubePlayer = () => {
         ) : (
           <p className="font-semibold">OUT OF AREA</p>
         )}
-        {showPlayButton && currentAreaIndex !== null && currentVideoId !== null  ? (
+        {showPlayButton  ? (
           <div>
             <button className='p-4 border font-semibold' onClick={playVideo}>
-              Play Video {currentAreaIndex + 1} {currentVideoId + 1}
+              Play Video 
             </button>
           </div>
         ) : (
           <button className='hidden' onClick={playVideo}>
-            {/* Hidden button */}
+            ieu eweuh
           </button>
         )}
 
