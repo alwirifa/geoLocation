@@ -191,9 +191,9 @@ const CustomYouTubePlayer = () => {
           {showPlayButton ? (
             <div className='w-full h-full flex justify-center items-center fixed top-0'>
 
-              <div className='border-2 p-4 rounded-md flex justify-center items-center flex-col gap-4'>
+              <div className='bg-white border-2 border-black p-4 rounded-md flex justify-center items-center flex-col gap-4'>
                 <p className='font-semibold'>Allow Your GPS location</p>
-                <button className='p-4 py-2 rounded-md border font-semibold shadow--md' onClick={playVideo}>
+                <button className='p-4 py-2 rounded-md border border-black font-semibold shadow--md' onClick={playVideo}>
                   ok
                 </button>
               </div>
