@@ -1,5 +1,7 @@
 "use client"
 
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
 
@@ -93,7 +95,6 @@ const CustomYouTubePlayer = () => {
     };
   }, []);
 
-  
   useEffect(() => {
     if (player && currentVideoId && isPlaying) {
       player.loadVideoById(currentVideoId);
@@ -103,6 +104,8 @@ const CustomYouTubePlayer = () => {
       }
     }
   }, [player, currentVideoId, isPlaying]);
+  
+  
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
