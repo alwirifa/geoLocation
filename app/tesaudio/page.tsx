@@ -57,7 +57,11 @@ const CustomYouTubePlayer = () => {
           });
 
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
-          setIsPlaying(isInsideAnyGeofence);
+
+          if (!hasUserClicked) {
+
+            setIsPlaying(isInsideAnyGeofence);
+          }
           setShowPlayButton(isInsideAnyGeofence)
 
         },
@@ -141,6 +145,8 @@ const CustomYouTubePlayer = () => {
   }, [currentAreaIndex]);
   
   const playVideo = () => {
+    setHasUserClicked(true)
+   
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
       : "6YaaRmXtJu0"; // Set videoId to "6YaaRmXtJu0" when out of area
