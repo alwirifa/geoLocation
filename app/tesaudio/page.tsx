@@ -153,6 +153,7 @@ const CustomYouTubePlayer = () => {
       : "HIRNdveLnJI";
 
     setCurrentVideoId(videoIdToPlay);
+    setShowPlayButton(false)
     setIsPlaying(true);
     setVideoPlayed(true);
     player.playVideo();
@@ -186,6 +187,10 @@ const CustomYouTubePlayer = () => {
         ) : (
           <p className="font-semibold">OUT OF AREA</p>
         )}
+       
+       
+       
+       
         {showPlayButton  ? (
           <div>
             <button className='p-4 border font-semibold' onClick={playVideo}>
