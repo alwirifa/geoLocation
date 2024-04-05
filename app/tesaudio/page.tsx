@@ -102,23 +102,6 @@ const CustomYouTubePlayer = () => {
     }
   }, [player, currentVideoId, isPlaying]);
 
-  useEffect(() => {
-    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
-      const { videoId } = geofenceAreas[currentAreaIndex];
-      setCurrentVideoId(videoId);
-      setIsPlaying(true);
-      setVideoPlayed(true); // Set videoPlayed to true when video starts playing
-      setShowPlayButton(true); // Set showPlayButton to false when video starts playing
-      if (player) {
-        player.loadVideoById(videoId);
-        player.playVideo();
-      }
-    } else {
-      setIsPlaying(false);
-    }
-  }, [currentAreaIndex]);
-  
-
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
     const dLat = deg2rad(lat2 - lat1);
@@ -153,11 +136,21 @@ const CustomYouTubePlayer = () => {
       setCurrentVideoId(videoId);
       setIsPlaying(true);
       setVideoPlayed(true); // Set videoPlayed to true when video starts playing
-
+      setShowPlayButton(false); // Set showPlayButton to false when video starts playing
       player.playVideo();
     }
   };
 
+
+  useEffect(() => {
+    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
+      const { videoId } = geofenceAreas[currentAreaIndex];
+      setCurrentVideoId(videoId);
+     
+    } else {
+      setIsPlaying(false);
+    }
+  }, [currentAreaIndex]);
   // useEffect(() => {
   //   setShowPlayButton(true); // Show play button when user moves to a different geofence area
   // }, [currentAreaIndex]);
@@ -190,10 +183,10 @@ const CustomYouTubePlayer = () => {
         ) : (
           <p className="font-semibold">OUT OF AREA</p>
         )}
-        {showPlayButton && currentAreaIndex !== null && !videoPlayed ? (
+        {showPlayButton && currentAreaIndex !== null && currentVideoId !== null && !videoPlayed ? (
           <div>
             <button className='p-4 border font-semibold' onClick={playVideo}>
-              Play Video {currentAreaIndex + 1}
+              Play Video {currentAreaIndex + 1} {currentVideoId + 1}
             </button>
           </div>
         ) : (
