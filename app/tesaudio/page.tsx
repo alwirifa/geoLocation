@@ -1,6 +1,5 @@
 "use client"
 
-
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
 
@@ -135,21 +134,21 @@ const CustomYouTubePlayer = () => {
     if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
-    } else {
-      setCurrentVideoId("6YaaRmXtJu0"); // Set videoId to "6YaaRmXtJu0" when out of area
-    }
+    } 
   }, [currentAreaIndex]);
   
+ 
+
   const playVideo = () => {
     setHasUserClicked(true);
-    const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
-      ? geofenceAreas[currentAreaIndex].videoId
-      : "6YaaRmXtJu0"; // Set videoId to "6YaaRmXtJu0" when out of area
-    setCurrentVideoId(videoIdToPlay);
-    setIsPlaying(true);
-    setVideoPlayed(true); // Set videoPlayed to true when video starts playing
-    setShowPlayButton(false); // Set showPlayButton to false when video starts playing
-    player.playVideo();
+    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
+      const { videoId } = geofenceAreas[currentAreaIndex];
+      setCurrentVideoId(videoId);
+      setIsPlaying(true);
+      setVideoPlayed(true); // Set videoPlayed to true when video starts playing
+      setShowPlayButton(false); // Set showPlayButton to false when video starts playing
+      player.playVideo();
+    }
   };
 
   
