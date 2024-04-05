@@ -206,7 +206,7 @@ const CustomYouTubePlayer = () => {
           )}
           
           {experienceStarted ? (
-            <div className="absolute top-16 flex flex-col gap-4 items-center ">
+            <div className="absolute top-16 flex flex-col gap-4 items-center w-full justify-center">
 
               <div className='flex flex-col justify-center items-center gap-1'>
                 <p className='text-lg text-purple font-semibold'>HERE, NOWHERE HEAR</p>
@@ -253,7 +253,7 @@ const CustomYouTubePlayer = () => {
             </div>
 
           ) : (
-            <div>
+            <div className='absolute top-16 w-full flex justify-center items-center'>
 
               <div className={`flex flex-col items-center justify-center w-full pt-[16svh]`}>
 
