@@ -147,14 +147,14 @@ const CustomYouTubePlayer = () => {
   };
 
 
-  // useEffect(() => {
-  //   if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
-  //     const { videoId } = geofenceAreas[currentAreaIndex];
-  //     setCurrentVideoId(videoId);
-  //   } else {
-  //     setCurrentVideoId("HIRNdveLnJI");
-  //   }
-  // }, [currentAreaIndex]);
+  useEffect(() => {
+    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
+      const { videoId } = geofenceAreas[currentAreaIndex];
+      setCurrentVideoId(videoId);
+    } else {
+      setCurrentVideoId("HIRNdveLnJI");
+    }
+  }, [currentAreaIndex]);
 
   const playVideo = () => {
     setHasUserClicked(true)
