@@ -56,11 +56,10 @@ const CustomYouTubePlayer = () => {
           });
 
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
-
           if (!hasUserClicked) {
-            setIsPlaying(false);
+            return;
           } else {
-            setIsPlaying(true)
+            setIsPlaying(isInsideAnyGeofence)
           }
           setShowPlayButton(isInsideAnyGeofence)
         },
