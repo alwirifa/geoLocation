@@ -130,16 +130,7 @@ const CustomYouTubePlayer = () => {
     },
   };
 
-  const playVideo = () => {
-    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
-      const { videoId } = geofenceAreas[currentAreaIndex];
-      setCurrentVideoId(videoId);
-      setIsPlaying(true);
-      setVideoPlayed(true); // Set videoPlayed to true when video starts playing
-      setShowPlayButton(false); // Set showPlayButton to false when video starts playing
-      player.playVideo();
-    }
-  };
+
 
 
   useEffect(() => {
@@ -151,6 +142,17 @@ const CustomYouTubePlayer = () => {
       setIsPlaying(false);
     }
   }, [currentAreaIndex]);
+
+  const playVideo = () => {
+    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
+      const { videoId } = geofenceAreas[currentAreaIndex];
+      setCurrentVideoId(videoId);
+      setIsPlaying(true);
+      setVideoPlayed(true); // Set videoPlayed to true when video starts playing
+      setShowPlayButton(false); // Set showPlayButton to false when video starts playing
+      player.playVideo();
+    }
+  };
   // useEffect(() => {
   //   setShowPlayButton(true); // Show play button when user moves to a different geofence area
   // }, [currentAreaIndex]);
