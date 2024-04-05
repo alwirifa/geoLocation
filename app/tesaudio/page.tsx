@@ -94,14 +94,13 @@ const CustomYouTubePlayer = () => {
   }, []);
 
   useEffect(() => {
-    if (player && currentVideoId) {
+    if (player && currentVideoId && isPlaying) {
       player.loadVideoById(currentVideoId);
-      if (isPlaying) {
-      } else {
-        player.pauseVideo();
-      }
+    } else {
+      player.stopVideo(); // Hentikan video jika tidak sedang dimainkan
     }
   }, [player, currentVideoId, isPlaying]);
+  
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
@@ -151,6 +150,8 @@ const CustomYouTubePlayer = () => {
     setShowPlayButton(false); // Set showPlayButton to false when video starts playing
     player.playVideo();
   };
+
+  
 
   return (
     <div className='h-[100svh] w-full relative '>
