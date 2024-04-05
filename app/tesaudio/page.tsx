@@ -141,20 +141,23 @@ const CustomYouTubePlayer = () => {
   }, [currentAreaIndex]);
   
   const playVideo = () => {
+    // Check if user has clicked the video
+    if (!hasUserClicked) {
+      return; // If user hasn't clicked, do nothing
+    }
+  
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
       : "6YaaRmXtJu0"; // Set videoId to "6YaaRmXtJu0" when out of area
-
+  
     setCurrentVideoId(videoIdToPlay);
     setIsPlaying(true);
     setVideoPlayed(true); // Set videoPlayed to true when video starts playing
     setShowPlayButton(false); // Set showPlayButton to false when video starts playing
-    setHasUserClicked(true); // Set hasUserClicked to true when user clicks on video
     if (player) {
       player.playVideo();
     }
   };
-
   return (
     <div className='h-[100svh] w-full relative '>
 
