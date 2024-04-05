@@ -141,7 +141,7 @@ const CustomYouTubePlayer = () => {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
     } else {
-      setCurrentVideoId("VXcXdMgU0");
+      setCurrentVideoId("D_VXcXdMgU0");
     }
   }, [currentAreaIndex]);
 
@@ -151,7 +151,7 @@ const CustomYouTubePlayer = () => {
 
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
-      : "VXcXdMgU0";
+      : "D_VXcXdMgU0";
 
     setCurrentVideoId(videoIdToPlay);
     setIsPlaying(true);
