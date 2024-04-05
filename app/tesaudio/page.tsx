@@ -29,7 +29,6 @@ const CustomYouTubePlayer = () => {
 
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925577428921417, longitude: 107.66501480730345, radius: 10, videoId: "DOOrIxw5xOw" },
     { latitude:  -6.925391401199705,  longitude: 107.66489758575915, radius: 10, videoId: "XnUNOaxw6bs" },
     { latitude: -6.925487185695368, longitude: 107.66453954172253, radius: 10, videoId: "36YnV9STBqc" },
     { latitude: -6.9168766, longitude: 107.6614897, radius: 8, videoId: "bk8WKwHDUNk" },
@@ -130,33 +129,27 @@ const CustomYouTubePlayer = () => {
     },
   };
 
-
-
-
   useEffect(() => {
     if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
-     
     } else {
-      setIsPlaying(false);
+      setCurrentVideoId("6YaaRmXtJu0"); // Set videoId to "6YaaRmXtJu0" when out of area
     }
   }, [currentAreaIndex]);
-
+  
   const playVideo = () => {
-    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
-      const { videoId } = geofenceAreas[currentAreaIndex];
-      setCurrentVideoId(videoId);
-      setIsPlaying(true);
-      setVideoPlayed(true); // Set videoPlayed to true when video starts playing
-      setShowPlayButton(false); // Set showPlayButton to false when video starts playing
-      player.playVideo();
-    }
+    const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
+      ? geofenceAreas[currentAreaIndex].videoId
+      : "6YaaRmXtJu0"; // Set videoId to "6YaaRmXtJu0" when out of area
+  
+    setCurrentVideoId(videoIdToPlay);
+    setIsPlaying(true);
+    setVideoPlayed(true); // Set videoPlayed to true when video starts playing
+    setShowPlayButton(false); // Set showPlayButton to false when video starts playing
+    player.playVideo();
   };
-  // useEffect(() => {
-  //   setShowPlayButton(true); // Show play button when user moves to a different geofence area
-  // }, [currentAreaIndex]);
-
+  
 
   return (
     <div className='h-[100svh] w-full relative '>
