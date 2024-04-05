@@ -24,12 +24,14 @@ const CustomYouTubePlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
   const [showPlayButton, setShowPlayButton] = useState(false);
+  const [videoPlayed, setVideoPlayed] = useState(false); // Track whether video has been played or not
+
 
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925572458911993, longitude: 107.66502260462097, radius: 15000, videoId: "DOOrIxw5xOw" },
-    { latitude: -6.9167608, longitude: 107.6616099, radius: 8, videoId: "XnUNOaxw6bs" },
-    { latitude: -6.9167322, longitude: 107.6613635, radius: 8, videoId: "36YnV9STBqc" },
+    { latitude: -6.925577428921417, longitude: 107.66501480730345, radius: 10, videoId: "DOOrIxw5xOw" },
+    { latitude:  -6.925391401199705,  longitude: 107.66489758575915, radius: 10, videoId: "XnUNOaxw6bs" },
+    { latitude: -6.925487185695368, longitude: 107.66453954172253, radius: 10, videoId: "36YnV9STBqc" },
     { latitude: -6.9168766, longitude: 107.6614897, radius: 8, videoId: "bk8WKwHDUNk" },
     { latitude: -6.5168766, longitude: 107.7614897, radius: 8, videoId: 'yNKvkPJl-tg' }
   ];
@@ -133,9 +135,15 @@ const CustomYouTubePlayer = () => {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
       setIsPlaying(true);
-      player.playVideo()
+      setVideoPlayed(true); // Set videoPlayed to true when video starts playing
+      setShowPlayButton(false); // Set showPlayButton to false when video starts playing
+      player.playVideo();
     }
   };
+
+  // useEffect(() => {
+  //   setShowPlayButton(true); // Show play button when user moves to a different geofence area
+  // }, [currentAreaIndex]);
 
 
   return (
@@ -165,14 +173,15 @@ const CustomYouTubePlayer = () => {
         ) : (
           <p className="font-semibold">OUT OF AREA</p>
         )}
-
-        {showPlayButton && currentAreaIndex !== null ? (
-          <button className='p-4 border font-semibold' onClick={playVideo}>
-            Play Video {currentAreaIndex + 1}
-          </button>
+        {showPlayButton && currentAreaIndex !== null && !videoPlayed ? (
+          <div>
+            <button className='p-4 border font-semibold' onClick={playVideo}>
+              Play Video {currentAreaIndex + 1}
+            </button>
+          </div>
         ) : (
-          <button className='p-4 border font-semibold' onClick={playVideo}>
-       
+          <button className='hidden' onClick={playVideo}>
+            {/* Hidden button */}
           </button>
         )}
 
