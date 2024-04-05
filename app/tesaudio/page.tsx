@@ -188,7 +188,7 @@ const CustomYouTubePlayer = () => {
         ) : (
           <p className="font-semibold">OUT OF AREA</p>
         )}
-        {showPlayButton && currentAreaIndex !== null && currentVideoId !== null && !videoPlayed ? (
+        {showPlayButton && currentAreaIndex !== null && currentVideoId !== null  ? (
           <div>
             <button className='p-4 border font-semibold' onClick={playVideo}>
               Play Video {currentAreaIndex + 1} {currentVideoId + 1}
