@@ -198,7 +198,7 @@ const CustomYouTubePlayer = () => {
           </button>
         )}
 
-        <div className='' onClick={watchUserLocation}>
+        <div className='p-8' onClick={watchUserLocation}>
           Watch User Location
         </div>
       </div>
