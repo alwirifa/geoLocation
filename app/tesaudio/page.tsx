@@ -50,6 +50,7 @@ const CustomYouTubePlayer = () => {
             if (distance <= area.radius) {
               isInsideAnyGeofence = true;
               areaIndex = index;
+              setShowPlayButton(true)
             }
           });
 
@@ -57,9 +58,7 @@ const CustomYouTubePlayer = () => {
           setIsPlaying(isInsideAnyGeofence);
 
 
-          if (player && isInsideAnyGeofence) {
-            setShowPlayButton(true)
-          } else if (player) {
+          if (isInsideAnyGeofence = false) {
             setShowPlayButton(false)
             player.pauseVideo();
           }
@@ -142,7 +141,7 @@ const CustomYouTubePlayer = () => {
       player.playVideo()
     }
   };
-  
+
 
   return (
     <div className='h-[100svh] w-full relative '>
