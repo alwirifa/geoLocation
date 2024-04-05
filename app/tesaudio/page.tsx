@@ -102,6 +102,23 @@ const CustomYouTubePlayer = () => {
     }
   }, [player, currentVideoId, isPlaying]);
 
+  useEffect(() => {
+    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
+      const { videoId } = geofenceAreas[currentAreaIndex];
+      setCurrentVideoId(videoId);
+      setIsPlaying(true);
+      setVideoPlayed(true); // Set videoPlayed to true when video starts playing
+      setShowPlayButton(false); // Set showPlayButton to false when video starts playing
+      if (player) {
+        player.loadVideoById(videoId);
+        player.playVideo();
+      }
+    } else {
+      setIsPlaying(false);
+    }
+  }, [currentAreaIndex]);
+  
+
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
     const dLat = deg2rad(lat2 - lat1);
