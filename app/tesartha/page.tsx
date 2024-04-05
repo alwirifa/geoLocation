@@ -178,7 +178,7 @@ const CustomYouTubePlayer = () => {
           </div>
 
 
-          <div className=''>
+          <div className='hidden'>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={index}
