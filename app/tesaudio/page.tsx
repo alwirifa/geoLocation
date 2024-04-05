@@ -27,7 +27,7 @@ const CustomYouTubePlayer = () => {
 
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925572458911993, longitude: 107.66502260462097, radius: 15, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.925572458911993, longitude: 107.66502260462097, radius: 15000, videoId: "DOOrIxw5xOw" },
     { latitude: -6.9167608, longitude: 107.6616099, radius: 8, videoId: "XnUNOaxw6bs" },
     { latitude: -6.9167322, longitude: 107.6613635, radius: 8, videoId: "36YnV9STBqc" },
     { latitude: -6.9168766, longitude: 107.6614897, radius: 8, videoId: "bk8WKwHDUNk" },
@@ -50,18 +50,13 @@ const CustomYouTubePlayer = () => {
             if (distance <= area.radius) {
               isInsideAnyGeofence = true;
               areaIndex = index;
-              setShowPlayButton(true)
             }
           });
 
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
           setIsPlaying(isInsideAnyGeofence);
+          setShowPlayButton(isInsideAnyGeofence)
 
-
-          if (isInsideAnyGeofence = false) {
-            setShowPlayButton(false)
-            player.pauseVideo();
-          }
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -166,14 +161,18 @@ const CustomYouTubePlayer = () => {
           </div>
         )}
         {currentAreaIndex !== null ? (
-          <p className="font-semibold">AUDIO {currentAreaIndex}</p>
+          <p className="font-semibold">AUDIO {currentAreaIndex + 1}</p>
         ) : (
           <p className="font-semibold">OUT OF AREA</p>
         )}
 
-        {showPlayButton && (
+        {showPlayButton && currentAreaIndex !== null ? (
           <button className='p-4 border font-semibold' onClick={playVideo}>
-            Play Video {currentAreaIndex}
+            Play Video {currentAreaIndex + 1}
+          </button>
+        ) : (
+          <button className='p-4 border font-semibold' onClick={playVideo}>
+       
           </button>
         )}
 
