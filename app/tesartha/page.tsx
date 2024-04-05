@@ -136,14 +136,14 @@ const CustomYouTubePlayer = () => {
     },
   };
 
-  useEffect(() => {
-    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
-      const { videoId } = geofenceAreas[currentAreaIndex];
-      setCurrentVideoId(videoId);
-    } else {
-      setCurrentVideoId("HIRNdveLnJI");
-    }
-  }, [currentAreaIndex]);
+  // useEffect(() => {
+  //   if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
+  //     const { videoId } = geofenceAreas[currentAreaIndex];
+  //     setCurrentVideoId(videoId);
+  //   } else {
+  //     setCurrentVideoId("HIRNdveLnJI");
+  //   }
+  // }, [currentAreaIndex]);
 
   const playVideo = () => {
     setHasUserClicked(true)
@@ -177,7 +177,7 @@ const CustomYouTubePlayer = () => {
           </div>
 
 
-          <div className='abolute top-0 -translate-x-32'>
+          <div className='absolute top-0 -translate-x-32'>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={index}
