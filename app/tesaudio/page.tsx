@@ -156,7 +156,6 @@ const CustomYouTubePlayer = () => {
     setCurrentVideoId(videoIdToPlay);
     setIsPlaying(true);
     setVideoPlayed(true);
-    setShowPlayButton(false);
     player.playVideo();
   };
 
