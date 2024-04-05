@@ -60,7 +60,7 @@ const CustomYouTubePlayer = () => {
           if (!hasUserClicked) {
             return; // If user hasn't clicked, do nothing
           } else {
-
+            
             setIsPlaying(isInsideAnyGeofence);
           }
           setShowPlayButton(isInsideAnyGeofence)
@@ -198,6 +198,7 @@ const CustomYouTubePlayer = () => {
             {/* Hidden button */}
           </button>
         )}
+        <p>user {hasUserClicked}</p>
 
         <div className='' onClick={watchUserLocation}>
           Watch User Location
