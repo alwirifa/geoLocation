@@ -263,12 +263,7 @@ const CustomYouTubePlayer = () => {
                 </div>
 
                 <div className='flex flex-col gap-4 p-8 mt-6 '>
-                  <p className='text-justify font-medium'>
-                    das
-                  </p>
-                  <p className='text-justify font-medium'>
-                    as
-                  </p>
+                 
                 </div>
               </div>
               <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
