@@ -58,12 +58,13 @@ const CustomYouTubePlayer = () => {
 
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
           if (!hasUserClicked) {
-            return; // If user hasn't clicked, do nothing
+            setShowPlayButton(true)
           } else {
-            
+
             setIsPlaying(isInsideAnyGeofence);
+            setShowPlayButton(false); // Set showPlayButton to false when video starts playing
           }
-          setShowPlayButton(isInsideAnyGeofence)
+         
 
         },
         (error) => {
@@ -153,7 +154,7 @@ const CustomYouTubePlayer = () => {
     setCurrentVideoId(videoIdToPlay);
     setIsPlaying(true);
     setVideoPlayed(true); // Set videoPlayed to true when video starts playing
-    setShowPlayButton(false); // Set showPlayButton to false when video starts playing
+
     setHasUserClicked(true); // Set hasUserClicked to true when user clicks on video
     if (player) {
       player.playVideo();
