@@ -112,7 +112,6 @@ const CustomYouTubePlayer = () => {
       if (player) {
         player.loadVideoById(videoId);
         player.playVideo();
-        setShowPlayButton(false)
       }
     } else {
       setIsPlaying(false);
@@ -154,7 +153,7 @@ const CustomYouTubePlayer = () => {
       setCurrentVideoId(videoId);
       setIsPlaying(true);
       setVideoPlayed(true); // Set videoPlayed to true when video starts playing
-      setShowPlayButton(false); // Set showPlayButton to false when video starts playing
+
       player.playVideo();
     }
   };
