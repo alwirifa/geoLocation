@@ -55,12 +55,7 @@ const CustomYouTubePlayer = () => {
             }
           });
 
-          setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
-          if (!hasUserClicked) {
-            return;
-          } else {
-            setIsPlaying(isInsideAnyGeofence)
-          }
+          setIsPlaying(isInsideAnyGeofence)
           setShowPlayButton(isInsideAnyGeofence)
         },
         (error) => {
