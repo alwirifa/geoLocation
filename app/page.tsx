@@ -234,7 +234,7 @@ const CustomYouTubePlayer = () => {
                   </div>
                 </div>
 
-                <div className='absolute bottom-[134px] right-16 p-4 border-2 border-green-500 flex justify-center items-center'>
+                {/* <div className='absolute bottom-[134px] right-16 p-4 border-2 border-green-500 flex justify-center items-center'>
                   <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
                 </div>
                 <div className='absolute top-36 right-24 p-4 border-2 border-green-500 flex justify-center items-center'>
@@ -253,7 +253,7 @@ const CustomYouTubePlayer = () => {
 
                 <div className='absolute top-16 right-8 p-4 border-2 border-green-500 flex justify-center items-center'>
                   <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 5 ? 'visible' : 'hidden'}`} />
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -267,7 +267,7 @@ const CustomYouTubePlayer = () => {
                   <p className='text-xs'>Tomy Herseta, 2024.</p>
                 </div>
 
-                <div className='flex flex-col gap-4 px-10 mt-6 '>
+                <div className='flex flex-col gap-4 px-10 mt-4 '>
                   <p className='text-justify font-medium '>
                     {data.home1}
                   </p>
@@ -276,7 +276,7 @@ const CustomYouTubePlayer = () => {
                   </p>
                 </div>
               </div>
-              <div className='absolute w-full bottom-[14svh] flex flex-col gap-4 justify-center items-center'>
+              <div className='absolute w-full bottom-[12svh] flex flex-col gap-4 justify-center items-center'>
                 <p className='uppercase text-lg text-purple font-bold exo text-center px-16'>{data.device}</p>
                 <img src='/images/headphones.png' alt='' className='h-20 w-20' />
                 <button
