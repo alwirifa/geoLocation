@@ -1,6 +1,7 @@
 export const idData = {
   home1: 'Instalasi ini adalah pengalaman audio spasial yang membutuhkan partisipasi aktif dari para penonton.',
-  home2: 'Dengan berjalan melintasi area Taman Seni Jakarta, Anda dapat mendengarkan berbagai jenis suara yang sudah dipetakan berdasarkan lokasi GPS Anda',
+  home2: 'Tolong aktifkan pengaturan lokasi di ponsel Anda karena akan digunakan untuk memicu sumber suara yang berbeda berdasarkan lokasi tertentu di area Art Jakarta Garden.',
+  device: 'Mohon gunakan perangkat pendengaran Anda sendiri.',
   button: 'Mulai Pengalaman',
   artwork1: 'Di era di mana konektivitas digital menjadi yang utama, "Kami Mendengar Anda di Sini dan di Sana" muncul sebagai eksplorasi tentang efek polarisasi internet terhadap masyarakat, terutama ditonjolkan dalam atmosfer panas pemilihan presiden Indonesia yang akan datang. Instalasi suara spasial ini menyelami kebisingan media sosial, mengubahnya menjadi pengalaman auditori yang mendalam yang mencakup kekacauan dan ketidaksepakatan dari percakapan online.',
   artwork2: 'Instalasi ini menggarisbawahi perpecahan sosial yang diperbesar oleh internet. Saat pengunjung masuk ke ruang tersebut, mereka dikelilingi oleh hiruk pikuk suara yang berasal dari berbagai arah, mencerminkan aliran pendapat, debat, dan bentrokan yang tak henti-hentinya yang ditandai oleh interaksi digital. Kekacauan auditori ini tidak hanya mencerminkan keragaman pandangan tetapi juga sifat yang mendominasi dari komunikasi digital di era yang dipenuhi politik. Ini menyajikan manifestasi sensori dari kesenjangan digital, di mana faksi-faksi ideologis terhubung dan terputus, terlibat dalam perselisihan virtual. Elemen interaktif mengundang peserta untuk berkontribusi pada lanskap suara yang berkembang, melambangkan sifat partisipatif namun seringkali memecah belah dari media sosial.',
@@ -11,7 +12,8 @@ export const idData = {
 
 export const enData = {
   home1: 'This installation is a spatial audio experience which requires active participation from the audience.',
-  home2: 'By walking across the Art Jakarta Garden areas, you can listen to different kind of sounds which already mapped based on your GPS location.',
+  home2: 'Please enable your location setting on your phone as it will be utilized to trigger different sound source based on specific locations within Art Jakarta Garden area.',
+  device: 'please use your own listening device.',
   button: 'Start Experience',
   artwork1: 'In an age where digital connectivity reigns supreme, "We Hear You Here and There" emerges as an exploration of the internet\'s polarizing effects on society, particularly accentuated in the heated atmosphere of Indonesia\'s upcoming presidential elections. This spatial sound installation delves into the cacophony of social media, transforming it into an immersive auditory experience that encapsulates the chaos and discord of online discourse.',
   artwork2: 'The installation underscores the societal schisms amplified by the internet. As visitors step into the space, they are enveloped in a whirlwind of voices and sounds emanating from various directions, mirroring the relentless stream of opinions, debates, and clashes that characterize digital interactions. This auditory chaos not only reflects the diversity of views but also the overwhelming nature of digital communication in a politically charged era. It presents a sensory manifestation of the digital divide, where ideological factions are both connected and disconnected, engaged in virtual disputes. Interactive elements invite attendees to contribute to the evolving soundscape, symbolizing the participatory yet often divisive nature of social media.',

@@ -13,10 +13,7 @@ const routes = [
     href: "/artist",
     label: "artist",
   },
-  {
-    href: "/credits",
-    label: "credits",
-  },
+
 ];
 
 const Navbar = () => {
@@ -25,13 +22,14 @@ const Navbar = () => {
   return (
     <div>
       <div className='w-full bg-purple text-white'>
-        <ul className='p-6 text-white text-sm font-semibold uppercase flex gap-4 justify-center'>
+        <ul className='p-6 text-white text-sm font-semibold uppercase flex gap-4 justify-center exo'>
           {routes.map((item, index) => (
             <Link href={item.href} key={index}>{item.label}</Link>
           ))}
           <button onClick={toggleLanguage}>
-            {language === 'en' ? 'EXPERIENCE' : 'EXPERIENCE'}
+            {language === 'en' ? 'EN/ID' : 'EN/ID'}
           </button>
+          <Link href={'/'}>EXPERIENCE</Link>
         </ul>
       </div>
     </div>

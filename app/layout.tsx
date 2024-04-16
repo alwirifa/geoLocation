@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Onest, Exo } from "next/font/google";
 import "./globals.css"
 import Layout from "./components/layout";
 import { GlobalContextProvider } from './context/store';
@@ -18,6 +18,19 @@ export const viewport: Viewport = {
   viewportFit: 'cover'
 }
 
+const onest_init = Onest ({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-onest'
+})
+
+
+const exo_init = Exo ({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-exo'
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${onest_init.variable} ${exo_init.variable}`}>
           <GlobalContextProvider>{children}</GlobalContextProvider>
         
       </body>

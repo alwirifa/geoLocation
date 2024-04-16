@@ -41,9 +41,9 @@ const Page = (props: Props) => {
           </p>
 
           <div className='flex flex-col my-10 gap-1'>
-            <a href="#" className='underline text-purple font-bold'>WEBSITE</a>
-            <a href="#" className='underline text-purple font-bold'>INSTAGRAM</a>
-            <a href="#" className='underline text-purple font-bold'>CONTACT</a>
+            <a href="https://tomyhrst.wixsite.com/tomyherseta/about" target='_blank' className='underline text-purple font-bold exo'>WEBSITE</a>
+            <a href="https://www.instagram.com/tomyherseta/?hl=en"   target='_blank' className='underline text-purple font-bold exo'>INSTAGRAM</a>
+            <a href="mailto:tomyhrst@gmail.com?subject=Hello!"       target='_blank' className='underline text-purple font-bold exo'>CONTACT</a>
             <p className='text-transparent'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. </p>
           </div>
 

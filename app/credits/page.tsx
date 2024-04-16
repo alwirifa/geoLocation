@@ -45,13 +45,13 @@ const Page = (props: Props) => {
         </div>
 
         <div className='flex flex-col  p-8 w-full pt-[16svh]'>
-          <p className='text-lg font-bold'>CREDITS</p>
+          <p className='text-lg font-bold exo'>CREDITS</p>
 
           <div className='flex flex-col gap-4 mt-8'>
             {credits.map((credit, index) => (
               <div key={index} className='grid gap-[2px]'>
                 <p className='text-sm font-medium'>{credit.label}</p>
-                <p className=' font-bold'>{credit.text}</p>
+                <p className=' font-bold exo'>{credit.text}</p>
               </div>
             ))}
           </div>

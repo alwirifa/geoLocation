@@ -7,7 +7,32 @@ import { useGlobalContext } from '../context/store';
 
 type Props = {};
 
-
+const credits = [
+  {
+    label: 'Technology & Production Support',
+    text: 'iForte'
+  },
+  {
+    label: 'Spatial Construction',
+    text: 'ThisPlay'
+  },
+  {
+    label: 'Multimedia Programming',
+    text: 'Arthatronic Studio'
+  },
+  {
+    label: 'Lighting Programming & Arthandling',
+    text: 'Indra Fardiansyah'
+  },
+  {
+    label: 'Prodution Assistant',
+    text: 'Alexandra Ronodipuro'
+  },
+  {
+    label: 'Prodution Support',
+    text: 'Maulana Ahmad'
+  },
+];
 
 const Page = (props: Props) => {
   const { language, toggleLanguage } = useGlobalContext();
@@ -47,12 +72,24 @@ const Page = (props: Props) => {
               {data.artwork2}
             </p>
 
-            <p className='text-purple font-bold text-justify'>
+            <p className='text-purple font-bold text-justify exo'>
               THIS INSTALLATION IS FULLY SUPPORTED BY IFORTE FOR ART JAKARTA GARDEN 2024.
             </p>
 
+
+            <div className='flex flex-col gap-4 mt-4'>
+              <p className=' font-bold'>CREDITS</p>
+              {credits.map((credit, index) => (
+                <div key={index} className='grid gap-[2px]'>
+                  <p className='text-sm font-medium'>{credit.label}</p>
+                  <p className=' font-bold'>{credit.text}</p>
+                </div>
+              ))}
+            </div>
+
+
             <p className='text-transparent'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. M</p>
-       
+
           </div>
 
         </div>
