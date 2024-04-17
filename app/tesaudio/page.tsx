@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 const AudioButton: React.FC = () => {
-  const [overdriveAmount, setOverdriveAmount] = useState(10); // default overdrive amount
+  const [overdriveAmount, setOverdriveAmount] = useState(0); // default overdrive amount
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
   const [overdrive, setOverdrive] = useState<WaveShaperNode | null>(null);
@@ -48,7 +48,7 @@ const AudioButton: React.FC = () => {
 
   // function to create distortion curve
   const makeDistortionCurve = (amount: number) => {
-    if (amount === 0) return null; // jika nilai overdriveAmount adalah 0, kembalikan null
+    if (amount === 0) return null; 
     const numSamples = 44100;
     const curve = new Float32Array(numSamples);
     const deg = Math.PI / 180;
@@ -76,7 +76,7 @@ const AudioButton: React.FC = () => {
         <input
           type="range"
           min="0"
-          max="10"
+          max="1"
           step="1"
           value={overdriveAmount}
           onChange={handleSliderChange}
