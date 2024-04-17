@@ -1,93 +1,63 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Pizzicato from 'pizzicato';
 
-const AudioButton: React.FC = () => {
-  const [overdriveAmount, setOverdriveAmount] = useState(0.5); // default overdrive amount
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-  const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
-  const [overdrive, setOverdrive] = useState<WaveShaperNode | null>(null);
+const Page = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [sound, setSound] = useState<Pizzicato.Sound | null>(null);
 
-  const playAudio = async () => {
-    // path to audio file
-    const audioPath = '/music/voice.mp3';
+  useEffect(() => {
+    const initializeSound = () => {
+      const newSound = new Pizzicato.Sound('/music/music.mp3', () => {
+      
+        // Create a reverb effect
+        const reverb = new Pizzicato.Effects.Reverb({
+          time: 3,
+          decay: 2,
+          reverse: false,
+          mix: 0.7
+        });
 
-    try {
-      // fetch audio file
-      const response = await fetch(audioPath);
-      const arrayBuffer = await response.arrayBuffer();
+        // Create a distortion effect
+        const distortion = new Pizzicato.Effects.Distortion({
+          gain: 0.4
+        });
 
-      // create audio context
-      const context = new (window.AudioContext)();
-      setAudioContext(context);
+        // Add effects to the sound
+        newSound.addEffect(reverb);
+        newSound.addEffect(distortion);
 
-      // decode audio data
-      const audioBuffer = await context.decodeAudioData(arrayBuffer);
+        // Set the sound
+        setSound(newSound);
+      });
+    };
 
-      // create audio source
-      const src = context.createBufferSource();
-      src.buffer = audioBuffer;
-      setSource(src);
+    initializeSound();
 
-      // create overdrive effect
-      const od = context.createWaveShaper();
-      od.curve = makeDistortionCurve(1);
-      od.oversample = '4x';
-      setOverdrive(od);
+    return () => {
+      if (sound) {
+        sound.stop();
+      }
+    };
+  }, []); 
 
-      // connect audio nodes
-      src.connect(od);
-      od.connect(context.destination);
-
-      // start playing audio
-      src.start(0);
-    } catch (error) {
-      console.error('Error playing audio:', error);
-    }
-  };
-
-  // function to create distortion curve
-  const makeDistortionCurve = (amount: number) => {
-    if (amount === 0) return null; // jika nilai overdriveAmount adalah 0, kembalikan null
-    const numSamples = 44100;
-    const curve = new Float32Array(numSamples);
-    const deg = Math.PI / 180;
-    const x = amount * 1000; // scale the amount to match the previous range
-    for (let i = 0; i < numSamples; ++i) {
-      const value = (i * 2) / numSamples - 1;
-      curve[i] = (3 + x) * value * 20 * deg / (Math.PI + x * Math.abs(value));
-    }
-    return curve;
-  };
-
- 
-
-  // function to handle slider change
-  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(event.target.value);
-    setOverdriveAmount(newValue);
-    if (overdrive) {
-      overdrive.curve = makeDistortionCurve(newValue);
+  const togglePlay = () => {
+    if (sound) {
+      if (isPlaying) {
+        sound.pause();
+      } else {
+        sound.play();
+      }
+      setIsPlaying(!isPlaying);
     }
   };
 
   return (
     <div>
-      <button onClick={playAudio}>Play Audio with OverDrive</button>
-      <div>
-        <input
-          type="range"
-          min="0"
-          max="10"
-          step="1"
-          value={overdriveAmount}
-          onChange={handleSliderChange}
-        />
-        <span>{overdriveAmount.toFixed(1)}</span>
-      </div>
+      <button onClick={togglePlay}>{isPlaying ? 'Pause Music' : 'Play Music'}</button>
     </div>
   );
 };
 
-
-export default AudioButton;
+export default Page;

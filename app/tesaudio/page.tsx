@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 const AudioButton: React.FC = () => {
-  const [overdriveAmount, setOverdriveAmount] = useState(0); // default overdrive amount
+  const [overdriveAmount, setOverdriveAmount] = useState(0); 
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
   const [overdrive, setOverdrive] = useState<WaveShaperNode | null>(null);
@@ -49,10 +49,10 @@ const AudioButton: React.FC = () => {
   // function to create distortion curve
   const makeDistortionCurve = (amount: number) => {
     if (amount === 0) return null; 
-    const numSamples = 44100;
+    const numSamples = 1024;
     const curve = new Float32Array(numSamples);
     const deg = Math.PI / 180;
-    const x = 10 * 1000; // scale the amount to match the previous range
+    const x = amount * 1000; // scale the amount to match the previous range
     for (let i = 0; i < numSamples; ++i) {
       const value = (i * 2) / numSamples - 1;
       curve[i] = (3 + x) * value * 20 * deg / (Math.PI + x * Math.abs(value));
@@ -69,6 +69,7 @@ const AudioButton: React.FC = () => {
     }
   };
 
+  
   return (
     <div>
       <button onClick={playAudio}>Play Audio with OverDrive</button>
@@ -77,11 +78,12 @@ const AudioButton: React.FC = () => {
           type="range"
           min="0"
           max="1"
-          step="1"
+          step="0.1"
           value={overdriveAmount}
           onChange={handleSliderChange}
         />
-        <span>{overdriveAmount.toFixed(1)}</span>
+        <span>{overdriveAmount}</span>
+  
       </div>
     </div>
   );
