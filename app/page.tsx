@@ -50,11 +50,11 @@ const CustomYouTubePlayer = () => {
 
   const geofenceAreas: GeofenceArea[] = [
     { latitude: -6.925382988682443, longitude: 107.66489520342901, radius: 8, videoId: "lP26UCnoH9s" },
-    { latitude: -6.925643885570046, longitude: 107.66497546412633, radius: 8, videoId: "WkBX4N79r4w" },
+    { latitude: -6.925643885570046, longitude: 107.66497546412633, radius: 8, videoId: "" },
     { latitude: -6.9254657883091, longitude: 107.66459461924887, radius: 8, videoId: "bk8WKwHDUNk" },
     { latitude: -6.925726685150913, longitude: 107.66474727194769, radius: 8, videoId: "36YnV9STBqc" },
     // { latitude: -6.916132, longitude: 107.6570591, radius: 8, videoId: '' },
-    { latitude:     -6.925506406988566, longitude: 107.66503211873619,      radius: 8, videoId: '' },
+    { latitude:     -6.925506406988566, longitude: 107.66503211873619,      radius: 8, videoId: 'WkBX4N79r4w' },
 
 
     // { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
@@ -176,7 +176,7 @@ const CustomYouTubePlayer = () => {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
 
-      if (currentAreaIndex === 3) {
+      if (currentAreaIndex === 1) {
         sound && sound.play();
       } else {
         sound && sound.pause();
