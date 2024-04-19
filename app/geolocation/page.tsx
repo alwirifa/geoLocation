@@ -200,27 +200,7 @@ const TestGeolocation = () => {
         </div>
       )}
 
-      <div className="relative h-96 w-96 border">
-        {/* {userLocation && fixedUserX !== null && fixedUserY !== null && fixedUserX >= 0 && fixedUserX <= 100 && fixedUserY >= 0 && fixedUserY <= 100 && (
-          <div
-            className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
-            style={{
-              top: `${fixedUserX}%`,
-              left: `${fixedUserY}%`,
-            }}
-          ></div>
-        )} */}
-
-        {userLocation && (
-          <div
-            className="bg-red-500 h-4 w-4 rounded-full absolute animate-ping"
-            style={{
-              top: `${fixedUserX}%`,
-              left: `${fixedUserY}%`,
-            }}
-          ></div>
-        )}
-      </div>
+  
 
 
       <p>User Location (Fixed): {fixedUserX}, {fixedUserY}</p>

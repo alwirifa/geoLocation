@@ -165,9 +165,9 @@ const MusicPlayer: React.FC = () => {
       <div className='flex gap-4'>
 
         {/* Distortion */}
-        <div className='flex flex-col gap-2 border-2 p-4 rounded-md'>
+        <div className='flex flex-col gap-2 border-2 p-4 rounded-md w-[200px]'>
           <label className='text-xl text-center uppercase font-bold'>Distortion</label>
-          <button onClick={toggleDistortionEffect}>{distortionEffectOn ? 'Turn off effect' : 'Turn on effect'}</button>
+          <button className="p-2" onClick={toggleDistortionEffect}>{distortionEffectOn ? <span className='bg-green-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>ON</span>: <span className='bg-red-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>OFF</span>}</button>
           <label>Gain: {gain}</label>
           <input
             type="range"
@@ -180,9 +180,9 @@ const MusicPlayer: React.FC = () => {
         </div>
 
         {/* Reverb */}
-        <div className='flex flex-col gap-2 border-2 p-4 rounded-md'>
+        <div className='flex flex-col gap-2 border-2 p-4 rounded-md w-[200px]'>
           <label className='text-xl text-center uppercase font-bold'>Reverb</label>
-          <button onClick={toggleReverbEffect}>{reverbEffectOn ? 'Turn off effect' : 'Turn on effect'}</button>
+          <button className="p-2" onClick={toggleReverbEffect}>{reverbEffectOn ?  <span className='bg-green-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>ON</span>: <span className='bg-red-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>OFF</span>}</button>
           <label>Reverb Time: {reverbTime}</label>
           <input
             type="range"
@@ -213,9 +213,9 @@ const MusicPlayer: React.FC = () => {
         </div>
 
         {/* Delay */}
-        <div className='flex flex-col gap-2 border-2 p-4 rounded-md'>
+        <div className='flex flex-col gap-2 border-2 p-4 rounded-md w-[200px]'>
           <label className='text-xl text-center uppercase font-bold'>Delay</label>
-          <button onClick={toggleDelayEffect}>{delayEffectOn ? 'Turn off effect' : 'Turn on effect'}</button>
+          <button className="p-2" onClick={toggleDelayEffect}>{delayEffectOn ?  <span className='bg-green-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>ON</span>: <span className='bg-red-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>OFF</span>}</button>
           <label>Delay Feedback: {delayFeedback}</label>
           <input
             type="range"

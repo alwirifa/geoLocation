@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
 import Navbar from './components/Navbar';
+import Pizzicato from 'pizzicato';
 
 import { enData, idData } from './data';
 import { useGlobalContext } from './context/store';
@@ -33,21 +34,35 @@ const CustomYouTubePlayer = () => {
   const [hasUserClicked, setHasUserClicked] = useState(false);
   const [experienceStarted, setExperienceStarted] = useState(false);
 
+  // audio + effect
+  const [gain, setGain] = useState(0.4);
+  const [reverbTime, setReverbTime] = useState(0.01);
+  const [reverbDecay, setReverbDecay] = useState(0.01);
+  const [reverbMix, setReverbMix] = useState(0.5);
+  const [delayFeedback, setDelayFeedback] = useState(0); // Feedback parameter for delay effect
+  const [delayTime, setDelayTime] = useState(0); // Time parameter for delay effect
+  const [delayMix, setDelayMix] = useState(0); // Mix parameter for delay effect
+  const [sound, setSound] = useState<Pizzicato.Sound | null>(null);
+  const [playButton, setPlayButton] = useState(true);
+
   const { language, toggleLanguage } = useGlobalContext();
   const data = language === 'en' ? enData : idData;
 
   const geofenceAreas: GeofenceArea[] = [
-    // { latitude: -6.925391401199705, longitude: 107.66489758575915, radius: 10, videoId: "XnUNOaxw6bs" },
-    // { latitude: -6.925487185695368, longitude: 107.66453954172253, radius: 10, videoId: "36YnV9STBqc" },
-    // // { latitude: -6.925579012135751, longitude: 107.66500683304874, radius: 8, videoId: "bk8WKwHDUNk" },
-    // { latitude: -6.5168766, longitude: 107.7614897, radius: 8, videoId: 'yNKvkPJl-tg' }
+    { latitude: -6.925382988682443, longitude: 107.66489520342901, radius: 8, videoId: "lP26UCnoH9s" },
+    { latitude: -6.925643885570046, longitude: 107.66497546412633, radius: 8, videoId: "WkBX4N79r4w" },
+    { latitude: -6.9254657883091, longitude: 107.66459461924887, radius: 8, videoId: "bk8WKwHDUNk" },
+    { latitude: -6.925726685150913, longitude: 107.66474727194769, radius: 8, videoId: "36YnV9STBqc" },
+    // { latitude: -6.916132, longitude: 107.6570591, radius: 8, videoId: '' },
+    { latitude:     -6.925506406988566, longitude: 107.66503211873619,      radius: 8, videoId: '' },
 
-    { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
-    { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "WkBX4N79r4w" },
-    { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "36YnV9STBqc" },
-    { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "RP0vhIfNOQQ" },
-    { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "ku5VKha1VB8" },
+
+    // { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
+    // { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "WkBX4N79r4w" },
+    // { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "bk8WKwHDUNk" },
+    // { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "36YnV9STBqc" },
+    // { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "RP0vhIfNOQQ" },
+    // { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "ku5VKha1VB8" },
   ];
 
   const watchUserLocation = () => {
@@ -102,6 +117,13 @@ const CustomYouTubePlayer = () => {
       setWatchId(null);
     }
     // player.pauseVideo();
+  
+
+    sound && sound.pause();
+
+    // if (currentAreaIndex === 4) {
+    //   sound && sound.play();
+    // } 
   };
 
   useEffect(() => {
@@ -153,6 +175,13 @@ const CustomYouTubePlayer = () => {
     if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
+
+      if (currentAreaIndex === 3) {
+        sound && sound.play();
+      } else {
+        sound && sound.pause();
+      }
+
     } else {
       setCurrentVideoId("HIRNdveLnJI");
     }
@@ -161,18 +190,113 @@ const CustomYouTubePlayer = () => {
   const playVideo = () => {
     setHasUserClicked(true)
 
-
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
       : "HIRNdveLnJI";
+
+      console.log(videoIdToPlay)
 
     setCurrentVideoId(videoIdToPlay);
     setShowPlayButton(false)
     setIsPlaying(true);
     setVideoPlayed(true);
     player.playVideo();
+
   };
 
+
+  useEffect(() => {
+    const sound = new Pizzicato.Sound('/music/music.mp3', () => {
+      const distortion = new Pizzicato.Effects.Distortion({
+        gain: gain,
+      });
+      const reverb = new Pizzicato.Effects.Reverb({
+        time: reverbTime,
+        decay: reverbDecay,
+        reverse: false,
+        mix: reverbMix,
+      });
+      const delay = new Pizzicato.Effects.Delay({
+        feedback: delayFeedback,
+        time: delayTime,
+        mix: delayMix,
+      });
+      sound.addEffect(distortion);
+      sound.addEffect(reverb);
+      sound.addEffect(delay);
+      setSound(sound);
+    });
+
+    return () => {
+      sound && sound.stop();
+    };
+  }, []);
+
+  const handlePlay = () => {
+    setPlayButton(!playButton)
+
+    if (playButton) {
+      sound && sound.play();
+    } else {
+      sound && sound.pause();
+    }
+  };
+
+  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newGain = parseFloat(event.target.value);
+    setGain(newGain);
+    if (sound && sound.effects[0]) {
+      (sound.effects[0] as Pizzicato.Effects.Distortion).gain = newGain;
+    }
+  };
+
+  const handleReverbTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newReverbTime = parseFloat(event.target.value);
+    setReverbTime(newReverbTime);
+    if (sound && sound.effects[1]) {
+      (sound.effects[1] as Pizzicato.Effects.Reverb).time = newReverbTime;
+    }
+  };
+
+  const handleReverbDecayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newReverbDecay = parseFloat(event.target.value);
+    setReverbDecay(newReverbDecay);
+    if (sound && sound.effects[1]) {
+      (sound.effects[1] as Pizzicato.Effects.Reverb).decay = newReverbDecay;
+    }
+  };
+
+  const handleReverbMixChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newReverbMix = parseFloat(event.target.value);
+    setReverbMix(newReverbMix);
+    if (sound && sound.effects[1]) {
+      (sound.effects[1] as Pizzicato.Effects.Reverb).mix = newReverbMix;
+    }
+  };
+
+  const handleDelayFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newDelayFeedback = parseFloat(event.target.value);
+    setDelayFeedback(newDelayFeedback);
+    if (sound && sound.effects[2]) {
+      (sound.effects[2] as Pizzicato.Effects.Delay).feedback = newDelayFeedback;
+    }
+  };
+
+  const handleDelayTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newDelayTime = parseFloat(event.target.value);
+    setDelayTime(newDelayTime);
+    if (sound && sound.effects[2]) {
+      (sound.effects[2] as Pizzicato.Effects.Delay).time = newDelayTime;
+    }
+  };
+
+  const handleDelayMixChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newDelayMix = parseFloat(event.target.value);
+    setDelayMix(newDelayMix);
+    if (sound && sound.effects[2]) {
+      (sound.effects[2] as Pizzicato.Effects.Delay).mix = newDelayMix;
+    }
+  };
 
   return (
     <div className='h-[100svh] w-full relative '>
@@ -190,7 +314,7 @@ const CustomYouTubePlayer = () => {
           </div>
 
 
-          <div className='absolute top-0 -translate-x-32'>
+          <div className='absolute top-0'>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={index}
@@ -228,7 +352,18 @@ const CustomYouTubePlayer = () => {
                 <div className='bg-purple  flex justify-end items-center px-3 py-1 absolute top-0 w-full'>
                   <img src="/images/close.png" className='h-[30px] w-[30px]' alt="" onClick={stopWatchUserLocation} />
                 </div>
-                <img src="/images/map.png" alt="" className='h-auto w-[300px]' />
+                <div className='mt-8 h-[200px] w-[300px]'>
+
+                  {userLocation && (
+                    <div>
+                      <p>Latitude: {userLocation.latitude}</p>
+                      <p>Longitude: {userLocation.longitude}</p>
+                      <p>Accuracy: {userLocation.accuracy} meters</p>
+                      <p>Speed: {userLocation.speed} meters/second</p>
+                    </div>
+                  )}
+                </div>
+                {/* <img src="/images/map.png" alt="" className='h-auto w-[300px]' /> */}
                 <div className='bg-purple  flex justify-between items-center p-2 px-4 absolute bottom-0 w-full'>
                   {currentAreaIndex !== null ? (
                     <p className="text-white font-bold exo">AUDIO {currentAreaIndex + 1}</p>
@@ -240,28 +375,90 @@ const CustomYouTubePlayer = () => {
                     <img src="/images/audio.png" alt="" className='h-6 w-6' />
                   </div>
                 </div>
-
-                {/* <div className='absolute bottom-[134px] right-16 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
-                </div>
-                <div className='absolute top-36 right-24 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
-                </div>
-                <div className='absolute top-20 left-32 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
-                </div>
-                <div className='absolute top-32 left-16 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
-                </div>
-
-                <div className='absolute bottom-40 left-4 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 4 ? 'visible' : 'hidden'}`} />
-                </div>
-
-                <div className='absolute top-16 right-8 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 5 ? 'visible' : 'hidden'}`} />
-                </div> */}
               </div>
+
+              <div>
+                <button onClick={handlePlay}>{playButton ? 'Play' : 'Pause'}</button>
+                <div>
+
+                  <label>Gain: {gain}</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={gain}
+                    onChange={handleSliderChange}
+                  />
+                </div>
+                <div>
+                  <label>Reverb Time: {reverbTime}</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={reverbTime}
+                    onChange={handleReverbTimeChange}
+                  />
+                </div>
+                <div>
+                  <label>Reverb Decay: {reverbDecay}</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={reverbDecay}
+                    onChange={handleReverbDecayChange}
+                  />
+                </div>
+                <div>
+                  <label>Reverb Mix: {reverbMix}</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={reverbMix}
+                    onChange={handleReverbMixChange}
+                  />
+                </div>
+                <div>
+                  <label>Delay Feedback: {delayFeedback}</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={delayFeedback}
+                    onChange={handleDelayFeedbackChange}
+                  />
+                </div>
+                <div>
+                  <label>Delay Time: {delayTime}</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={delayTime}
+                    onChange={handleDelayTimeChange}
+                  />
+                </div>
+                <div>
+                  <label>Delay Mix: {delayMix}</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={delayMix}
+                    onChange={handleDelayMixChange}
+                  />
+                </div>
+              </div>
+
             </div>
 
           ) : (
