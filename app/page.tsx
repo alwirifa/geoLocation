@@ -21,7 +21,6 @@ interface GeofenceArea {
   radius: number;
   videoId: string;
 }
-
 const CustomYouTubePlayer = () => {
   const [player, setPlayer] = useState<any>(null);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -34,65 +33,52 @@ const CustomYouTubePlayer = () => {
   const [hasUserClicked, setHasUserClicked] = useState(false);
   const [experienceStarted, setExperienceStarted] = useState(false);
 
-  // audio + effect
-  const [gain, setGain] = useState(0.4);
-  const [reverbTime, setReverbTime] = useState(0.01);
-  const [reverbDecay, setReverbDecay] = useState(0.01);
-  const [reverbMix, setReverbMix] = useState(0.5);
-  const [delayFeedback, setDelayFeedback] = useState(0); // Feedback parameter for delay effect
-  const [delayTime, setDelayTime] = useState(0); // Time parameter for delay effect
-  const [delayMix, setDelayMix] = useState(0); // Mix parameter for delay effect
   const [sound, setSound] = useState<Pizzicato.Sound | null>(null);
-  const [playButton, setPlayButton] = useState(true);
+
 
   const { language, toggleLanguage } = useGlobalContext();
   const data = language === 'en' ? enData : idData;
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.925382988682443, longitude: 107.66489520342901, radius: 8, videoId: "lP26UCnoH9s" },
-    { latitude: -6.925643885570046, longitude: 107.66497546412633, radius: 8, videoId: "" },
-    { latitude: -6.9254657883091, longitude: 107.66459461924887, radius: 8, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.925726685150913, longitude: 107.66474727194769, radius: 8, videoId: "36YnV9STBqc" },
-    // { latitude: -6.916132, longitude: 107.6570591, radius: 8, videoId: '' },
-    { latitude:     -6.925506406988566, longitude: 107.66503211873619,      radius: 8, videoId: 'WkBX4N79r4w' },
+    // { latitude: -6.925391401199705, longitude: 107.66489758575915, radius: 10, videoId: "XnUNOaxw6bs" },
+    // { latitude: -6.8928514, longitude: 107.5908501, radius: 10, videoId: "XnUNOaxw6bs" },
+    // { latitude: -6.9042176, longitude: 107.593728, radius: 10, videoId: "" },
 
+    { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "" },
+    { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "XKueVSGTk2o" },
+    { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "YDfiTGGPYCk " },
+    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "gCNeDWCI0vo" },
+    { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "jfKfPfyJRdk" },
+    { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "DOOrIxw5xOw" },
+  // blank lJAjCRP00SI
 
-    // { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
-    // { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "WkBX4N79r4w" },
-    // { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "bk8WKwHDUNk" },
-    // { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "36YnV9STBqc" },
-    // { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "RP0vhIfNOQQ" },
-    // { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "ku5VKha1VB8" },
   ];
 
   const watchUserLocation = () => {
-
     setExperienceStarted(true)
+
 
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-
           let isInsideAnyGeofence = false;
           let areaIndex = null;
-
           geofenceAreas.forEach((area, index) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
+
             if (distance <= area.radius) {
               isInsideAnyGeofence = true;
               areaIndex = index;
+
             }
+
           });
-
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
-
           if (!hasUserClicked) {
-
             setIsPlaying(isInsideAnyGeofence);
           }
-
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -109,21 +95,15 @@ const CustomYouTubePlayer = () => {
     }
   };
 
-
   const stopWatchUserLocation = () => {
     setExperienceStarted(false)
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-    // player.pauseVideo();
-  
+    // player.pauseVideo()
+    sound && sound.stop();
 
-    sound && sound.pause();
-
-    if (currentAreaIndex === 4) {
-      sound && sound.play();
-    } 
   };
 
   useEffect(() => {
@@ -132,15 +112,15 @@ const CustomYouTubePlayer = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (player && currentVideoId) {
-      player.loadVideoById(currentVideoId);
-      if (isPlaying) {
-      } else {
-        player.pauseVideo();
-      }
-    }
-  }, [player, currentVideoId, isPlaying]);
+  // useEffect(() => {
+  //   if (player && currentVideoId) {
+  //     player.loadVideoById(currentVideoId);
+  //     if (isPlaying) {
+  //     } else {
+  //       player.pauseVideo();
+  //     }
+  //   }
+  // }, [player, currentVideoId, isPlaying]);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
@@ -153,15 +133,12 @@ const CustomYouTubePlayer = () => {
     const distance = R * c;
     return distance * 1000;
   };
-
   const deg2rad = (deg: number): number => {
     return deg * (Math.PI / 180);
   };
-
   const onReady = (event: any) => {
     setPlayer(event.target);
   };
-
   const opts = {
     height: '100',
     width: '100',
@@ -178,125 +155,59 @@ const CustomYouTubePlayer = () => {
 
       if (currentAreaIndex === 1) {
         sound && sound.play();
+
       } else {
         sound && sound.pause();
-      }
 
+      }
     } else {
-      setCurrentVideoId("HIRNdveLnJI");
+      setCurrentVideoId("lJAjCRP00SI");
     }
+
+    console.log(currentAreaIndex)
   }, [currentAreaIndex]);
 
   const playVideo = () => {
     setHasUserClicked(true)
-
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
-      : "HIRNdveLnJI";
-
-      console.log(videoIdToPlay)
-
+      : "1SLr62VBBjw";
     setCurrentVideoId(videoIdToPlay);
     setShowPlayButton(false)
     setIsPlaying(true);
     setVideoPlayed(true);
     player.playVideo();
-
   };
 
 
   useEffect(() => {
-    const sound = new Pizzicato.Sound('/music/music.mp3', () => {
+    const sound = new Pizzicato.Sound('/music/iforte.mp3', () => {
       const distortion = new Pizzicato.Effects.Distortion({
-        gain: gain,
+        gain: 1,
       });
       const reverb = new Pizzicato.Effects.Reverb({
-        time: reverbTime,
-        decay: reverbDecay,
+        time: 1,
+        decay: 1,
         reverse: false,
-        mix: reverbMix,
+        mix: 0.5,
       });
       const delay = new Pizzicato.Effects.Delay({
-        feedback: delayFeedback,
-        time: delayTime,
-        mix: delayMix,
+        feedback: 0.5,
+        time: 1,
+        mix: 1,
       });
       sound.addEffect(distortion);
       sound.addEffect(reverb);
       sound.addEffect(delay);
       setSound(sound);
+      console.log("sound is ready")
     });
 
     return () => {
       sound && sound.stop();
     };
+
   }, []);
-
-  const handlePlay = () => {
-    setPlayButton(!playButton)
-
-    if (playButton) {
-      sound && sound.play();
-    } else {
-      sound && sound.pause();
-    }
-  };
-
-  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newGain = parseFloat(event.target.value);
-    setGain(newGain);
-    if (sound && sound.effects[0]) {
-      (sound.effects[0] as Pizzicato.Effects.Distortion).gain = newGain;
-    }
-  };
-
-  const handleReverbTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newReverbTime = parseFloat(event.target.value);
-    setReverbTime(newReverbTime);
-    if (sound && sound.effects[1]) {
-      (sound.effects[1] as Pizzicato.Effects.Reverb).time = newReverbTime;
-    }
-  };
-
-  const handleReverbDecayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newReverbDecay = parseFloat(event.target.value);
-    setReverbDecay(newReverbDecay);
-    if (sound && sound.effects[1]) {
-      (sound.effects[1] as Pizzicato.Effects.Reverb).decay = newReverbDecay;
-    }
-  };
-
-  const handleReverbMixChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newReverbMix = parseFloat(event.target.value);
-    setReverbMix(newReverbMix);
-    if (sound && sound.effects[1]) {
-      (sound.effects[1] as Pizzicato.Effects.Reverb).mix = newReverbMix;
-    }
-  };
-
-  const handleDelayFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newDelayFeedback = parseFloat(event.target.value);
-    setDelayFeedback(newDelayFeedback);
-    if (sound && sound.effects[2]) {
-      (sound.effects[2] as Pizzicato.Effects.Delay).feedback = newDelayFeedback;
-    }
-  };
-
-  const handleDelayTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newDelayTime = parseFloat(event.target.value);
-    setDelayTime(newDelayTime);
-    if (sound && sound.effects[2]) {
-      (sound.effects[2] as Pizzicato.Effects.Delay).time = newDelayTime;
-    }
-  };
-
-  const handleDelayMixChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newDelayMix = parseFloat(event.target.value);
-    setDelayMix(newDelayMix);
-    if (sound && sound.effects[2]) {
-      (sound.effects[2] as Pizzicato.Effects.Delay).mix = newDelayMix;
-    }
-  };
 
   return (
     <div className='h-[100svh] w-full relative '>
@@ -352,18 +263,8 @@ const CustomYouTubePlayer = () => {
                 <div className='bg-purple  flex justify-end items-center px-3 py-1 absolute top-0 w-full'>
                   <img src="/images/close.png" className='h-[30px] w-[30px]' alt="" onClick={stopWatchUserLocation} />
                 </div>
-                <div className='mt-8 h-[200px] w-[300px]'>
-
-                  {userLocation && (
-                    <div>
-                      <p>Latitude: {userLocation.latitude}</p>
-                      <p>Longitude: {userLocation.longitude}</p>
-                      <p>Accuracy: {userLocation.accuracy} meters</p>
-                      <p>Speed: {userLocation.speed} meters/second</p>
-                    </div>
-                  )}
-                </div>
-                {/* <img src="/images/map.png" alt="" className='h-auto w-[300px]' /> */}
+            
+                <img src="/images/map.png" alt="" className='h-auto w-[300px]' />
                 <div className='bg-purple  flex justify-between items-center p-2 px-4 absolute bottom-0 w-full'>
                   {currentAreaIndex !== null ? (
                     <p className="text-white font-bold exo">AUDIO {currentAreaIndex + 1}</p>
@@ -377,87 +278,6 @@ const CustomYouTubePlayer = () => {
                 </div>
               </div>
 
-              <div>
-                <button onClick={handlePlay}>{playButton ? 'Play' : 'Pause'}</button>
-                <div>
-
-                  <label>Gain: {gain}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.1"
-                    value={gain}
-                    onChange={handleSliderChange}
-                  />
-                </div>
-                <div>
-                  <label>Reverb Time: {reverbTime}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={reverbTime}
-                    onChange={handleReverbTimeChange}
-                  />
-                </div>
-                <div>
-                  <label>Reverb Decay: {reverbDecay}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={reverbDecay}
-                    onChange={handleReverbDecayChange}
-                  />
-                </div>
-                <div>
-                  <label>Reverb Mix: {reverbMix}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={reverbMix}
-                    onChange={handleReverbMixChange}
-                  />
-                </div>
-                <div>
-                  <label>Delay Feedback: {delayFeedback}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.1"
-                    value={delayFeedback}
-                    onChange={handleDelayFeedbackChange}
-                  />
-                </div>
-                <div>
-                  <label>Delay Time: {delayTime}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.1"
-                    value={delayTime}
-                    onChange={handleDelayTimeChange}
-                  />
-                </div>
-                <div>
-                  <label>Delay Mix: {delayMix}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={delayMix}
-                    onChange={handleDelayMixChange}
-                  />
-                </div>
-              </div>
 
             </div>
 

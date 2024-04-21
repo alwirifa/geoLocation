@@ -5,11 +5,11 @@ import Pizzicato from 'pizzicato';
 
 const MusicPlayer: React.FC = () => {
   const [gain, setGain] = useState(0.4);
-  const [reverbTime, setReverbTime] = useState(0.01);
-  const [reverbDecay, setReverbDecay] = useState(0.01);
+  const [reverbTime, setReverbTime] = useState(1);
+  const [reverbDecay, setReverbDecay] = useState(1);
   const [reverbMix, setReverbMix] = useState(0.5);
-  const [delayFeedback, setDelayFeedback] = useState(0.6);
-  const [delayTime, setDelayTime] = useState(0.4);
+  const [delayFeedback, setDelayFeedback] = useState(0.5);
+  const [delayTime, setDelayTime] = useState(1);
   const [delayMix, setDelayMix] = useState(0.5);
   const [sound, setSound] = useState<Pizzicato.Sound | null>(null);
   const [playButton, setPlayButton] = useState(true);
@@ -18,7 +18,7 @@ const MusicPlayer: React.FC = () => {
   const [delayEffectOn, setDelayEffectOn] = useState(false);
 
   useEffect(() => {
-    const sound = new Pizzicato.Sound('/music/music.mp3', () => {
+    const sound = new Pizzicato.Sound('/music/habibi.mp3', () => {
       const distortion = new Pizzicato.Effects.Distortion({
         gain: gain,
       });

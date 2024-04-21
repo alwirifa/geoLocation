@@ -1,6 +1,5 @@
 "use client"
 
-"use client"
 
 import React, { useState, useEffect } from 'react';
 import Pizzicato from 'pizzicato';
@@ -17,7 +16,7 @@ const MusicPlayer: React.FC = () => {
   const [playButton, setPlayButton] = useState(true);
 
   useEffect(() => {
-    const sound = new Pizzicato.Sound('/music/music.mp3', () => {
+    const sound = new Pizzicato.Sound('/music/iforte.mp3', () => {
       const distortion = new Pizzicato.Effects.Distortion({
         gain: gain,
       });
@@ -36,12 +35,16 @@ const MusicPlayer: React.FC = () => {
       sound.addEffect(reverb);
       sound.addEffect(delay);
       setSound(sound);
+  
+      // Music is ready, log to console
+      console.log("Music is ready to play!");
     });
-
+  
     return () => {
       sound && sound.stop();
     };
   }, []);
+  
 
   const handlePlay = () => {
     setPlayButton(!playButton)
