@@ -225,7 +225,7 @@ const CustomYouTubePlayer = () => {
           </div>
 
 
-          <div className='absolute top-0'>
+          <div className='absolute top-0 -translate-x-32'>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={index}
