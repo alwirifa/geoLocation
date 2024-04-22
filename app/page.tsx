@@ -38,12 +38,19 @@ const CustomYouTubePlayer = () => {
   const data = language === 'en' ? enData : idData;
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.2220146, longitude: 106.8068591, radius: 15, videoId: "b4g_5vkdVm4" },
-    { latitude: -6.2222365, longitude: 106.8071025, radius: 15, videoId: "XKueVSGTk2o" },
-    { latitude: -6.22178, longitude: 106.8067372, radius: 15, videoId: "YDfiTGGPYCk" },
-    { latitude: -6.2217714, longitude: 106.8064705, radius: 15, videoId: "gCNeDWCI0vo" },
-    { latitude: -6.2219972, longitude: 106.8061736, radius: 15, videoId: "jfKfPfyJRdk" },
-    { latitude: -6.2222127, longitude: 106.8061864, radius: 15, videoId: "DOOrIxw5xOw" },
+    // { latitude: -6.2220146, longitude: 106.8068591, radius: 15, videoId: "b4g_5vkdVm4" },
+    // { latitude: -6.2222365, longitude: 106.8071025, radius: 15, videoId: "XKueVSGTk2o" },
+    // { latitude: -6.22178, longitude: 106.8067372, radius: 15, videoId: "YDfiTGGPYCk" },
+    // { latitude: -6.2217714, longitude: 106.8064705, radius: 15, videoId: "gCNeDWCI0vo" },
+    // { latitude: -6.2219972, longitude: 106.8061736, radius: 15, videoId: "jfKfPfyJRdk" },
+    // { latitude: -6.2222127, longitude: 106.8061864, radius: 15, videoId: "DOOrIxw5xOw" },
+
+    { latitude: -6.2190717, longitude: 106.79407684, radius: 60, videoId: "sgEJ4sOwboM" },
+    { latitude: -6.2190393790078335, longitude: 106.79423510316938, radius: 100, videoId: "qMtfLzbsBas" },
+    
+    
+
+    
   ];
 
   const watchUserLocation = () => {
@@ -215,7 +222,7 @@ const CustomYouTubePlayer = () => {
           </div>
 
 
-          <div className='absolute top-0 -translate-x-32 '>
+          <div className='absolute top-0  '>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={area.videoId}
