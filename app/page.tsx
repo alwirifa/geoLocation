@@ -200,8 +200,8 @@ const CustomYouTubePlayer = () => {
             <div className='w-full h-full flex justify-center items-center fixed top-0 z-50 bg-black/50'>
 
               <div className='bg-white border-2 border-purple p-4 rounded-md flex justify-center items-center flex-col gap-4 '>
-                <p className='font-bold exo text-center text-purple text-lg px-6 pt-6'>Please allow your GPS location<br /> before start the experience</p>
-                <button className='p-4 py-2 mb-4 rounded-md border-2 border-purple text-purple font-bold  exo shadow--md' onClick={playVideo}>
+                <p className='font-bold exo text-center text-purple px-6 pt-6'>Please allow your GPS location<br /> before start the experience</p>
+                <button className='p-4 py-2 mb-4 rounded-md border-2 border-purple text-purple font-bold  text-sm exo shadow-md' onClick={playVideo}>
                   OK
                 </button>
               </div>
