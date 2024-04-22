@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
 import Navbar from './components/Navbar';
+import Pizzicato from 'pizzicato';
 
 import { enData, idData } from './data';
 import { useGlobalContext } from './context/store';
@@ -31,7 +32,9 @@ const CustomYouTubePlayer = () => {
   const [videoPlayed, setVideoPlayed] = useState(false);
   const [hasUserClicked, setHasUserClicked] = useState(false);
   const [experienceStarted, setExperienceStarted] = useState(false);
-  const [firstPlay, setFirstPlay] = useState(true);
+
+  const [sound, setSound] = useState<Pizzicato.Sound | null>(null);
+
 
   const { language, toggleLanguage } = useGlobalContext();
   const data = language === 'en' ? enData : idData;
@@ -48,6 +51,7 @@ const CustomYouTubePlayer = () => {
   const watchUserLocation = () => {
     setExperienceStarted(true)
 
+
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
@@ -61,15 +65,13 @@ const CustomYouTubePlayer = () => {
             if (distance <= area.radius) {
               isInsideAnyGeofence = true;
               areaIndex = index;
+
             }
+
           });
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
           if (!hasUserClicked) {
             setIsPlaying(isInsideAnyGeofence);
-          }
-
-          if (!isInsideAnyGeofence) {
-            setCurrentVideoId('lJAjCRP00SI')
           }
         },
         (error) => {
@@ -147,14 +149,19 @@ const CustomYouTubePlayer = () => {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
 
+      if (currentAreaIndex === 0) {
+        sound && sound.play();
+
+      } else {
+        sound && sound.pause();
+
+      }
     } else {
       setCurrentVideoId("lJAjCRP00SI");
     }
 
-    console.log(currentVideoId)
     console.log(currentAreaIndex)
   }, [currentAreaIndex]);
-
 
   const playVideo = () => {
     setHasUserClicked(true)
@@ -165,13 +172,38 @@ const CustomYouTubePlayer = () => {
     setShowPlayButton(false)
     setIsPlaying(true);
     setVideoPlayed(true);
-
-    setTimeout(() => {
-      if (player) {
-        player.playVideo();
-      }
-    }, 5000); // Time delay 3 detik
+    player.playVideo();
   };
+
+
+  useEffect(() => {
+    const sound = new Pizzicato.Sound('/music/iforte.mp3', () => {
+      const distortion = new Pizzicato.Effects.Distortion({
+        gain: 1,
+      });
+      const reverb = new Pizzicato.Effects.Reverb({
+        time: 1,
+        decay: 1,
+        reverse: false,
+        mix: 0.5,
+      });
+      const delay = new Pizzicato.Effects.Delay({
+        feedback: 0.5,
+        time: 1,
+        mix: 1,
+      });
+      sound.addEffect(distortion);
+      sound.addEffect(reverb);
+      sound.addEffect(delay);
+      setSound(sound);
+      console.log("sound is ready")
+    });
+
+    return () => {
+      sound && sound.stop();
+    };
+
+  }, []);
 
   return (
     <div className='h-[100svh] w-full relative '>
