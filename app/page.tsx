@@ -110,15 +110,17 @@ const CustomYouTubePlayer = () => {
   }, []);
 
   useEffect(() => {
-    if (player && currentVideoId) {
-      player.loadVideoById(currentVideoId);
+    if (player && currentVideoIds.length > 0) {
+      currentVideoIds.forEach((videoId) => {
+        player.loadVideoById(videoId);
+      });
       if (isPlaying) {
         player.playVideo();
       } else {
         player.pauseVideo();
       }
     }
-  }, [player, currentVideoId, isPlaying]);
+  }, [player, currentVideoIds, isPlaying]);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
