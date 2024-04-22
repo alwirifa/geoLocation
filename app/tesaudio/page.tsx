@@ -1,252 +1,181 @@
 "use client"
+import React, { useEffect, useState } from 'react';
+import YouTube from 'react-youtube';
+interface UserLocation {
+  latitude: number;
+  longitude: number;
+  accuracy: number;
+  speed: number | null;
+}
+interface GeofenceArea {
+  latitude: number;
+  longitude: number;
+  radius: number;
+  videoId: string;
+}
+const CustomYouTubePlayer = () => {
+  const [player, setPlayer] = useState<any>(null);
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [watchId, setWatchId] = useState<number | null>(null);
+  const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentAreaIndex, setCurrentAreaIndex] = useState<number | null>(null);
+  const [showPlayButton, setShowPlayButton] = useState(true);
+  const [videoPlayed, setVideoPlayed] = useState(false);
+  const [hasUserClicked, setHasUserClicked] = useState(false);
+  const geofenceAreas: GeofenceArea[] = [
+    { latitude: -6.2223542, longitude: 106.806881, radius: 30, videoId: "xK4ZqrLys_k" },
+    { latitude: -6.2220232, longitude: 106.8068387, radius: 25, videoId: "XKueVSGTk2o" },
+    { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "YDfiTGGPYCk" },
+    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 25, videoId: "gCNeDWCI0vo" },
+    { latitude: -6.2222515, longitude: 106.8060507, radius: 25, videoId: "jfKfPfyJRdk" },
+    { latitude: -6.2216579, longitude: 106.806822, radius: 25, videoId: "DOOrIxw5xOw" },
+  ];
+  const watchUserLocation = () => {
+    if (navigator.geolocation) {
+      const id = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude, accuracy, speed } = position.coords;
+          setUserLocation({ latitude, longitude, accuracy, speed });
+          let isInsideAnyGeofence = false;
+          let areaIndex = null;
+          geofenceAreas.forEach((area, index) => {
+            const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
+            if (distance <= area.radius) {
+              isInsideAnyGeofence = true;
+              areaIndex = index;
+            }
+          });
+          setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
+          if (!hasUserClicked) {
 
-import React, { useState, useEffect } from 'react';
-import Pizzicato from 'pizzicato';
+            setIsPlaying(isInsideAnyGeofence);
+          }
+          player.playVideo();
 
-const MusicPlayer: React.FC = () => {
-  const [gain, setGain] = useState(0.4);
-  const [reverbTime, setReverbTime] = useState(1);
-  const [reverbDecay, setReverbDecay] = useState(1);
-  const [reverbMix, setReverbMix] = useState(0.5);
-  const [delayFeedback, setDelayFeedback] = useState(0.5);
-  const [delayTime, setDelayTime] = useState(1);
-  const [delayMix, setDelayMix] = useState(0.5);
-  const [sound, setSound] = useState<Pizzicato.Sound | null>(null);
-  const [playButton, setPlayButton] = useState(true);
-  const [distortionEffectOn, setDistortionEffectOn] = useState(false);
-  const [reverbEffectOn, setReverbEffectOn] = useState(false);
-  const [delayEffectOn, setDelayEffectOn] = useState(false);
-
-  useEffect(() => {
-    const sound = new Pizzicato.Sound('/music/habibi.mp3', () => {
-      const distortion = new Pizzicato.Effects.Distortion({
-        gain: gain,
-      });
-      const reverb = new Pizzicato.Effects.Reverb({
-        time: reverbTime,
-        decay: reverbDecay,
-        reverse: false,
-        mix: reverbMix,
-      });
-      const delay = new Pizzicato.Effects.Delay({
-        feedback: delayFeedback,
-        time: delayTime,
-        mix: delayMix,
-      });
-
-      if (distortionEffectOn) sound.addEffect(distortion);
-      if (reverbEffectOn) sound.addEffect(reverb);
-      if (delayEffectOn) sound.addEffect(delay);
-
-      setSound(sound);
-    });
-
-    return () => {
-      sound && sound.stop();
-    };
-  }, [])
-  const handlePlay = () => {
-    setPlayButton(!playButton);
-
-    if (playButton) {
-      sound && sound.play();
-    } else {
-      sound && sound.pause();
-    }
-  };
-
-  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newGain = parseFloat(event.target.value);
-    setGain(newGain);
-    if (sound && sound.effects[0]) {
-      (sound.effects[0] as Pizzicato.Effects.Distortion).gain = newGain;
-    }
-  };
-
-  const toggleDistortionEffect = () => {
-    setDistortionEffectOn(!distortionEffectOn);
-    if (sound) {
-      if (distortionEffectOn) {
-        sound.removeEffect(sound.effects[0]);
-      } else {
-        sound.addEffect(new Pizzicato.Effects.Distortion({ gain: gain }));
-      }
-    }
-  };
-
-  const toggleReverbEffect = () => {
-    setReverbEffectOn(!reverbEffectOn);
-    if (sound) {
-      if (reverbEffectOn) {
-        const reverbIndex = sound.effects.findIndex(effect => effect instanceof Pizzicato.Effects.Reverb);
-        if (reverbIndex !== -1) {
-          sound.removeEffect(sound.effects[reverbIndex]);
-        }
-      } else {
-        sound.addEffect(new Pizzicato.Effects.Reverb({
-          time: reverbTime,
-          decay: reverbDecay,
-          reverse: false,
-          mix: reverbMix,
-        }));
-      }
-    }
-  };
+        },
+        (error) => {
   
-  const toggleDelayEffect = () => {
-    setDelayEffectOn(!delayEffectOn);
-    if (sound) {
-      if (delayEffectOn) {
-        const delayIndex = sound.effects.findIndex(effect => effect instanceof Pizzicato.Effects.Delay);
-        if (delayIndex !== -1) {
-          sound.removeEffect(sound.effects[delayIndex]);
+          console.error('Error watching user location: ', error);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: 5000,
         }
+      );
+      setWatchId(id);
+    } else {
+      console.log('Geolocation is not supported by this browser');
+    }
+  };
+  const stopWatchUserLocation = () => {
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+      setWatchId(null);
+    }
+    if (player) {
+      player.pauseVideo();
+    }
+  };
+  useEffect(() => {
+    return () => {
+      stopWatchUserLocation();
+    };
+  }, []);
+  useEffect(() => {
+    if (player && currentVideoId) {
+      player.loadVideoById(currentVideoId);
+      if (isPlaying) {
       } else {
-        sound.addEffect(new Pizzicato.Effects.Delay({
-          feedback: delayFeedback,
-          time: delayTime,
-          mix: delayMix,
-        }));
+        player.pauseVideo();
       }
     }
+  }, [player, currentVideoId, isPlaying]);
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+    const R = 6371;
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance * 1000;
   };
-
-  const handleReverbTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newReverbTime = parseFloat(event.target.value);
-    setReverbTime(newReverbTime);
-    if (sound && sound.effects[1]) {
-      (sound.effects[1] as Pizzicato.Effects.Reverb).time = newReverbTime;
+  const deg2rad = (deg: number): number => {
+    return deg * (Math.PI / 180);
+  };
+  const onReady = (event: any) => {
+    setPlayer(event.target);
+  };
+  const opts = {
+    height: '100',
+    width: '100',
+    playerVars: {
+      autoplay: 0,
+      playsinline: 1
+    },
+  };
+  useEffect(() => {
+    if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
+      const { videoId } = geofenceAreas[currentAreaIndex];
+      setCurrentVideoId(videoId);
+    } else {
+      setCurrentVideoId("lJAjCRP00SI");
     }
+  }, [currentAreaIndex]);
+  const playVideo = () => {
+    setHasUserClicked(true)
+    const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
+      ? geofenceAreas[currentAreaIndex].videoId
+      : "1SLr62VBBjw";
+    setCurrentVideoId(videoIdToPlay);
+    setIsPlaying(true);
+    setVideoPlayed(true);
+    player.playVideo();
   };
-
-  const handleReverbDecayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newReverbDecay = parseFloat(event.target.value);
-    setReverbDecay(newReverbDecay);
-    if (sound && sound.effects[1]) {
-      (sound.effects[1] as Pizzicato.Effects.Reverb).decay = newReverbDecay;
-    }
-  };
-
-  const handleReverbMixChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newReverbMix = parseFloat(event.target.value);
-    setReverbMix(newReverbMix);
-    if (sound && sound.effects[1]) {
-      (sound.effects[1] as Pizzicato.Effects.Reverb).mix = newReverbMix;
-    }
-  };
-
-  const handleDelayFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newDelayFeedback = parseFloat(event.target.value);
-    setDelayFeedback(newDelayFeedback);
-    if (sound && sound.effects[2]) {
-      (sound.effects[2] as Pizzicato.Effects.Delay).feedback = newDelayFeedback;
-    }
-  };
-
-  const handleDelayTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newDelayTime = parseFloat(event.target.value);
-    setDelayTime(newDelayTime);
-    if (sound && sound.effects[2]) {
-      (sound.effects[2] as Pizzicato.Effects.Delay).time = newDelayTime;
-    }
-  };
-
-  const handleDelayMixChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newDelayMix = parseFloat(event.target.value);
-    setDelayMix(newDelayMix);
-    if (sound && sound.effects[2]) {
-      (sound.effects[2] as Pizzicato.Effects.Delay).mix = newDelayMix;
-    }
-  };
-
   return (
-    <div>
-      <button onClick={handlePlay}>{playButton ? 'Play' : 'Pause'}</button>
-      <div className='flex gap-4'>
-
-        {/* Distortion */}
-        <div className='flex flex-col gap-2 border-2 p-4 rounded-md w-[200px]'>
-          <label className='text-xl text-center uppercase font-bold'>Distortion</label>
-          <button className="p-2" onClick={toggleDistortionEffect}>{distortionEffectOn ? <span className='bg-green-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>ON</span>: <span className='bg-red-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>OFF</span>}</button>
-          <label>Gain: {gain}</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-            value={gain}
-            onChange={handleSliderChange}
+    <div className='h-[100svh] w-full relative '>
+      <div className='absolute top-0'>
+        {geofenceAreas.map((area, index) => (
+          <YouTube
+            key={index}
+            videoId={area.videoId}
+            onReady={onReady}
+            opts={opts}
           />
-        </div>
-
-        {/* Reverb */}
-        <div className='flex flex-col gap-2 border-2 p-4 rounded-md w-[200px]'>
-          <label className='text-xl text-center uppercase font-bold'>Reverb</label>
-          <button className="p-2" onClick={toggleReverbEffect}>{reverbEffectOn ?  <span className='bg-green-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>ON</span>: <span className='bg-red-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>OFF</span>}</button>
-          <label>Reverb Time: {reverbTime}</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={reverbTime}
-            onChange={handleReverbTimeChange}
-          />
-          <label>Reverb Decay: {reverbDecay}</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={reverbDecay}
-            onChange={handleReverbDecayChange}
-          />
-          <label>Reverb Mix: {reverbMix}</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={reverbMix}
-            onChange={handleReverbMixChange}
-          />
-        </div>
-
-        {/* Delay */}
-        <div className='flex flex-col gap-2 border-2 p-4 rounded-md w-[200px]'>
-          <label className='text-xl text-center uppercase font-bold'>Delay</label>
-          <button className="p-2" onClick={toggleDelayEffect}>{delayEffectOn ?  <span className='bg-green-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>ON</span>: <span className='bg-red-500 text-white px-4 py-2 rounded-md text-sm font-semibold'>OFF</span>}</button>
-          <label>Delay Feedback: {delayFeedback}</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-            value={delayFeedback}
-            onChange={handleDelayFeedbackChange}
-          />
-          <label>Delay Time: {delayTime}</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
-            value={delayTime}
-            onChange={handleDelayTimeChange}
-          />
-          <label>Delay Mix: {delayMix}</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={delayMix}
-            onChange={handleDelayMixChange}
-          />
+        ))}
+      </div>
+      <div className='absolute bottom-10 left-0 flex flex-col gap-4'>
+        {userLocation && (
+          <div>
+            <p>Latitude: {userLocation.latitude}</p>
+            <p>Longitude: {userLocation.longitude}</p>
+            <p>Accuracy: {userLocation.accuracy} meters</p>
+          </div>
+        )}
+        {currentAreaIndex !== null ? (
+          <p className="font-semibold">AUDIO {currentAreaIndex + 1}</p>
+        ) : (
+          <p className="font-semibold">OUT OF AREA</p>
+        )}
+        {showPlayButton && currentAreaIndex !== null && currentVideoId !== null  ? (
+          <div>
+            <button className='p-4 border font-semibold' onClick={playVideo}>
+              Play Video {currentAreaIndex + 1} {currentVideoId + 1}
+            </button>
+          </div>
+        ) : (
+          <button className='hidden' onClick={playVideo}>
+            {/* Hidden button */}
+          </button>
+        )}
+        <div className='p-8' onClick={watchUserLocation}>
+          Watch User Location
         </div>
       </div>
     </div>
   );
 };
-
-export default MusicPlayer;
+export default CustomYouTubePlayer;
