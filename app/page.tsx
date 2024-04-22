@@ -188,7 +188,21 @@ const CustomYouTubePlayer = () => {
                 <div className='bg-purple  flex justify-end items-center px-3 py-1 absolute top-0 w-full'>
                   <img src="/images/close.png" className='h-[30px] w-[30px]' alt="" onClick={stopWatchUserLocation} />
                 </div>
-                <img src="/images/map.png" alt="" className='h-auto w-[300px]' />
+                {/* <img src="/images/map.png" alt="" className='h-auto w-[300px]' /> */}
+
+                <div>
+                  {userLocation && (
+                    <div>
+                      <h2>User Location</h2>
+                      <p>Latitude: {userLocation.latitude}</p>
+                      <p>Longitude: {userLocation.longitude}</p>
+                      <p>Accuracy: {userLocation.accuracy} meters</p>
+                      <p>Speed: {userLocation.speed} meters/second</p>
+                    </div>
+                  )}
+
+
+                </div>
                 <div className='bg-purple  flex justify-between items-center p-2 px-4 absolute bottom-0 w-full'>
                   {currentAreaIndex !== null ? (
                     <p className="text-white font-semibold">AUDIO {currentAreaIndex + 1}</p>
@@ -199,24 +213,7 @@ const CustomYouTubePlayer = () => {
                     <img src="/images/audio.png" alt="" className='h-6 w-6' />
                   </div>
                 </div>
-                <div className='absolute bottom-[134px] right-16 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 0 ? 'visible' : 'hidden'}`} />
-                </div>
-                <div className='absolute top-36 right-24 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 1 ? 'visible' : 'hidden'}`} />
-                </div>
-                <div className='absolute top-20 left-32 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 2 ? 'visible' : 'hidden'}`} />
-                </div>
-                <div className='absolute top-32 left-16 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 3 ? 'visible' : 'hidden'}`} />
-                </div>
-                <div className='absolute bottom-40 left-4 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 4 ? 'visible' : 'hidden'}`} />
-                </div>
-                <div className='absolute top-16 right-8 p-4 border-2 border-green-500 flex justify-center items-center'>
-                  <div className={`bg-red-500 h-4 w-4 rounded-full animate-ping absolute ${currentAreaIndex === 5 ? 'visible' : 'hidden'}`} />
-                </div>
+
               </div>
             </div>
           ) : (
