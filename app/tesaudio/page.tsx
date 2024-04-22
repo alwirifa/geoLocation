@@ -30,33 +30,13 @@ const Page = () => {
 
 
   const geofenceAreas: GeofenceArea[] = [
-
-    // { latitude: -6.925368719382597, longitude: 107.6648914323083, radius: 6, videoId: "lP26UCnoH9s" },
-    // { latitude: -6.925666016230372, longitude: 107.66497922370358, radius: 6, videoId: "DOOrIxw5xOw" },
-    // { latitude: -6.925464304205161, longitude: 107.6645636305663, radius: 6, videoId: "bk8WKwHDUNk" },
-    // { latitude: -6.925770034941376, longitude: 107.66466558186403, radius: 6, videoId: "36YnV9STBqc" },
-
-
-    // // gasmin
-    // { latitude: -6.9166387, longitude: 107.6615271, radius: 4, videoId: "DOOrIxw5xOw" },
-
-    // { latitude: -6.9167608, longitude: 107.6616099, radius: 4, videoId: "XnUNOaxw6bs" },
-
-    // { latitude: -6.9167322, longitude: 107.6613635, radius: 4, videoId: "36YnV9STBqc" },
-
-    // { latitude: -6.9168766, longitude: 107.6614897, radius: 4, videoId: "bk8WKwHDUNk" },
-
-    // jkt
-
-
-
-    { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "lP26UCnoH9s" },
-    { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "WkBX4N79r4w" },
-    { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "bk8WKwHDUNk" },
-    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "36YnV9STBqc" },
-    { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "RP0vhIfNOQQ" },
-    { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "ku5VKha1VB8" },
-  ]
+    { latitude: -6.2220146, longitude: 106.8068591, radius: 30, videoId: "b4g_5vkdVm4" },
+    { latitude: -6.2222365, longitude: 106.8071025, radius: 25, videoId: "XKueVSGTk2o" },
+    { latitude: -6.22178, longitude: 106.8067372, radius: 25, videoId: "YDfiTGGPYCk" },
+    { latitude: -6.2217714, longitude: 106.8064705, radius: 25, videoId: "gCNeDWCI0vo" },
+    { latitude: -6.2219972, longitude: 106.8061736, radius: 25, videoId: "jfKfPfyJRdk" },
+    { latitude: -6.2222127, longitude: 106.8061864, radius: 25, videoId: "DOOrIxw5xOw" },
+  ];
 
   const watchUserLocation = () => {
     setExperienceStarted(true);
