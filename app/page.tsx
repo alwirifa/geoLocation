@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
 import Navbar from './components/Navbar';
-import Pizzicato from 'pizzicato';
 
 import { enData, idData } from './data';
 import { useGlobalContext } from './context/store';
@@ -32,31 +31,22 @@ const CustomYouTubePlayer = () => {
   const [videoPlayed, setVideoPlayed] = useState(false);
   const [hasUserClicked, setHasUserClicked] = useState(false);
   const [experienceStarted, setExperienceStarted] = useState(false);
-
-  const [sound, setSound] = useState<Pizzicato.Sound | null>(null);
-
+  const [firstPlay, setFirstPlay] = useState(true);
 
   const { language, toggleLanguage } = useGlobalContext();
   const data = language === 'en' ? enData : idData;
 
   const geofenceAreas: GeofenceArea[] = [
-    // { latitude: -6.925391401199705, longitude: 107.66489758575915, radius: 10, videoId: "XnUNOaxw6bs" },
-    // { latitude: -6.8928514, longitude: 107.5908501, radius: 10, videoId: "XnUNOaxw6bs" },
-    // { latitude: -6.9042176, longitude: 107.593728, radius: 10, videoId: "" },
-
-    { latitude: -6.2223542, longitude: 106.806881, radius: 20, videoId: "" },
-    { latitude: -6.2220232, longitude: 106.8068387, radius: 20, videoId: "XKueVSGTk2o" },
-    { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "YDfiTGGPYCk " },
-    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 20, videoId: "gCNeDWCI0vo" },
-    { latitude: -6.2222515, longitude: 106.8060507, radius: 20, videoId: "jfKfPfyJRdk" },
-    { latitude: -6.2216579, longitude: 106.806822, radius: 20, videoId: "DOOrIxw5xOw" },
-  // blank lJAjCRP00SI
-
+    { latitude: -6.2223542, longitude: 106.806881, radius: 30, videoId: "xK4ZqrLys_k" },
+    { latitude: -6.2220232, longitude: 106.8068387, radius: 25, videoId: "XKueVSGTk2o" },
+    { latitude: -6.2216925, longitude: 106.8064602, radius: 25, videoId: "YDfiTGGPYCk" },
+    { latitude: -6.221902133889262, longitude: 106.80623434081818, radius: 25, videoId: "gCNeDWCI0vo" },
+    { latitude: -6.2222515, longitude: 106.8060507, radius: 25, videoId: "jfKfPfyJRdk" },
+    { latitude: -6.2216579, longitude: 106.806822, radius: 25, videoId: "DOOrIxw5xOw" },
   ];
 
   const watchUserLocation = () => {
     setExperienceStarted(true)
-
 
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
@@ -71,7 +61,6 @@ const CustomYouTubePlayer = () => {
             if (distance <= area.radius) {
               isInsideAnyGeofence = true;
               areaIndex = index;
-
             }
 
           });
@@ -101,8 +90,9 @@ const CustomYouTubePlayer = () => {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-    // player.pauseVideo()
-    sound && sound.stop();
+    // if (player) {
+    //   player.pauseVideo(); // Memeriksa apakah player telah diinisialisasi sebelum memanggil pauseVideo()
+    // }
 
   };
 
@@ -112,15 +102,16 @@ const CustomYouTubePlayer = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (player && currentVideoId) {
-      player.loadVideoById(currentVideoId);
-      if (isPlaying) {
-      } else {
-        player.pauseVideo();
-      }
-    }
-  }, [player, currentVideoId, isPlaying]);
+  // useEffect(() => {
+  //   if (player && currentVideoId) {
+  //     player.loadVideoById(currentVideoId);
+  //     if (isPlaying) {
+  //       player.playVideo();
+  //     } else {
+  //       player.pauseVideo();
+  //     }
+  //   }
+  // }, [player, currentVideoId, isPlaying]);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
@@ -153,61 +144,30 @@ const CustomYouTubePlayer = () => {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
 
-      if (currentAreaIndex === 1) {
-        sound && sound.play();
-
-      } else {
-        sound && sound.pause();
-
-      }
     } else {
       setCurrentVideoId("lJAjCRP00SI");
     }
 
+    console.log(currentVideoId)
     console.log(currentAreaIndex)
   }, [currentAreaIndex]);
 
+
   const playVideo = () => {
-    setHasUserClicked(true)
-    const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
-      ? geofenceAreas[currentAreaIndex].videoId
-      : "1SLr62VBBjw";
+    setHasUserClicked(true);
+    const videoIdToPlay = firstPlay ? "1SLr62VBBjw" : (currentAreaIndex !== null && geofenceAreas[currentAreaIndex] ? geofenceAreas[currentAreaIndex].videoId : "1SLr62VBBjw");
     setCurrentVideoId(videoIdToPlay);
-    setShowPlayButton(false)
+    setShowPlayButton(false);
     setIsPlaying(true);
     setVideoPlayed(true);
-    player.playVideo();
+    setFirstPlay(false); // Setelah pemutaran pertama, atur firstPlay menjadi false
+    setTimeout(() => {
+      if(player) {
+        player.playVideo();
+      }
+    }, 5000); // Time delay 3 detik
   };
-
-
-  useEffect(() => {
-    const sound = new Pizzicato.Sound('/music/iforte.mp3', () => {
-      const distortion = new Pizzicato.Effects.Distortion({
-        gain: 1,
-      });
-      const reverb = new Pizzicato.Effects.Reverb({
-        time: 1,
-        decay: 1,
-        reverse: false,
-        mix: 0.5,
-      });
-      const delay = new Pizzicato.Effects.Delay({
-        feedback: 0.5,
-        time: 1,
-        mix: 1,
-      });
-      sound.addEffect(distortion);
-      sound.addEffect(reverb);
-      sound.addEffect(delay);
-      setSound(sound);
-      console.log("sound is ready")
-    });
-
-    return () => {
-      sound && sound.stop();
-    };
-
-  }, []);
+  
 
   return (
     <div className='h-[100svh] w-full relative '>
@@ -225,7 +185,7 @@ const CustomYouTubePlayer = () => {
           </div>
 
 
-          <div className='absolute top-0 -translate-x-32'>
+          <div className='absolute top-0 '>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={index}
@@ -239,10 +199,10 @@ const CustomYouTubePlayer = () => {
           {showPlayButton ? (
             <div className='w-full h-full flex justify-center items-center fixed top-0 z-50 bg-black/50'>
 
-              <div className='bg-white border border-black p-4 rounded-md flex justify-center items-center flex-col gap-4 '>
-                <p className='font-semibold'>Allow Your GPS location</p>
-                <button className='p-4 py-2 rounded-md border border-black font-semibold shadow--md' onClick={playVideo}>
-                  ok
+              <div className='bg-white border-2 border-purple p-4 rounded-md flex justify-center items-center flex-col gap-4 '>
+                <p className='font-bold exo text-center text-purple text-lg px-6 pt-6'>Please allow your GPS location<br /> before start the experience</p>
+                <button className='p-4 py-2 mb-4 rounded-md border-2 border-purple text-purple font-bold  exo shadow--md' onClick={playVideo}>
+                  OK
                 </button>
               </div>
             </div>
@@ -263,7 +223,7 @@ const CustomYouTubePlayer = () => {
                 <div className='bg-purple  flex justify-end items-center px-3 py-1 absolute top-0 w-full'>
                   <img src="/images/close.png" className='h-[30px] w-[30px]' alt="" onClick={stopWatchUserLocation} />
                 </div>
-            
+
                 <img src="/images/map.png" alt="" className='h-auto w-[300px]' />
                 <div className='bg-purple  flex justify-between items-center p-2 px-4 absolute bottom-0 w-full'>
                   {currentAreaIndex !== null ? (
@@ -277,8 +237,6 @@ const CustomYouTubePlayer = () => {
                   </div>
                 </div>
               </div>
-
-
             </div>
 
           ) : (
