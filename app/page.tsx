@@ -45,7 +45,7 @@ const CustomYouTubePlayer = () => {
     // { latitude: -6.2219972, longitude: 106.8061736, radius: 15, videoId: "jfKfPfyJRdk" },
     // { latitude: -6.2222127, longitude: 106.8061864, radius: 15, videoId: "DOOrIxw5xOw" },
 
-    { latitude: -6.2190717, longitude: 106.79407684, radius: 60, videoId: "sgEJ4sOwboM" },
+    { latitude: -6.2190393790078335, longitude: 106.79423510316938, radius: 120, videoId: "sgEJ4sOwboM" },
     { latitude: -6.2190393790078335, longitude: 106.79423510316938, radius: 100, videoId: "qMtfLzbsBas" },
     
     
