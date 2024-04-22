@@ -90,9 +90,9 @@ const CustomYouTubePlayer = () => {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-    // if (player) {
-    //   player.pauseVideo(); // Memeriksa apakah player telah diinisialisasi sebelum memanggil pauseVideo()
-    // }
+    if (player) {
+      player.pauseVideo(); // Memeriksa apakah player telah diinisialisasi sebelum memanggil pauseVideo()
+    }
 
   };
 
@@ -102,16 +102,16 @@ const CustomYouTubePlayer = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (player && currentVideoId) {
-  //     player.loadVideoById(currentVideoId);
-  //     if (isPlaying) {
-  //       player.playVideo();
-  //     } else {
-  //       player.pauseVideo();
-  //     }
-  //   }
-  // }, [player, currentVideoId, isPlaying]);
+  useEffect(() => {
+    if (player && currentVideoId) {
+      player.loadVideoById(currentVideoId);
+      if (isPlaying) {
+        player.playVideo();
+      } else {
+        player.pauseVideo();
+      }
+    }
+  }, [player, currentVideoId, isPlaying]);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371;
