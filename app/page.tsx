@@ -62,7 +62,7 @@ const CustomYouTubePlayer = () => {
               isInsideAnyGeofence = true;
               areaIndex = index;
             }
-
+            setIsPlaying(true)
           });
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
           if (!hasUserClicked) {
@@ -156,7 +156,7 @@ const CustomYouTubePlayer = () => {
     console.log(currentAreaIndex)
   }, [currentAreaIndex]);
 
-  
+
   const playVideo = () => {
     setHasUserClicked(true)
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
@@ -166,12 +166,12 @@ const CustomYouTubePlayer = () => {
     setShowPlayButton(false)
     setIsPlaying(true);
     setVideoPlayed(true);
-    
+
     setTimeout(() => {
-          if(player) {
-            player.playVideo();
-          }
-        }, 5000); // Time delay 3 detik
+      if (player) {
+        player.playVideo();
+      }
+    }, 5000); // Time delay 3 detik
   };
 
   return (
@@ -255,16 +255,16 @@ const CustomYouTubePlayer = () => {
                 </div>
 
                 <div className='flex flex-col gap-4 px-10 mt-4 '>
-                  <p className='text-justify font-medium '>
+                  <p className='text-justify font-medium text-sm'>
                     {data.home1}
                   </p>
-                  <p className='text-justify font-medium'>
+                  <p className='text-justify font-medium text-sm'>
                     {data.home2}
                   </p>
                 </div>
               </div>
               <div className='absolute w-full bottom-[12svh] flex flex-col gap-4 justify-center items-center'>
-                <p className='uppercase text-lg text-purple font-bold exo text-center px-16'>{data.device}</p>
+                <p className='uppercase text-base text-purple font-bold exo text-center px-16'>{data.device}</p>
                 <img src='/images/headphones.png' alt='' className='h-20 w-20' />
                 <button
                   className='border-2 border-purple text-purple font-bold text-lg px-6 py-2 rounded-full max-w-max exo'
