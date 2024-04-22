@@ -165,10 +165,10 @@ const CustomYouTubePlayer = () => {
 
   const playVideo = () => {
     setHasUserClicked(true)
-    const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
-      ? geofenceAreas[currentAreaIndex].videoId
-      : "lJAjCRP00SI";
-    setCurrentVideoId(videoIdToPlay);
+    // const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
+    //   ? geofenceAreas[currentAreaIndex].videoId
+    //   : "1SLr62VBBjw";
+    setCurrentVideoId('1SLr62VBBjw');
     setShowPlayButton(false)
     setIsPlaying(true);
     setVideoPlayed(true);
