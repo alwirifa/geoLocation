@@ -152,7 +152,7 @@ const CustomYouTubePlayer = () => {
               <img src="/images/forteLogo.png" alt="" className='w-auto h-4' />
             </div>
           </div>
-          <div className='absolute top-0 -translate-x-32'>
+          <div className='absolute top-0 '>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={index}
