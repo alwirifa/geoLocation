@@ -122,7 +122,7 @@ const CustomYouTubePlayer = () => {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
     } else {
-      setCurrentVideoId("HIRNdveLnJI");
+      setCurrentVideoId("lJAjCRP00SI");
     }
   }, [currentAreaIndex]);
 
@@ -134,7 +134,7 @@ const CustomYouTubePlayer = () => {
 
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
-      : "HIRNdveLnJI";
+      : "lJAjCRP00SI";
     setCurrentVideoId(videoIdToPlay);
     setShowPlayButton(false)
     setIsPlaying(true);
@@ -154,7 +154,7 @@ const CustomYouTubePlayer = () => {
               <img src="/images/forteLogo.png" alt="" className='w-auto h-4' />
             </div>
           </div>
-          <div className='absolute top-0 -translate-x-32'>
+          <div className='absolute top-0 '>
             {geofenceAreas.map((area, index) => (
               <YouTube
                 key={index}
@@ -190,7 +190,7 @@ const CustomYouTubePlayer = () => {
                 </div>
                 {/* <img src="/images/map.png" alt="" className='h-auto w-[300px]' /> */}
 
-                <div>
+                <div className='w-[300px] h-[300px]'>
                   {userLocation && (
                     <div>
                       <h2>User Location</h2>
