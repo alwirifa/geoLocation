@@ -68,6 +68,10 @@ const CustomYouTubePlayer = () => {
           if (!hasUserClicked) {
             setIsPlaying(isInsideAnyGeofence);
           }
+
+          if (!isInsideAnyGeofence) {
+            setCurrentVideoId('lJAjCRP00SI')
+          }
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -152,29 +156,12 @@ const CustomYouTubePlayer = () => {
     console.log(currentAreaIndex)
   }, [currentAreaIndex]);
 
-
-  // const playVideo = () => {
-  //   setHasUserClicked(true);
-  //   const videoIdToPlay = firstPlay ? "1SLr62VBBjw" : (currentAreaIndex !== null && geofenceAreas[currentAreaIndex] ? geofenceAreas[currentAreaIndex].videoId : "lJAjCRP00SI");
-  //   setCurrentVideoId(videoIdToPlay);
-  //   setShowPlayButton(false);
-  //   setIsPlaying(true);
-  //   setVideoPlayed(true);
-  //   setFirstPlay(false); // Setelah pemutaran pertama, atur firstPlay menjadi false
-  //   setTimeout(() => {
-  //     if(player) {
-  //       player.playVideo();
-  //     }
-  //   }, 5000); // Time delay 3 detik
-  // };
-  
-
   
   const playVideo = () => {
     setHasUserClicked(true)
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
-      : "lJAjCRP00SI";
+      : "1SLr62VBBjw";
     setCurrentVideoId(videoIdToPlay);
     setShowPlayButton(false)
     setIsPlaying(true);
