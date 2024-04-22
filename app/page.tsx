@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
 import Navbar from './components/Navbar';
-import Pizzicato from 'pizzicato';
 
 import { enData, idData } from './data';
 import { useGlobalContext } from './context/store';
@@ -33,7 +32,6 @@ const CustomYouTubePlayer = () => {
   const [hasUserClicked, setHasUserClicked] = useState(false);
   const [experienceStarted, setExperienceStarted] = useState(false);
 
-  const [sound, setSound] = useState<Pizzicato.Sound | null>(null);
 
 
   const { language, toggleLanguage } = useGlobalContext();
@@ -72,6 +70,10 @@ const CustomYouTubePlayer = () => {
           setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
           if (!hasUserClicked) {
             setIsPlaying(isInsideAnyGeofence);
+          }
+
+          if (isPlaying === true) {
+            player.playVideo()
           }
         },
         (error) => {
@@ -148,14 +150,6 @@ const CustomYouTubePlayer = () => {
     if (currentAreaIndex !== null && geofenceAreas[currentAreaIndex]) {
       const { videoId } = geofenceAreas[currentAreaIndex];
       setCurrentVideoId(videoId);
-
-      if (currentAreaIndex === 0) {
-        sound && sound.play();
-
-      } else {
-        sound && sound.pause();
-
-      }
     } else {
       setCurrentVideoId("lJAjCRP00SI");
     }
@@ -176,34 +170,7 @@ const CustomYouTubePlayer = () => {
   };
 
 
-  useEffect(() => {
-    const sound = new Pizzicato.Sound('/music/iforte.mp3', () => {
-      const distortion = new Pizzicato.Effects.Distortion({
-        gain: 1,
-      });
-      const reverb = new Pizzicato.Effects.Reverb({
-        time: 1,
-        decay: 1,
-        reverse: false,
-        mix: 0.5,
-      });
-      const delay = new Pizzicato.Effects.Delay({
-        feedback: 0.5,
-        time: 1,
-        mix: 1,
-      });
-      sound.addEffect(distortion);
-      sound.addEffect(reverb);
-      sound.addEffect(delay);
-      setSound(sound);
-      console.log("sound is ready")
-    });
-
-    return () => {
-      sound && sound.stop();
-    };
-
-  }, []);
+ 
 
   return (
     <div className='h-[100svh] w-full relative '>
@@ -236,8 +203,8 @@ const CustomYouTubePlayer = () => {
             <div className='w-full h-full flex justify-center items-center fixed top-0 z-50 bg-black/50'>
 
               <div className='bg-white border-2 border-purple p-4 rounded-md flex justify-center items-center flex-col gap-4 '>
-                <p className='font-bold exo text-center text-purple px-6 pt-6'>Please allow your GPS location<br /> before start the experience</p>
-                <button className='p-4 py-2 mb-4 rounded-md border-2 border-purple text-purple font-bold  text-sm exo shadow-md' onClick={playVideo}>
+                <p className='font-bold exo text-center text-purple'>Please allow your GPS location<br /> before start the experience</p>
+                <button className='p-4  rounded-md border-2 border-purple text-purple font-bold  text-sm exo shadow-md' onClick={playVideo}>
                   OK
                 </button>
               </div>
