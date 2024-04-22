@@ -167,24 +167,24 @@ const CustomYouTubePlayer = () => {
   //     }
   //   }, 5000); // Time delay 3 detik
   // };
+  
 
-
-
+  
   const playVideo = () => {
     setHasUserClicked(true)
     const videoIdToPlay = currentAreaIndex !== null && geofenceAreas[currentAreaIndex]
       ? geofenceAreas[currentAreaIndex].videoId
-      : "1SLr62VBBjw";
+      : "lJAjCRP00SI";
     setCurrentVideoId(videoIdToPlay);
     setShowPlayButton(false)
     setIsPlaying(true);
     setVideoPlayed(true);
-
+    
     setTimeout(() => {
-      if (player) {
-        player.playVideo();
-      }
-    }, 5000); // Time delay 3 detik
+          if(player) {
+            player.playVideo();
+          }
+        }, 5000); // Time delay 3 detik
   };
 
   return (
