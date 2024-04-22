@@ -20,6 +20,7 @@ interface GeofenceArea {
   radius: number;
   videoId: string;
 }
+
 const CustomYouTubePlayer = () => {
   const [player, setPlayer] = useState<any>(null);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -31,6 +32,7 @@ const CustomYouTubePlayer = () => {
   const [videoPlayed, setVideoPlayed] = useState(false);
   const [hasUserClicked, setHasUserClicked] = useState(false);
   const [experienceStarted, setExperienceStarted] = useState(false);
+  const [currentVideoIds, setCurrentVideoIds] = useState<string[]>([]);
 
 
 
@@ -53,62 +55,25 @@ const CustomYouTubePlayer = () => {
     
   ];
 
+  
   const watchUserLocation = () => {
-    setExperienceStarted(true)
-
+    setExperienceStarted(true);
 
     if (navigator.geolocation) {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude, accuracy, speed } = position.coords;
           setUserLocation({ latitude, longitude, accuracy, speed });
-          let isInsideAnyGeofence = false;
-          let areaIndex = null;
 
-          // geofenceAreas.forEach((area, index) => {
-          //   const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
-
-          //   if (distance <= area.radius) {
-          //     isInsideAnyGeofence = true;
-          //     areaIndex = index;
-
-          //   }
-
-          // });
-
-
-          geofenceAreas.forEach((area, index) => {
+          const foundVideoIds: string[] = [];
+          geofenceAreas.forEach((area) => {
             const distance = calculateDistance(latitude, longitude, area.latitude, area.longitude);
             if (distance <= area.radius) {
-              isInsideAnyGeofence = true;
-              areaIndex = index;
-              if (currentVideoId !== area.videoId) {
-                setCurrentVideoId(area.videoId);
-              }
+              foundVideoIds.push(area.videoId);
             }
           });
-
-          if (isInsideAnyGeofence) {
-            setIsPlaying(true);
-            setCurrentAreaIndex(areaIndex);
-          
-          } else {
-            // If the user is outside of any geofence area, play the specified video
-            setCurrentVideoId("lJAjCRP00SI");
-            setIsPlaying(true);
-            setCurrentAreaIndex(null);
-          }
-
-
-
-          // setCurrentAreaIndex(isInsideAnyGeofence ? areaIndex : null);
-          // if (!hasUserClicked) {
-          //   setIsPlaying(isInsideAnyGeofence);
-          // }
-
-          // if (isPlaying === true) {
-          //   player.playVideo()
-          // }
+          setCurrentVideoIds(foundVideoIds);
+          setIsPlaying(foundVideoIds.length > 0);
         },
         (error) => {
           console.error('Error watching user location: ', error);
@@ -124,6 +89,7 @@ const CustomYouTubePlayer = () => {
       console.log('Geolocation is not supported by this browser');
     }
   };
+
 
   const stopWatchUserLocation = () => {
     setExperienceStarted(false)
