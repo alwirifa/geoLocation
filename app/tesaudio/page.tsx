@@ -30,12 +30,12 @@ const Page = () => {
 
 
   const geofenceAreas: GeofenceArea[] = [
-    { latitude: -6.2220146, longitude: 106.8068591, radius: 30, videoId: "b4g_5vkdVm4" },
-    { latitude: -6.2222365, longitude: 106.8071025, radius: 25, videoId: "XKueVSGTk2o" },
-    { latitude: -6.22178, longitude: 106.8067372, radius: 25, videoId: "YDfiTGGPYCk" },
-    { latitude: -6.2217714, longitude: 106.8064705, radius: 25, videoId: "gCNeDWCI0vo" },
-    { latitude: -6.2219972, longitude: 106.8061736, radius: 25, videoId: "jfKfPfyJRdk" },
-    { latitude: -6.2222127, longitude: 106.8061864, radius: 25, videoId: "DOOrIxw5xOw" },
+    { latitude: -6.2220146, longitude: 106.8068591, radius: 40, videoId: "b4g_5vkdVm4" },
+    { latitude: -6.2222365, longitude: 106.8071025, radius: 40, videoId: "XKueVSGTk2o" },
+    { latitude: -6.22178, longitude: 106.8067372, radius: 40, videoId: "YDfiTGGPYCk" },
+    { latitude: -6.2217714, longitude: 106.8064705, radius: 40, videoId: "gCNeDWCI0vo" },
+    { latitude: -6.2219972, longitude: 106.8061736, radius: 40, videoId: "jfKfPfyJRdk" },
+    { latitude: -6.2222127, longitude: 106.8061864, radius: 40, videoId: "DOOrIxw5xOw" },
   ];
 
   const watchUserLocation = () => {
